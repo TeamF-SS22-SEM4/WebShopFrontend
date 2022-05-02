@@ -4,13 +4,26 @@ import logo from './icon.png';
 import './App.css';
 import AppHeader from './components/AppHeader';
 import LoginPage from './components/LoginPage';
+import { Route, Routes } from 'react-router-dom';
+import Startpage from './components/Startpage';
 
 function App() {
   return (
     <>
-      <LoginPage></LoginPage>
       <AppHeader></AppHeader>
-      <img src={logo} className="App-logo" alt="logo" />
+      <Routes>
+        <Route path="/" element={<Startpage/>}>
+          
+        </Route>
+        <Route path="/login" element={<LoginPage/>}>
+        
+
+        </Route>
+      </Routes>
+      
+      
+
+      
 
     </>
     // <Router>
