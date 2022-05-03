@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import logo from "../../icon.png"
+import logo from "../../resources/icon.png"
 import './AppHeader.css'
 import AccountIcon from "../AccountIcon/AccountIcon";
 
@@ -13,7 +13,7 @@ function AppHeader() {
             </Link>
         </div>
 
-        <AccountIcon></AccountIcon>
+        <AccountIcon/>
 
     </div>
   );

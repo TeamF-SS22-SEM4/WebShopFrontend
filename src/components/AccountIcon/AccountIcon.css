@@ -1,5 +1,17 @@
-
 .accountIcon {
     margin: 10px;
 
+}
+.profile-wrapper {
+    /*width: 64px;*/
+    /*height: 64px;*/
+    border-radius: 50%;
+}
+
+img.profile-pic {
+    display: block;
+    object-fit: cover;
+    border-radius: 50%;
+    width: 64px;
+    height: 64px;
 }

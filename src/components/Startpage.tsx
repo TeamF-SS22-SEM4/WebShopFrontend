@@ -1,9 +1,8 @@
 import {Button} from "@blueprintjs/core";
-import logo from './../icon.png'
+import logo from './../resources/icon.png'
 import SearchBar from "./SearchBar/SearchBar";
 
 function Startpage() {
-
     return (
         <div>
             <SearchBar></SearchBar>
