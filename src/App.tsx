@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 
 import './App.css';
 import AppHeader from './components/AppHeader/AppHeader';
-import LoginPage from './components/LoginPage';
+import LoginPage from './components/LoginPage/LoginPage';
 import { Route, Routes } from 'react-router-dom';
 import Home from './components/Startpage';
 
