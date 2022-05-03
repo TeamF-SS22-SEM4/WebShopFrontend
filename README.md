@@ -4,11 +4,11 @@ A ReactJs Application for a fictional Musicshop "Tomify", created for course Ent
 
 
 ## Run the application
-###For Development
+### For Development
 
 Recommended to start via ``npm start``, for Hot-Reloading.
 ***
-###For Deployment
+### For Deployment
 
 Run via ``runWin.ps1/runLinux.ps1``-scripts.
 
