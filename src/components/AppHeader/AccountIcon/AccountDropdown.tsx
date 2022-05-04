@@ -1,6 +1,6 @@
 import {MenuItem, Menu, Icon} from "@blueprintjs/core";
 import {useContext} from "react";
-import {AuthenticationContext, DarkModeContext} from "../../App";
+import {AuthenticationContext, DarkModeContext} from "../../../App";
 
 function AccountDropdown() {
     const authenticationContext = useContext(AuthenticationContext)
