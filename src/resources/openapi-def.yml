@@ -1,0 +1,206 @@
+openapi: 3.0.3
+info:
+  title: ROOT.war
+  version: '1.0'
+servers:
+#  TODO override this in application depending on .env
+  - url: http://localhost:8080
+paths:
+  /api/v1/login:
+    post:
+      operationId: "login"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResultDTO'
+        '403':
+          description: invalid credentials
+  /api/v1/orders:
+    post:
+      operationId: "placeOrder"
+      parameters:
+        - name: session-id
+          in: header
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Purchase'
+      responses:
+        '200':
+          description: Ok, placed order
+        '401':
+          description: Unauthorized for operation
+        '403':
+          description: Not Authenticated
+        '404':
+          description: unknown carrier id
+  /api/v1/products:
+    get:
+      operationId: "getProducts"
+      parameters:
+        - name: search
+          in: query
+          schema:
+            default: ''
+            type: string
+        - name: session-id
+          in: header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductDetailsDTO'
+        '401':
+          description: Unauthorized for operation
+        '403':
+          description: Not Authenticated
+  /api/v1/products/{id}:
+    get:
+      operationId: "getProduct"
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: session-id
+          in: header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDetailsDTO'
+        '401':
+          description: Unauthorized for operation
+        '403':
+          description: Not Authenticated
+        '404':
+          description: unknown product id
+components:
+  schemas:
+    Credentials:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    LoginResultDTO:
+      type: object
+      properties:
+        sessionId:
+          type: string
+        employeeId:
+          type: string
+        username:
+          type: string
+        roles:
+          type: array
+          items:
+            type: string
+        topicNames:
+          type: array
+          items:
+            type: string
+    OrderItem:
+      type: object
+      properties:
+        carrierId:
+          format: uuid
+          pattern: '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
+          type: string
+        amount:
+          format: int32
+          type: integer
+    PaymentInformation:
+      type: object
+      properties:
+        paymentMethod:
+          type: string
+        creditCardType:
+          type: string
+        creditCardNumber:
+          type: string
+        cvc:
+          type: string
+    ProductDetailsDTO:
+      type: object
+      properties:
+        productId:
+          format: uuid
+          pattern: '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
+          type: string
+        name:
+          type: string
+        artistName:
+          type: string
+        releaseYear:
+          type: string
+        labelName:
+          type: string
+        genre:
+          type: string
+        duration:
+          type: string
+        songs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SongDTO'
+        soundCarriers:
+          type: array
+          items:
+            $ref: '#/components/schemas/SoundCarrierDTO'
+    Purchase:
+      type: object
+      properties:
+        orderItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        paymentInformation:
+          $ref: '#/components/schemas/PaymentInformation'
+    SongDTO:
+      type: object
+      properties:
+        title:
+          type: string
+        duration:
+          type: string
+    SoundCarrierDTO:
+      type: object
+      properties:
+        soundCarrierId:
+          format: uuid
+          pattern: '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
+          type: string
+        soundCarrierName:
+          type: string
+        amountAvailable:
+          format: int32
+          type: integer
+        pricePerCarrier:
+          format: float
+          type: number
+        location:
+          type: string

@@ -1,7 +1,7 @@
 import './LoginPage.css'
 import {Button, Card, Elevation, FormGroup, InputGroup, Label, Spinner, SpinnerSize} from "@blueprintjs/core";
 import {KeyboardEvent, useContext, useState} from "react";
-import {AuthenticationContext} from "../../App";
+import {apiClient, AuthenticationContext} from "../../App";
 import DestinationPicker from "./DestinationPicker";
 import {useNavigate} from "react-router-dom";
 
@@ -47,12 +47,17 @@ function LoginPage() {
         }
 
         setFetching(true)
-        setTimeout(() => {
-            //TODO call actual api
-            authenticationContext.login("placeholder-session", "test-user");
-            navigate("/")
-            setFetching(false)
-        }, 500);
+        const credentials = {username, password};
+        apiClient.login({credentials}).then(resultDTO => {
+            const sessionId = resultDTO.sessionId || "";
+            const username = resultDTO.username || "";
+
+            authenticationContext.login(sessionId, username);
+            setFetching(false);
+            navigate("/"); //TODO go to last page
+        }).catch(reason => {
+            //TODO handling
+        });
     }
 
     return (

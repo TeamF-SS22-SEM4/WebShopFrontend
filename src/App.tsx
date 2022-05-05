@@ -1,12 +1,21 @@
 import React, {useEffect, useState} from 'react';
-
 import './App.css';
 import AppHeader from './components/AppHeader/AppHeader';
 import LoginPage from './components/LoginPage/LoginPage';
 import {Route, Routes} from 'react-router-dom';
 import Startpage from "./components/StartPage/Startpage";
 import SearchPage from "./components/SearchPage/SearchPage";
+import {Configuration, DefaultApi} from "./openapi-client";
 
+//set up open api client
+const config = new Configuration({
+    basePath: "http://localhost:8080"
+    //TODO get from env,  https?
+})
+
+export const apiClient = new DefaultApi(config);
+
+//set up global contexts
 export type AuthenticationContextType = {
     sessionId: string;
     username: string;
@@ -84,7 +93,6 @@ function App(this: any) {
         })
     }, []);
 
-    console.log(darkState.dark)
     return (
         <AuthenticationContext.Provider value={authState}>
             <DarkModeContext.Provider value={darkState}>
