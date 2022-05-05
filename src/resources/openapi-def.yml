@@ -3,12 +3,11 @@ info:
   title: ROOT.war
   version: '1.0'
 servers:
-#  TODO override this in application depending on .env
-  - url: http://localhost:8080
+  - url: /
 paths:
   /api/v1/login:
     post:
-      operationId: "login"
+      operationId: login
       requestBody:
         content:
           application/json:
@@ -25,7 +24,7 @@ paths:
           description: invalid credentials
   /api/v1/orders:
     post:
-      operationId: "placeOrder"
+      operationId: placeOrder
       parameters:
         - name: session-id
           in: header
@@ -47,16 +46,12 @@ paths:
           description: unknown carrier id
   /api/v1/products:
     get:
-      operationId: "getProducts"
+      operationId: searchProducts
       parameters:
         - name: search
           in: query
           schema:
             default: ''
-            type: string
-        - name: session-id
-          in: header
-          schema:
             type: string
       responses:
         '200':
@@ -66,22 +61,14 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ProductDetailsDTO'
-        '401':
-          description: Unauthorized for operation
-        '403':
-          description: Not Authenticated
+                  $ref: '#/components/schemas/ProductOverviewDTO'
   /api/v1/products/{id}:
     get:
-      operationId: "getProduct"
+      operationId: getProduct
       parameters:
         - name: id
           in: path
           required: true
-          schema:
-            type: string
-        - name: session-id
-          in: header
           schema:
             type: string
       responses:
@@ -96,7 +83,7 @@ paths:
         '403':
           description: Not Authenticated
         '404':
-          description: unknown product id
+          description: Unknown product id
 components:
   schemas:
     Credentials:
@@ -171,6 +158,24 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SoundCarrierDTO'
+    ProductOverviewDTO:
+      type: object
+      properties:
+        productId:
+          format: uuid
+          pattern: '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
+          type: string
+        name:
+          type: string
+        artistName:
+          type: string
+        releaseYear:
+          type: string
+        genre:
+          type: string
+        smallestPrice:
+          format: float
+          type: number
     Purchase:
       type: object
       properties:
