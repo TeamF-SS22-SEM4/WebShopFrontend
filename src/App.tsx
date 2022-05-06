@@ -7,10 +7,12 @@ import Startpage from "./components/StartPage/Startpage";
 import SearchPage from "./components/SearchPage/SearchPage";
 import {Configuration, DefaultApi} from "./openapi-client";
 
+const host = process.env.REACT_APP_API_HOST || "localhost";
+const port = process.env.REACT_APP_API_PORT || "8080";
+
 //set up open api client
 const config = new Configuration({
-    // basePath: 'http://musicshop-backend:8080' CORS?!
-    basePath: "http://localhost:8080"
+    basePath: `${host}:${port}`,
 })
 
 export const apiClient = new DefaultApi(config);
@@ -33,14 +35,14 @@ let contextValue: AuthenticationContextType = {
     sessionId: "",
     username: "",
     loggedIn: false,
-    login: (s: string, u: string) => {
+    login: () => {
     },
     logout: () => {
     }
 }
 let darkValue: DarkContextType = {
     dark: true,
-    setDark: (b) => {
+    setDark: () => {
     }
 }
 
