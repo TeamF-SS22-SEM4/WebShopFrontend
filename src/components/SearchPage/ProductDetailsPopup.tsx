@@ -18,7 +18,7 @@ const ProductDetailsPopup = ({callbackFunction, productId}: ProductDetailsPopupP
 
     const fetchProductDetails = () => {
         // TODO: Handle undefined in another way
-        if(productId != undefined) {
+        if(productId !== undefined) {
             const getProductRequest: GetProductRequest = {
                 id: productId
             };
