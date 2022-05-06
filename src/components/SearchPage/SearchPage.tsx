@@ -1,28 +1,40 @@
 import './SearchPage.css';
-import { useEffect, useState } from "react";
-import { ProductDetailsDTO, ProductOverviewDTO, SearchProductsRequest } from "../../openapi-client";
+import { useState } from "react";
+import { GetProductRequest, ProductDetailsDTO, ProductOverviewDTO, SearchProductsRequest } from "../../openapi-client";
 import {apiClient} from "../../App";
 import SearchBar from "./SearchBar/SearchBar";
 import ProductDetailsPopup from './ProductDetailsPopup';
+import BuyProductPopup from './BuyProductPopup';
 
 function SearchPage() {
+    const [searchTerm, setSearchTerm] = useState<string>('a');
     const [products, setProducts] = useState<ProductOverviewDTO[]>();
-    const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
-    const [productId, setProductId] = useState<string | undefined>(undefined);
+    const [product, setProduct] = useState<ProductDetailsDTO | undefined>();
+    const [isProductDetailsShown, setIsProductDetailsShown] = useState<boolean>(false);
+    const [isBuyProductShown, setIsBuyProductShown] = useState<boolean>(false);
 
-    useEffect(() => {    
-        // After component did mount do initial search
-        fetchProducts('a');
-    });
-
-    const showPopup = (productId: string | undefined) => {
-        setProductId(productId);
-        setIsPopupOpen(true);
+    const showProductDetails = (productId: string | undefined) => {
+        if(productId !== undefined) {
+            fetchProductDetails(productId);
+            setIsProductDetailsShown(true);
+        }
     }
 
-    const closePopup = () => {
-        setProductId(undefined);
-        setIsPopupOpen(false);
+    const closeProductDetails = () => {
+        setProduct(undefined);
+        setIsProductDetailsShown(false);
+    }
+
+    const showBuyProduct = (productId: string | undefined) => {
+        if(productId !== undefined) {
+            fetchProductDetails(productId);
+            setIsBuyProductShown(true);
+        }
+    }
+
+    const closeBuyProduct = () => {
+        setProduct(undefined);
+        setIsBuyProductShown(false);
     }
 
     const fetchProducts = (searchTerm: string) => {
@@ -37,9 +49,23 @@ function SearchPage() {
         });
     }
 
+    const fetchProductDetails = (productId: string) => {
+        const getProductRequest: GetProductRequest = {
+            id: productId
+        };
+
+        apiClient.getProduct(getProductRequest).then(result => {
+            setProduct(result);
+        }).catch(reason => {
+            //TODO handling
+        });
+    }
+
     return (
         <>
-            <SearchBar callbackFunction={fetchProducts} />
+            <SearchBar callbackFunction={setSearchTerm} />
+            <button onClick={() => fetchProducts(searchTerm)}>Search</button>
+
             <div id="content">
                 <table className="table table-hover table-dark">
                     <thead>
@@ -64,12 +90,12 @@ function SearchPage() {
                                 <td className="align-middle">{product.releaseYear}</td>
                                 <td className="align-middle">{product.smallestPrice} €</td>
                                 <td>
-                                    <button onClick={() => showPopup(product.productId)}>
+                                    <button onClick={() => showProductDetails(product.productId)}>
                                         Details
                                     </button>
                                 </td>
                                 <td>
-                                    <button>
+                                    <button onClick={() => showBuyProduct(product.productId)}>
                                         Buy
                                     </button>
                                 </td>
@@ -80,8 +106,13 @@ function SearchPage() {
                 </table>
             </div>
             {
-                isPopupOpen ?
-                <ProductDetailsPopup callbackFunction={closePopup} productId={productId}/> :
+                isProductDetailsShown ?
+                <ProductDetailsPopup callbackFunction={closeProductDetails} product={product}/> :
+                null
+            }
+            {
+                isBuyProductShown ?
+                <BuyProductPopup callbackFunction={closeBuyProduct} product={product}/> :
                 null
             }
         </>

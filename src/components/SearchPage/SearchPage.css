@@ -15,7 +15,7 @@ table, th, td {
     right: 0;
     bottom: 0;
     margin: auto;
-    background-color: rgba(0,0,0, 0.5);
+    background-color: rgba(0,0,0, 0.7);
 }
 
 .popup_inner {
@@ -23,8 +23,16 @@ table, th, td {
     left: 25%;
     right: 25%;
     top: 25%;
-    bottom: 25%;
+    bottom: 22.5%;
     margin: auto;
-    background: white;
-    color: black;
+    color: white;
+    border: 2px solid rgb(194, 127, 0);
+}
+
+.header {
+    background: #424242;
+}
+
+.content {
+    background: #616161;
 }

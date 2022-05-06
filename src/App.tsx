@@ -9,7 +9,8 @@ import {Configuration, DefaultApi} from "./openapi-client";
 
 //set up open api client
 const config = new Configuration({
-    basePath: window.location.origin
+    // basePath: 'http://musicshop-backend:8080' CORS?!
+    basePath: "http://localhost:8080"
 })
 
 export const apiClient = new DefaultApi(config);

@@ -1,45 +1,57 @@
-import { useEffect, useState } from 'react';
-import { apiClient } from '../../App';
-import { GetProductRequest, ProductDetailsDTO } from '../../openapi-client';
+import { ProductDetailsDTO } from '../../openapi-client';
 import './SearchPage.css';
 
 interface ProductDetailsPopupProps {
     callbackFunction: () => void;
-    productId: string | undefined;
+    product: ProductDetailsDTO | undefined
 }
 
-const ProductDetailsPopup = ({callbackFunction, productId}: ProductDetailsPopupProps) => {
-    const [product, setProduct] = useState<ProductDetailsDTO>();
+const ProductDetailsPopup = ({callbackFunction, product}: ProductDetailsPopupProps) => {
     
-    useEffect(() => {    
-        // After component did mount do initial search
-        fetchProductDetails();
-    });
-
-    const fetchProductDetails = () => {
-        // TODO: Handle undefined in another way
-        if(productId != undefined) {
-            const getProductRequest: GetProductRequest = {
-                id: productId
-            };
-    
-            apiClient.getProduct(getProductRequest).then(result => {
-                setProduct(result);
-            }).catch(reason => {
-                //TODO handling
-            });
-        }
-    }
-
-    //@Johannes: Add other product information when you style this popup
     return (
         <div className='popup'>
-        <div className='popup_inner'>
-            <h1>{product?.name}</h1>
-            <p>{product?.artistName}</p>
-            <p>{product?.genre}</p>
-            <button onClick={() => callbackFunction()}>Close</button>
-        </div>
+            <div className='popup_inner'>
+                <div className="container">
+                    <div className="row header">
+                        <div className="col-10">
+                            <h1>{product?.name}</h1>
+                        </div>
+                        <div className="col-2">
+                            <button onClick={() => callbackFunction()}>Close</button>
+                        </div>
+                    </div>
+                    <div className="row flex-grow-1 content">
+                        <div className="col-6">
+                            <p>Album {product?.artistName}</p>
+                            <p>Artist {product?.genre}</p>
+                            <p>Genre {product?.releaseYear}</p>
+                            <p>Release {product?.duration}</p>
+                            <p>Label {product?.labelName}</p>
+                        </div>
+                        <div className="col-6">
+                            <table className="table table-hover table-dark">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Duration</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        product?.songs?.map(
+                                            song =>
+                                                <tr>
+                                                    <td className="align-middle">{song.title}</td>
+                                                    <td className="align-middle">{song.duration}</td>
+                                                </tr>  
+                                        )
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
       </div>
     )
 }
