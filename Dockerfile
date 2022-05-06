@@ -1,9 +1,17 @@
-# seperate image needed because the client generator requires a JVM
-FROM timbru31/java-node:11 AS clientBuilder
+FROM node:16.15.0-alpine3.15 AS dependenciesInstalled
+ENV NODE_ENV production
+# Add a work directory
 WORKDIR /app
+# Cache and Install dependencies
 COPY package.json .
 COPY package-lock.json .
 RUN npm install
+
+
+# seperate image needed because the client generator requires a JVM
+FROM timbru31/java-node:11 AS clientBuilder
+WORKDIR /app
+COPY --from=dependenciesInstalled /app/ /app/
 COPY ./src/resources/openapi-def.yml /app/src/resources/openapi-def.yml
 RUN npm run generate-client
 
@@ -13,16 +21,11 @@ ENV NODE_ENV production
 # Add a work directory
 WORKDIR /app
 # Cache and Install dependencies
-COPY package.json .
-COPY package-lock.json .
-RUN npm install
-# Copy app files
-COPY --from=clientBuilder /app/src/openapi-client/ src/openapi-client/
+COPY --from=clientBuilder /app/ /app/
 COPY . .
 RUN npm run test -- --watchAll=false
 # Build the app
 RUN npm run build
-
 
 
 # Bundle static assets with nginx
