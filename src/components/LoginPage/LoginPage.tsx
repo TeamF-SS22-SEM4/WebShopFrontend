@@ -23,6 +23,10 @@ function LoginPage() {
     let [displayEmptyUsernameMsg, setDisplayEmptyUsernameMsg] = useState(false);
     let [displayEmptyPasswordMsg, setDisplayEmptyPasswordMsg] = useState(false)
 
+    let [displayWrongCredentialsMsg, setDisplayWrongCredentialsMsg] = useState(false);
+    let [displayGenericErrorMsg, setDisplayGenericErrorMsg] = useState(false);
+
+
     const keyDownListener = (event: KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Enter") {
             doLogin();
@@ -32,7 +36,8 @@ function LoginPage() {
         //cleanup previous state
         setDisplayEmptyUsernameMsg(false);
         setDisplayEmptyPasswordMsg(false);
-
+        setDisplayGenericErrorMsg(false);
+        setDisplayWrongCredentialsMsg(false);
 
         if (!username) {
             setDisplayEmptyUsernameMsg(true)
@@ -53,8 +58,13 @@ function LoginPage() {
             authenticationContext.login(sessionId, username);
             setFetching(false);
             navigate("/"); //TODO go to last page
-        }).catch(reason => {
-            //TODO handling
+        }).catch(response => {
+            if (response.status == 403) {
+                setDisplayWrongCredentialsMsg(true);
+            } else {
+                setDisplayGenericErrorMsg(true);
+            }
+            setFetching(false);
         });
     }
 
@@ -63,6 +73,8 @@ function LoginPage() {
             <Card elevation={Elevation.FOUR} className={"credential-card"} >
                 {!fetching &&
                     <>
+                        {displayWrongCredentialsMsg && <p style={{color: "red", fontSize: 20}}>Wrong Username or Credentials</p>}
+                        {displayGenericErrorMsg && <p style={{color: "red", fontSize: 20}}>Something went wrong...</p>}
                     <FormGroup className={"credential-form"}>
                     <Label htmlFor={"username-input"} className={ displayEmptyUsernameMsg ? "error-msg": ""}>{!displayEmptyUsernameMsg ? "Username" : "Empty Username!"}</Label>
                     <InputGroup id={"username-input"} className={ displayEmptyUsernameMsg ? "error-msg": ""} value={username} onInput={e => setUsername((e.target as HTMLInputElement).value)} placeholder={"username"}  onKeyPress={event => keyDownListener(event)}/>
