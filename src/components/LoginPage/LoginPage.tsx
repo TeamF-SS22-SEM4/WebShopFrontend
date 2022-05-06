@@ -4,7 +4,11 @@ import {KeyboardEvent, useContext, useState} from "react";
 import {apiClient, AuthenticationContext} from "../../App";
 import {useNavigate} from "react-router-dom";
 
-function LoginPage() {
+interface LoginPageProps {
+    fromManualLink?: boolean
+}
+
+function LoginPage({fromManualLink}: LoginPageProps) {
     const navigate = useNavigate();
     const authenticationContext = useContext(AuthenticationContext);
     let [fetching, setFetching] = useState(false);
@@ -47,7 +51,9 @@ function LoginPage() {
 
             authenticationContext.login(sessionId, username);
             setFetching(false);
-            navigate("/"); //TODO go to last page
+            if (fromManualLink) {
+                navigate("/")
+            }
         }).catch(response => {
             if (response.status === 403) {
                 setDisplayWrongCredentialsMsg(true);

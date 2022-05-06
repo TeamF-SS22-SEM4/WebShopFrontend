@@ -6,13 +6,15 @@ import {Route, Routes} from 'react-router-dom';
 import Startpage from "./components/StartPage/Startpage";
 import SearchPage from "./components/SearchPage/SearchPage";
 import {Configuration, DefaultApi} from "./openapi-client";
+import RestrictedWrapper from "./components/LoginPage/RestrictedWrapper";
 
 const host = process.env.REACT_APP_API_HOST || "localhost";
 const port = process.env.REACT_APP_API_PORT || "8080";
 
 //set up open api client
 const config = new Configuration({
-    basePath: `${host}:${port}`,
+    //https?
+    basePath: `http://${host}:${port}`,
 })
 
 export const apiClient = new DefaultApi(config);
@@ -101,9 +103,14 @@ function App(this: any) {
                 <div className={darkState.dark ? "bp4-dark" : ""} style={darkState.dark ? {backgroundColor: "darkgray", minHeight: "100vh"} : {backgroundColor: "white"}}>
                     <AppHeader/>
                     <Routes>
-                        <Route path="/" element={<Startpage/>}/>
-                        <Route path="/login" element={<LoginPage/>}/>
+                        <Route index element={<Startpage/>}/>
+                        <Route path="/login" element={<LoginPage fromManualLink={true}/>}/>
                         <Route path="/search" element={<SearchPage/>}/>
+                        <Route path="/restrictedTest" element={
+                            <RestrictedWrapper>
+                                <h1>If you see this without being logged in tell Lukas he fucked up.</h1>
+                            </RestrictedWrapper>
+                        }/>
                     </Routes>
                 </div>
             </DarkModeContext.Provider>

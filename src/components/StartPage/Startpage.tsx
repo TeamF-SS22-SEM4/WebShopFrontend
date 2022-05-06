@@ -1,21 +1,20 @@
 import './StartPage.css'
 import SearchButton from "./SearchButton";
-import RequiresUserLink from "../LoginPage/RequiresUserLink";
-import {Card, Elevation} from "@blueprintjs/core";
+import {Card, Elevation, Icon} from "@blueprintjs/core";
+import {Link} from "react-router-dom";
 
 function Startpage() {
-
     return (
         <>
             <p className={"greeting"}>Welcome to Tomify!</p>
             <div className={"start-page-wrapper"}>
-                <RequiresUserLink to={"/search"}><SearchButton/></RequiresUserLink>
+                <Link to={"/search"}><SearchButton/></Link>
 
-                <RequiresUserLink to={"/search"} >
+                <Link to={"/restrictedTest"} >
                     <Card elevation={Elevation.FOUR} className={"link-card"} interactive={true}>
-                        <p>This is  very secure link, try getting there.</p>
+                        <Icon icon={"lock"} size={100}/>
                     </Card>
-                </RequiresUserLink>
+                </Link>
             </div>
         </>
     )
