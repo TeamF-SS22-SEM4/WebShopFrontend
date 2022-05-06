@@ -2,7 +2,6 @@ import './LoginPage.css'
 import {Button, Card, Elevation, FormGroup, InputGroup, Label, Spinner, SpinnerSize} from "@blueprintjs/core";
 import {KeyboardEvent, useContext, useState} from "react";
 import {apiClient, AuthenticationContext} from "../../App";
-import DestinationPicker from "./DestinationPicker";
 import {useNavigate} from "react-router-dom";
 
 export interface Destination {
@@ -18,7 +17,6 @@ export const remote: Destination = {address: "10.0.40.170", port: 12345}
 function LoginPage() {
     const navigate = useNavigate();
     const authenticationContext = useContext(AuthenticationContext);
-    let [destination, setDestination] = useState(local);
     let [fetching, setFetching] = useState(false);
     let [username, setUsername] = useState("");
     let [password, setPassword] = useState("");
@@ -65,7 +63,6 @@ function LoginPage() {
             <Card elevation={Elevation.FOUR} className={"credential-card"} >
                 {!fetching &&
                     <>
-                    <DestinationPicker dest={destination} setDest={setDestination}/>
                     <FormGroup className={"credential-form"}>
                     <Label htmlFor={"username-input"} className={ displayEmptyUsernameMsg ? "error-msg": ""}>{!displayEmptyUsernameMsg ? "Username" : "Empty Username!"}</Label>
                     <InputGroup id={"username-input"} className={ displayEmptyUsernameMsg ? "error-msg": ""} value={username} onInput={e => setUsername((e.target as HTMLInputElement).value)} placeholder={"username"}  onKeyPress={event => keyDownListener(event)}/>
