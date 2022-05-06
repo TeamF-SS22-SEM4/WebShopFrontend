@@ -1,5 +1,8 @@
 .start-page-wrapper {
     padding: 100px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .link-card {
@@ -9,6 +12,7 @@
     padding: 50px;
     max-width: 220px;
     border-radius: 20%;
+    margin: 30px;
 }
 
 .greeting {

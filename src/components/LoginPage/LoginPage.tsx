@@ -4,16 +4,6 @@ import {KeyboardEvent, useContext, useState} from "react";
 import {apiClient, AuthenticationContext} from "../../App";
 import {useNavigate} from "react-router-dom";
 
-export interface Destination {
-    address: string
-    port: number
-}
-
-export const local: Destination = {address: "localhost", port: 1099}
-export const remote: Destination = {address: "10.0.40.170", port: 12345}
-
-//TODO maybe proxy adress?
-
 function LoginPage() {
     const navigate = useNavigate();
     const authenticationContext = useContext(AuthenticationContext);
@@ -59,7 +49,7 @@ function LoginPage() {
             setFetching(false);
             navigate("/"); //TODO go to last page
         }).catch(response => {
-            if (response.status == 403) {
+            if (response.status === 403) {
                 setDisplayWrongCredentialsMsg(true);
             } else {
                 setDisplayGenericErrorMsg(true);
@@ -76,11 +66,11 @@ function LoginPage() {
                         {displayWrongCredentialsMsg && <p style={{color: "red", fontSize: 20}}>Wrong Username or Credentials</p>}
                         {displayGenericErrorMsg && <p style={{color: "red", fontSize: 20}}>Something went wrong...</p>}
                     <FormGroup className={"credential-form"}>
-                    <Label htmlFor={"username-input"} className={ displayEmptyUsernameMsg ? "error-msg": ""}>{!displayEmptyUsernameMsg ? "Username" : "Empty Username!"}</Label>
-                    <InputGroup id={"username-input"} className={ displayEmptyUsernameMsg ? "error-msg": ""} value={username} onInput={e => setUsername((e.target as HTMLInputElement).value)} placeholder={"username"}  onKeyPress={event => keyDownListener(event)}/>
+                        <Label htmlFor={"username-input"} className={ displayEmptyUsernameMsg ? "error-msg": ""}>{!displayEmptyUsernameMsg ? "Username" : "Empty Username!"}</Label>
+                        <InputGroup id={"username-input"} className={ displayEmptyUsernameMsg ? "error-msg": ""} value={username} onInput={e => setUsername((e.target as HTMLInputElement).value)} placeholder={"username"}  onKeyPress={event => keyDownListener(event)}/>
 
-                    <Label htmlFor={"password-input"} className={ displayEmptyPasswordMsg ? "error-msg": ""}>{!displayEmptyPasswordMsg ? "Password" : "Empty Password!"}</Label>
-                    <InputGroup id={"password-input"}  className={ displayEmptyPasswordMsg ? "error-msg": ""} type={"password"} value={password} onInput={e => setPassword((e.target as HTMLInputElement).value)} placeholder={"password"} onKeyPress={event => keyDownListener(event)}/>
+                        <Label htmlFor={"password-input"} className={ displayEmptyPasswordMsg ? "error-msg": ""}>{!displayEmptyPasswordMsg ? "Password" : "Empty Password!"}</Label>
+                        <InputGroup id={"password-input"}  className={ displayEmptyPasswordMsg ? "error-msg": ""} type={"password"} value={password} onInput={e => setPassword((e.target as HTMLInputElement).value)} placeholder={"password"} onKeyPress={event => keyDownListener(event)}/>
                     </FormGroup>
                     <Button intent="success" text={"Login"} onClick={() => doLogin()}/>
                     </>
