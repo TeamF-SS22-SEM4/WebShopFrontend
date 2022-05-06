@@ -8,6 +8,7 @@ COPY package-lock.json .
 RUN npm install
 # Copy app files
 COPY . .
+RUN npm run test -- --watchAll=false
 # Build the app
 RUN npm run build
 
