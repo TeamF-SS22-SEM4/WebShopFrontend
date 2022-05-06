@@ -17,7 +17,7 @@ const ProductDetailsPopup = ({callbackFunction, product}: ProductDetailsPopupPro
                             <h1>{product?.name}</h1>
                         </div>
                         <div className="col-2">
-                            <button onClick={() => callbackFunction()}>Close</button>
+                            <button className="btn custom-btn close-btn" onClick={() => callbackFunction()}>Close</button>
                         </div>
                     </div>
                     <div className="row flex-grow-1 content">

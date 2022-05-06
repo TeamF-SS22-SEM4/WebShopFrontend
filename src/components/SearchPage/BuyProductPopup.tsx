@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { ProductDetailsDTO } from '../../openapi-client';
+import { ProductDetailsDTO, SoundCarrierDTO } from '../../openapi-client';
 import './SearchPage.css';
+import { ShoppingCartItem, shoppingCart } from '../ShoppingCartPage/ShoppingCartPage';
 
 interface BuyProductPopupProps {
     callbackFunction: () => void;
@@ -8,17 +9,33 @@ interface BuyProductPopupProps {
 }
 
 const BuyProductPopup = ({callbackFunction, product}: BuyProductPopupProps) => {
-    const[selectedAmounts, setSelectedAmounts] = useState<Map<string | undefined, number>>(new Map());
+    const[selectedSoundCarriers, setSelectedSoundCarriers] = useState<Map<SoundCarrierDTO, number>>(new Map());
 
-    const updateSelectedAmounts = (soundCarrierId: string | undefined, amount: number) => {
-        let tempSelectedAmounts = selectedAmounts;
-        tempSelectedAmounts.set(soundCarrierId, amount)
-        setSelectedAmounts(tempSelectedAmounts);
+    const updateSelectedSoundCarriers = (soundCarrier: SoundCarrierDTO, amount: number) => {
+        let temp = selectedSoundCarriers;
+        temp.set(soundCarrier, amount)
+        setSelectedSoundCarriers(temp);
     }
 
     const addToCart = () => {
-        // TODO: When implementing cart build product with carrierId, productName etc.
-        console.log(selectedAmounts);
+        if(selectedSoundCarriers.size === 0) {
+            alert("You have to select at least one sound carrier!")
+        } else {
+            selectedSoundCarriers.forEach((amount, selectedSoundCarrier) => {
+                let shoppingCartItem: ShoppingCartItem = {
+                    productName: product?.name,
+                    artistName: product?.artistName,
+                    soundCarrerId: selectedSoundCarrier.soundCarrierId,
+                    soundCarrierType: selectedSoundCarrier.soundCarrierName,
+                    pricePerCarrier: selectedSoundCarrier.pricePerCarrier,
+                    selectedAmount: amount
+                };
+
+                if(!shoppingCart.includes(shoppingCartItem)) {
+                    shoppingCart.push(shoppingCartItem);
+                }
+            });
+        }
     }
     
     return (
@@ -30,10 +47,10 @@ const BuyProductPopup = ({callbackFunction, product}: BuyProductPopupProps) => {
                             <h1>{product?.name}</h1>
                         </div>
                         <div className="col-2">
-                            <button onClick={() => callbackFunction()}>Close</button>
+                            <button className='btn custom-btn close-btn' onClick={() => callbackFunction()}>Close</button>
                         </div>
                     </div>
-                    <div className="row flex-grow-1 content">
+                    <div className="row content">
                         <div className="col-10">
                             <table className="table table-hover table-dark">
                                     <thead>
@@ -57,22 +74,24 @@ const BuyProductPopup = ({callbackFunction, product}: BuyProductPopupProps) => {
                                                             <input 
                                                                 type="number" 
                                                                 placeholder='0'
-                                                                value={selectedAmounts.get(soundCarrier.soundCarrierId)} 
+                                                                value={selectedSoundCarriers.get(soundCarrier)} 
                                                                 min="0" 
                                                                 max={soundCarrier.amountAvailable}
-                                                                onChange={(event) => updateSelectedAmounts(soundCarrier.soundCarrierId, parseInt(event.target.value))}
+                                                                onChange={(event) => updateSelectedSoundCarriers(soundCarrier, parseInt(event.target.value))}
                                                             />
-                                                        </td>
-                                                        <td className="align-middle">
-                                                            <button onClick={() => addToCart()}> 
-                                                                Add to cart 
-                                                            </button>
                                                         </td>
                                                     </tr>  
                                             )
                                         }
                                     </tbody>
                                 </table>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className='col-12'>
+                        <button className="btn custom-btn" onClick={() => addToCart()}> 
+                                Add to cart 
+                        </button>
                         </div>
                     </div>
                 </div>

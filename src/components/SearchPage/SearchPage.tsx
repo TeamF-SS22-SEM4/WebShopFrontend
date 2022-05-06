@@ -64,7 +64,8 @@ function SearchPage() {
     return (
         <>
             <SearchBar callbackFunction={setSearchTerm} />
-            <button onClick={() => fetchProducts(searchTerm)}>Search</button>
+            
+            <button className="btn custom-btn" onClick={() => fetchProducts(searchTerm)}>Search</button>
 
             <div id="content">
                 <table className="table table-hover table-dark">
@@ -90,12 +91,12 @@ function SearchPage() {
                                 <td className="align-middle">{product.releaseYear}</td>
                                 <td className="align-middle">{product.smallestPrice} €</td>
                                 <td>
-                                    <button onClick={() => showProductDetails(product.productId)}>
+                                    <button className='btn custom-btn' onClick={() => showProductDetails(product.productId)}>
                                         Details
                                     </button>
                                 </td>
                                 <td>
-                                    <button onClick={() => showBuyProduct(product.productId)}>
+                                    <button className='btn custom-btn' onClick={() => showBuyProduct(product.productId)}>
                                         Buy
                                     </button>
                                 </td>
