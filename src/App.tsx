@@ -9,8 +9,7 @@ import {Configuration, DefaultApi} from "./openapi-client";
 
 //set up open api client
 const config = new Configuration({
-    basePath: "http://localhost:8080"
-    //TODO get from env,  https?
+    basePath: window.location.origin
 })
 
 export const apiClient = new DefaultApi(config);
