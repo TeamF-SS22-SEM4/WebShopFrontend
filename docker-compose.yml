@@ -6,9 +6,3 @@ services:
     build: .
     ports:
       - "${OUTWARD_PORT:-80}:80"
-    networks:
-      - musicshopbackend_musicshop_backend
-
-networks:
-  musicshopbackend_musicshop_backend:
-    external: true
