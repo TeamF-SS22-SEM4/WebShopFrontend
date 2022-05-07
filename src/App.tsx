@@ -5,7 +5,7 @@ import LoginPage from './components/LoginPage/LoginPage';
 import {Route, Routes} from 'react-router-dom';
 import Startpage from "./components/StartPage/Startpage";
 import SearchPage from "./components/SearchPage/SearchPage";
-import {Configuration, DefaultApi} from "./openapi-client";
+import {Configuration, DefaultApi, LoginResultDTO} from "./openapi-client";
 import RestrictedWrapper from "./components/LoginPage/RestrictedWrapper";
 import ShoppingCartPage from './components/ShoppingCartPage/ShoppingCartPage';
 
@@ -13,19 +13,26 @@ const host = process.env.REACT_APP_API_HOST || "localhost";
 const port = process.env.REACT_APP_API_PORT || "8080";
 
 //set up open api client
-const config = new Configuration({
+const configParams = {
     //https?
-    basePath: `http://${host}:${port}`,
-})
+    basePath: `http://${host}:${port}`
+}
 
-export const apiClient = new DefaultApi(config);
+export let apiClient = new DefaultApi(new Configuration(configParams));
+const setSessionIdInClient = (token: string) => {
+    apiClient = new DefaultApi(new Configuration(
+        {...configParams,
+        headers: {"session-id": token}}
+        //TODO change to http-auth header
+    ))
+}
 
 //set up global contexts
 export type AuthenticationContextType = {
     sessionId: string;
     username: string;
     loggedIn: boolean;
-    login: (s: string, u: string) => void;
+    storeLogin: (dto: LoginResultDTO) => void;
     logout: () => void;
 }
 
@@ -38,7 +45,7 @@ let contextValue: AuthenticationContextType = {
     sessionId: "",
     username: "",
     loggedIn: false,
-    login: () => {
+    storeLogin: () => {
     },
     logout: () => {
     }
@@ -74,13 +81,14 @@ function App(this: any) {
         setAuthState(prevState => {
             return {
                 ...prevState,
-                login: (s: string, u: string) => {
+                storeLogin: (dto) => {
                     setAuthState((prev => {
+                        setSessionIdInClient(dto.sessionId || "")
                         return {
                             ...prev,
                             loggedIn: true,
-                            username: u,
-                            sessionId: s
+                            username: dto.username || "",
+                            sessionId: dto.username || ""
                         }
                     }))
                 },

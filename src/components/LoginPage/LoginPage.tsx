@@ -46,10 +46,7 @@ function LoginPage({fromManualLink}: LoginPageProps) {
         setFetching(true)
         const credentials = {username, password};
         apiClient.login({credentials}).then(resultDTO => {
-            const sessionId = resultDTO.sessionId || "";
-            const username = resultDTO.username || "";
-
-            authenticationContext.login(sessionId, username);
+            authenticationContext.storeLogin(resultDTO);
             setFetching(false);
             if (fromManualLink) {
                 navigate("/")
