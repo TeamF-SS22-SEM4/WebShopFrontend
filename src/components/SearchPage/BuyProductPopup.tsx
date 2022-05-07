@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { ProductDetailsDTO, SoundCarrierDTO } from '../../openapi-client';
 import './SearchPage.css';
-import { ShoppingCartItem, shoppingCart } from '../ShoppingCartPage/ShoppingCartPage';
+import { shoppingCart } from '../ShoppingCartPage/ShoppingCartPage';
+import { ShoppingCartItem } from '../utils/ShoppingCartItem';
 
 interface BuyProductPopupProps {
     callbackFunction: () => void;
@@ -18,21 +19,40 @@ const BuyProductPopup = ({callbackFunction, product}: BuyProductPopupProps) => {
     }
 
     const addToCart = () => {
-        if(selectedSoundCarriers.size === 0) {
+        // Calc sum of selected amount because the amount of every product could be 0
+        let sumOfSelectedAmount: number = 0;
+
+        selectedSoundCarriers.forEach((amount) => {
+            sumOfSelectedAmount += amount;
+        });
+
+        if(selectedSoundCarriers.size === 0 || sumOfSelectedAmount === 0) {
             alert("You have to select at least one sound carrier!")
         } else {
             selectedSoundCarriers.forEach((amount, selectedSoundCarrier) => {
-                let shoppingCartItem: ShoppingCartItem = {
-                    productName: product?.name,
-                    artistName: product?.artistName,
-                    soundCarrerId: selectedSoundCarrier.soundCarrierId,
-                    soundCarrierType: selectedSoundCarrier.soundCarrierName,
-                    pricePerCarrier: selectedSoundCarrier.pricePerCarrier,
-                    selectedAmount: amount
-                };
+                if(amount !== 0) {
+                    let shoppingCartItem = new ShoppingCartItem( 
+                        product?.name,
+                        product?.artistName,
+                        selectedSoundCarrier.soundCarrierId,
+                        selectedSoundCarrier.soundCarrierName,
+                        selectedSoundCarrier.pricePerCarrier,
+                        selectedSoundCarrier.amountAvailable,
+                        amount
+                    );
+    
+                    if(shoppingCart.findIndex(item => item.soundCarrerId === shoppingCartItem.soundCarrerId) === -1) {
+                        shoppingCart.push(shoppingCartItem);
 
-                if(!shoppingCart.includes(shoppingCartItem)) {
-                    shoppingCart.push(shoppingCartItem);
+                        // Should set amount to 0 so the ui refreshes the table and shows 0 
+                        // TODO: Fix this 
+                        updateSelectedSoundCarriers(selectedSoundCarrier, 0);
+                        
+                        alert("Added " + shoppingCartItem.selectedAmount + " of " + shoppingCartItem.productName + 
+                        "[" + shoppingCartItem.soundCarrierType + "]" + " to cart");
+                    } else {
+                        alert(shoppingCartItem.productName + "[" + shoppingCartItem.soundCarrierType + "] is already in cart!");
+                    }
                 }
             });
         }
@@ -90,7 +110,7 @@ const BuyProductPopup = ({callbackFunction, product}: BuyProductPopupProps) => {
                     <div className="row">
                         <div className='col-12'>
                         <button className="btn custom-btn" onClick={() => addToCart()}> 
-                                Add to cart 
+                                Add to cart
                         </button>
                         </div>
                     </div>

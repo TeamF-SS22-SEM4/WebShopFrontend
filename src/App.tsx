@@ -101,17 +101,13 @@ function App(this: any) {
     return (
         <AuthenticationContext.Provider value={authState}>
             <DarkModeContext.Provider value={darkState}>
-                <div className={darkState.dark ? "bp4-dark" : ""} style={darkState.dark ? {backgroundColor: "darkgray", minHeight: "100vh"} : {backgroundColor: "white"}}>
+                <div className={darkState.dark ? "bp4-dark" : ""} style={darkState.dark ? {backgroundColor: "#616161", minHeight: "100vh"} : {backgroundColor: "white"}}>
                     <AppHeader/>
                     <Routes>
                         <Route index element={<Startpage/>}/>
                         <Route path="/login" element={<LoginPage fromManualLink={true}/>}/>
                         <Route path="/search" element={<SearchPage/>}/>
-                        <Route path="/cart" element={
-                            <RestrictedWrapper>
-                                <ShoppingCartPage />
-                            </RestrictedWrapper>
-                        }/>
+                        <Route path="/cart" element={ <ShoppingCartPage/>}/>
                         <Route path="/restrictedTest" element={
                             <RestrictedWrapper>
                                 <h1>If you see this without being logged in tell Lukas he fucked up.</h1>

@@ -63,48 +63,61 @@ function SearchPage() {
 
     return (
         <>
-            <SearchBar callbackFunction={setSearchTerm} />
-            
-            <button className="btn custom-btn" onClick={() => fetchProducts(searchTerm)}>Search</button>
-
-            <div id="content">
-                <table className="table table-hover table-dark">
-                    <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Artist</th>
-                        <th>Genre</th>
-                        <th>Release Year</th>
-                        <th>Price [from]</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {
-                        products?.map(
-                            product =>
-                            <tr key={product.productId}>
-                                <td className="align-middle">{product.name}</td>
-                                <td className="align-middle">{product.artistName}</td>
-                                <td className="align-middle">{product.genre}</td>
-                                <td className="align-middle">{product.releaseYear}</td>
-                                <td className="align-middle">{product.smallestPrice} €</td>
-                                <td>
-                                    <button className='btn custom-btn' onClick={() => showProductDetails(product.productId)}>
-                                        Details
-                                    </button>
-                                </td>
-                                <td>
-                                    <button className='btn custom-btn' onClick={() => showBuyProduct(product.productId)}>
-                                        Buy
-                                    </button>
-                                </td>
-                            </tr>  
-                        )
-                    }
-                    </tbody>
-                </table>
+            <div className="container">
+                <div className="row">
+                    <div className="col-12">
+                        <h1 className="pageTitle">Explore the music of Tomify!</h1>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-10">
+                        <SearchBar callbackFunction={setSearchTerm} />
+                    </div>
+                    <div className="col-2">
+                        <button className="btn custom-btn" onClick={() => fetchProducts(searchTerm)}>Search</button>
+                    </div>
+                </div>
+                <div className="row productListContainer">
+                    <div className="col-12">
+                        <table className="table table-hover table-dark productTable">
+                            <thead className="tableHead">
+                            <tr>
+                                <th>Name</th>
+                                <th>Artist</th>
+                                <th>Genre</th>
+                                <th>Release Year</th>
+                                <th>Price [from]</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {
+                                products?.map(
+                                    product =>
+                                    <tr key={product.productId}>
+                                        <td className="align-middle">{product.name}</td>
+                                        <td className="align-middle">{product.artistName}</td>
+                                        <td className="align-middle">{product.genre}</td>
+                                        <td className="align-middle">{product.releaseYear}</td>
+                                        <td className="align-middle">{product.smallestPrice} €</td>
+                                        <td>
+                                            <button className='btn custom-btn' onClick={() => showProductDetails(product.productId)}>
+                                                Details
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button className='btn custom-btn' onClick={() => showBuyProduct(product.productId)}>
+                                                Buy
+                                            </button>
+                                        </td>
+                                    </tr>  
+                                )
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
             {
                 isProductDetailsShown ?

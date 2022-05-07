@@ -11,14 +11,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
-.custom-btn {
-  background-color: #c27f00 !important;
-  color: white;
-}
-
-.close-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-}

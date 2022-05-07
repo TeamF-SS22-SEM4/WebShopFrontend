@@ -2,8 +2,17 @@ table, th, td {
     border: 1px solid black;
 }
 
-#content {
+.productListContainer {
+    margin-top: 2em;
+}
+
+.productTable {
+    background-color: #424242;
+}
+
+.tableHead {
     text-align: center;
+    background-color: #282828;
 }
 
 .popup {
