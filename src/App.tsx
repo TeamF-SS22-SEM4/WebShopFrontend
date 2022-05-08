@@ -8,6 +8,7 @@ import SearchPage from "./components/SearchPage/SearchPage";
 import {Configuration, DefaultApi, LoginResultDTO} from "./openapi-client";
 import RestrictedWrapper from "./components/LoginPage/RestrictedWrapper";
 import ShoppingCartPage from './components/ShoppingCartPage/ShoppingCartPage';
+import CheckoutPage from './components/CheckoutPage/CheckoutPage';
 
 const host = process.env.REACT_APP_API_HOST || "localhost";
 const port = process.env.REACT_APP_API_PORT || "8080";
@@ -117,6 +118,11 @@ function App(this: any) {
                         <Route path="/login" element={<LoginPage fromManualLink={true}/>}/>
                         <Route path="/search" element={<SearchPage/>}/>
                         <Route path="/cart" element={ <ShoppingCartPage/>}/>
+                        <Route path="/checkout" element={
+                            <RestrictedWrapper>
+                                <CheckoutPage />
+                            </RestrictedWrapper>
+                        }/>
                         <Route path="/restrictedTest" element={
                             <RestrictedWrapper>
                                 <h1>If you see this without being logged in tell Lukas he fucked up.</h1>

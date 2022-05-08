@@ -1,7 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { AuthenticationContext } from "../../App";
 import { ShoppingCartItem } from "../utils/ShoppingCartItem";
 
 const ShoppingCartPage = () => {
+    const authenticationContext = useContext(AuthenticationContext);
     const [totalPrice, setTotalPrice] = useState<number>(0);
 
     useEffect(() => {     
@@ -105,6 +108,18 @@ const ShoppingCartPage = () => {
                         <p className="standardText">Total: {totalPrice} €</p>
                     </div>
                 </div>
+                {
+                    (authenticationContext.loggedIn && shoppingCart.length > 0) && 
+                    
+                    <div className="row">
+                    <div className="col-12">
+                       <Link to={"/checkout"} >
+                           <button className="btn custom-btn">Check out</button>
+                       </Link>
+                    </div>
+                </div>
+                }
+               
             </div>
         </>
     );
