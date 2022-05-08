@@ -11,11 +11,12 @@ import ShoppingCartPage from './components/ShoppingCartPage/ShoppingCartPage';
 
 const host = process.env.REACT_APP_API_HOST || "localhost";
 const port = process.env.REACT_APP_API_PORT || "8080";
+const protocol = process.env.REACT_APP_API_PROTOCOL || "http";
 
 //set up open api client
 const configParams = {
     //https?
-    basePath: `http://${host}:${port}`
+    basePath: `${protocol}://${host}:${port}`
 }
 
 export let apiClient = new DefaultApi(new Configuration(configParams));
