@@ -1,4 +1,3 @@
-import { useState } from "react";
 
 interface SearchBarProps {
     callbackFunction: (searchTerm: string) => void;

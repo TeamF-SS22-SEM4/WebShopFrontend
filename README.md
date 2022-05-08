@@ -8,6 +8,10 @@ A ReactJs Application for a fictional Musicshop "Tomify", created for course Ent
 
 Recommended to start via ``npm start``, for Hot-Reloading.
 
+When running for the first time, first the commands ``npm install`` and ``npm run generate-client`` need to be executed.
+
+``npm ru generate-client`` also needs to be executed if there are changes to the openapi-definition.
+
 ***
 ### For Deployment
 
