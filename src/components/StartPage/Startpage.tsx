@@ -11,6 +11,7 @@ function Startpage() {
                 <div className="row">
                     <div className="col-12">
                         <p className="pageTitle">Welcome to Tomify!</p>
+                        <p>If this is shown CI/CD works!</p>
                     </div>
                 </div>
                 <div className="row">
