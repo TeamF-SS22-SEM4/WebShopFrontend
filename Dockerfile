@@ -23,7 +23,7 @@ WORKDIR /app
 # Cache and Install dependencies
 COPY --from=clientBuilder /app/ /app/
 COPY . .
-RUN npm run test -- --watchAll=false
+
 # Build the app
 RUN npm run build
 
