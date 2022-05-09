@@ -90,7 +90,7 @@ function App(this: any) {
                             ...prev,
                             loggedIn: true,
                             username: dto.username || "",
-                            sessionId: dto.username || ""
+                            sessionId: dto.sessionId || ""
                         }
                     }))
                 },

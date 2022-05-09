@@ -1,16 +1,64 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useContext, useState } from "react";
+import { apiClient, AuthenticationContext } from "../../App";
+import { OrderItem, PaymentInformation, PlaceOrderRequest, Purchase } from "../../openapi-client";
+import { shoppingCart } from "../ShoppingCartPage/ShoppingCartPage";
 
 const CheckoutPage = () => {
+    const authenticationContext = useContext(AuthenticationContext);
+    let sessionId = authenticationContext.sessionId;
+    
     const [paymentMethod, setPaymentMethod] = useState<string>("");
-    const [creditCardType, setCreditCardType] = useState<string>("");
+    const [creditCardType, setCreditCardType] = useState<string>("MASTERCARD");
     const [creditCardNumber, setCreditCardNumber] = useState<string>("");
     const [cvc, setCvc] = useState<string>("");
+    const [saleNumber, setSaleNumber] = useState<string>("");
 
     const placeOrder = () => {
-        console.log(paymentMethod);
-        console.log(creditCardType);
-        console.log(creditCardNumber);
-        console.log(cvc);
+        let isValidForm: boolean = true;
+        if(paymentMethod === "Credit Card") {
+            if(creditCardType === "" || creditCardNumber === "" || cvc === "") {
+                isValidForm = false;
+            }
+        }
+
+        if(isValidForm) {
+            let providedPaymentInformation: PaymentInformation = {
+                paymentMethod: paymentMethod,
+                creditCardType: creditCardType,
+                creditCardNumber: creditCardNumber,
+                cvc: cvc,
+            };
+
+            let selectedItems: OrderItem[] = [];
+            shoppingCart.forEach((item) => {
+                let orderItem: OrderItem = {
+                    carrierId: item.soundCarrerId,
+                    amount: item.selectedAmount,
+                };
+
+                console.log(item.soundCarrerId);
+
+                selectedItems.push(orderItem);
+            });
+
+            let purchase: Purchase = {
+                paymentInformation: providedPaymentInformation,
+                orderItems: selectedItems,
+            };
+
+            let placeOrderRequest: PlaceOrderRequest = {
+                sessionId: sessionId,
+                purchase: purchase,
+            };
+
+            apiClient.placeOrder(placeOrderRequest).then(result => {
+                alert(result);
+            }).catch(reason => {
+                //TODO handling
+            });
+        } else {
+            alert("You have to enter the payment information");
+        }
     }
 
     return (
@@ -36,7 +84,7 @@ const CheckoutPage = () => {
                     <>
                         <div className="row">
                             <div className="col-12"> 
-                                <select name="Credit Card Type" onChange={(evt) => setCreditCardType(evt.target.value)}>
+                                <select name="Credit Card Type" value={creditCardType} onChange={(evt) => setCreditCardType(evt.target.value)}>
                                     <option value="MASTERCARD">Mastercard</option>
                                     <option value="VISA">Visa</option>
                                 </select>
@@ -52,13 +100,13 @@ const CheckoutPage = () => {
                                 <input type="text" placeholder="CVC" onChange={(evt) => setCvc(evt.target.value)}/>
                             </div>
                         </div>
-                        <div className="row">
-                            <div className="col-12"> 
-                                <button onClick={() => placeOrder()} className="btn custom-btn">Order</button>
-                            </div>
-                        </div>
                     </> 
                 }
+                <div className="row">
+                    <div className="col-12"> 
+                        <button onClick={() => placeOrder()} className="btn custom-btn">Order</button>
+                    </div>
+                </div>
             </div>
         </>
     )
