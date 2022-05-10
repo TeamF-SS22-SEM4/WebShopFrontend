@@ -11,11 +11,10 @@ import ShoppingCartPage from './components/ShoppingCartPage/ShoppingCartPage';
 import CheckoutPage from './components/CheckoutPage/CheckoutPage';
 
 //set up open api client
+const apiUrl = window.location.origin === "http://localhost:3000" ? "http://localhost:8080" : window.location.origin;
 const configParams = {
-    //https?
-    basePath: window.location.origin
+    basePath: apiUrl
 }
-
 export let apiClient = new DefaultApi(new Configuration(configParams));
 const setSessionIdInClient = (token: string) => {
     apiClient = new DefaultApi(new Configuration(
