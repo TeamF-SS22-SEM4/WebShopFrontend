@@ -10,14 +10,10 @@ import RestrictedWrapper from "./components/LoginPage/RestrictedWrapper";
 import ShoppingCartPage from './components/ShoppingCartPage/ShoppingCartPage';
 import CheckoutPage from './components/CheckoutPage/CheckoutPage';
 
-const host = process.env.REACT_APP_API_HOST || "localhost";
-const port = process.env.REACT_APP_API_PORT || "8080";
-const protocol = process.env.REACT_APP_API_PROTOCOL || "http";
-
 //set up open api client
 const configParams = {
     //https?
-    basePath: `${protocol}://${host}:${port}`
+    basePath: window.location.origin
 }
 
 export let apiClient = new DefaultApi(new Configuration(configParams));
