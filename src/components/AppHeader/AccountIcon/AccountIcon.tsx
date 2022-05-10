@@ -1,5 +1,4 @@
 import React, {useContext} from 'react';
-import "./AccountIcon.css";
 import {Button, Icon, Popover} from "@blueprintjs/core";
 import AccountDropdown from "./AccountDropdown";
 import {Link} from "react-router-dom";

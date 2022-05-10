@@ -1,5 +1,4 @@
 import '../../App.css'
-import './StartPage.css'
 import SearchButton from "./SearchButton";
 import {Card, Elevation, Icon} from "@blueprintjs/core";
 import {Link} from "react-router-dom";

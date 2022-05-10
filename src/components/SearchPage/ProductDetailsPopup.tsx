@@ -1,5 +1,4 @@
 import { ProductDetailsDTO } from '../../openapi-client';
-import './SearchPage.css';
 
 interface ProductDetailsPopupProps {
     callbackFunction: () => void;

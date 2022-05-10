@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { ProductDetailsDTO, SoundCarrierDTO } from '../../openapi-client';
-import './SearchPage.css';
 import { shoppingCart } from '../ShoppingCartPage/ShoppingCartPage';
 import { ShoppingCartItem } from '../utils/ShoppingCartItem';
 

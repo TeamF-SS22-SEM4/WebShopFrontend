@@ -2,6 +2,126 @@
 @import "~@blueprintjs/core/lib/css/blueprint.css";
 @import "~@blueprintjs/icons/lib/css/blueprint-icons.css";
 
+.accountIcon {
+  margin: 10px;
+
+}
+.profile-wrapper {
+  /*width: 64px;*/
+  /*height: 64px;*/
+  border-radius: 50%;
+}
+
+img.profile-pic {
+  display: block;
+  object-fit: cover;
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+}
+
+
+.app-header {
+  background-color: #424242;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3em;
+}
+
+
+.logo {
+  margin: 10px;
+}
+
+
+
+.credential-card-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.credential-card {
+  margin: 50px;
+  min-width: 400px;
+}
+
+.credential-form {
+  margin-top: 20px;
+}
+
+.spinner-wrapper > h3 {
+
+  text-align: center;
+}
+.spinner-wrapper {
+  margin: 20px;
+}
+
+.error-msg {
+  color: red;
+  font-weight: bold;
+}
+
+
+table, th, td {
+  border: 1px solid black;
+}
+
+.productListContainer {
+  margin-top: 2em;
+}
+
+.productTable {
+  background-color: #424242;
+}
+
+.tableHead {
+  text-align: center;
+  background-color: #282828;
+}
+
+.popup {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  background-color: rgba(0,0,0, 0.7);
+}
+
+.popup_inner {
+  position: absolute;
+  left: 25%;
+  right: 25%;
+  top: 25%;
+  bottom: 22.5%;
+  margin: auto;
+  color: white;
+  border: 2px solid rgb(194, 127, 0);
+}
+
+.header {
+  background: #424242;
+}
+
+.content {
+  background: #616161;
+}
+
+.link-card {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  padding: 50px;
+  max-width: 220px;
+  border-radius: 20%;
+  margin: 30px;
+}
+
 .App {
   text-align: center;
 }

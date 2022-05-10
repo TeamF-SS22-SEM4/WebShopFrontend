@@ -1,4 +1,3 @@
-import './SearchPage.css';
 import { useState } from "react";
 import { GetProductRequest, ProductDetailsDTO, ProductOverviewDTO, SearchProductsRequest } from "../../openapi-client";
 import {apiClient} from "../../App";

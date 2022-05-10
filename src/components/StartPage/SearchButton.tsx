@@ -1,4 +1,3 @@
-import './StartPage.css'
 import {Card, Elevation, Icon} from "@blueprintjs/core";
 
 function SearchButton() {
