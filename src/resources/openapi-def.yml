@@ -38,6 +38,10 @@ paths:
       responses:
         '200':
           description: Ok, placed order
+          content:
+            text/plain:
+              schema:
+                type: string
         '401':
           description: Unauthorized for operation
         '403':
