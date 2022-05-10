@@ -6,15 +6,6 @@ table, th, td {
     margin-top: 2em;
 }
 
-.productTable {
-    background-color: #424242;
-}
-
-.tableHead {
-    text-align: center;
-    background-color: #282828;
-}
-
 .popup {
     position: fixed;
     width: 100%;

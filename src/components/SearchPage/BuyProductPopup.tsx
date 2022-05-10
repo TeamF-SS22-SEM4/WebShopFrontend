@@ -72,14 +72,13 @@ const BuyProductPopup = ({callbackFunction, product}: BuyProductPopupProps) => {
                     </div>
                     <div className="row content">
                         <div className="col-10">
-                            <table className="table table-hover table-dark">
-                                    <thead>
+                            <table className="table table-hover table-dark custom-table">
+                                    <thead className="custom-table-head">
                                         <tr>
                                             <th>Type</th>
                                             <th>Available</th>
                                             <th>Price</th>
-                                            <th></th>
-                                            <th></th>
+                                            <th>Selected Amount</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -89,7 +88,7 @@ const BuyProductPopup = ({callbackFunction, product}: BuyProductPopupProps) => {
                                                     <tr key={soundCarrier.soundCarrierId}>
                                                         <td className="align-middle">{soundCarrier.soundCarrierName}</td>
                                                         <td className="align-middle">{soundCarrier.amountAvailable}</td>
-                                                        <td className="align-middle">{soundCarrier.pricePerCarrier}</td>
+                                                        <td className="align-middle">{soundCarrier.pricePerCarrier}€</td>
                                                         <td className="align-middle">
                                                             <input 
                                                                 type="number" 

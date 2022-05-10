@@ -29,8 +29,8 @@ const ProductDetailsPopup = ({callbackFunction, product}: ProductDetailsPopupPro
                             <p>Label {product?.labelName}</p>
                         </div>
                         <div className="col-6">
-                            <table className="table table-hover table-dark">
-                                <thead>
+                            <table className="table table-hover table-dark custom-table">
+                                <thead className="custom-table-head">
                                     <tr>
                                         <th>Title</th>
                                         <th>Duration</th>

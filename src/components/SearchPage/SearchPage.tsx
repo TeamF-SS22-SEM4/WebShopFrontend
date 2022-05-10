@@ -44,8 +44,9 @@ function SearchPage() {
 
         apiClient.searchProducts(searchProductsRequest).then(result => {
             setProducts(result);
-        }).catch(reason => {
-            //TODO handling
+        }).catch(() => {
+            // Should only return 200 or a empty list
+            alert("Something went wrong...");
         });
     }
 
@@ -56,8 +57,17 @@ function SearchPage() {
 
         apiClient.getProduct(getProductRequest).then(result => {
             setProduct(result);
-        }).catch(reason => {
+        }).catch(response => {
             //TODO handling
+            if (response.status === 403) {
+                alert("Not Authenticated");
+            } else if (response.status === 401) {
+                alert("Unauthorized for operation");
+            } else if (response.status === 403) {
+                alert("Unknown product id");
+            } else {
+                alert("Something went wrong...");
+            }
         });
     }
 
@@ -79,8 +89,8 @@ function SearchPage() {
                 </div>
                 <div className="row productListContainer">
                     <div className="col-12">
-                        <table className="table table-hover table-dark productTable">
-                            <thead className="tableHead">
+                        <table className="table table-hover table-dark custom-table">
+                            <thead className="custom-table-head">
                             <tr>
                                 <th>Name</th>
                                 <th>Artist</th>
