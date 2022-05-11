@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import {apiClient, AuthenticationContext} from "../../App";
 import { ShoppingCartItem } from "../utils/ShoppingCartItem";
 import "./ShoppingCartPage.css";

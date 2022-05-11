@@ -1,12 +1,7 @@
 @import "~normalize.css";
-@import "~@blueprintjs/core/lib/css/blueprint.css";
-@import "~@blueprintjs/icons/lib/css/blueprint-icons.css";
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+@import 'bootstrap/dist/css/bootstrap.min.css';
+/*@import "~@blueprintjs/core/lib/css/blueprint.css";*/
+/*@import "~@blueprintjs/icons/lib/css/blueprint-icons.css";*/
 
 html, body, #root {
   height: 100%;
@@ -14,16 +9,17 @@ html, body, #root {
 }
 
 .header {
-  padding: 10px;
   background-color: blue;
+
   height: 20%;
   position: sticky;
   box-shadow: 0 0 50px rgba(0, 0, 0, 1);
 }
 
 .content {
-  height: 90%;
-  position: relative;
+  background-color: red;
+
+  height: 80%;
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -33,191 +29,191 @@ html, body, #root {
 
 
 
-.accountIcon {
-  margin: 10px;
+/*.accountIcon {*/
+/*  margin: 10px;*/
 
-}
-.profile-wrapper {
-  /*width: 64px;*/
-  /*height: 64px;*/
-  border-radius: 50%;
-}
+/*}*/
+/*.profile-wrapper {*/
+/*  !*width: 64px;*!*/
+/*  !*height: 64px;*!*/
+/*  border-radius: 50%;*/
+/*}*/
 
-img.profile-pic {
-  display: block;
-  object-fit: cover;
-  border-radius: 50%;
-  width: 64px;
-  height: 64px;
-}
-
-
-.app-header {
-  background-color: #424242;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 3em;
-}
+/*img.profile-pic {*/
+/*  display: block;*/
+/*  object-fit: cover;*/
+/*  border-radius: 50%;*/
+/*  width: 64px;*/
+/*  height: 64px;*/
+/*}*/
 
 
-.logo {
-  margin: 10px;
-}
+/*.app-header {*/
+/*  background-color: #424242;*/
+/*  display: flex;*/
+/*  justify-content: space-between;*/
+/*  align-items: center;*/
+/*  margin-bottom: 3em;*/
+/*}*/
+
+
+/*.logo {*/
+/*  margin: 10px;*/
+/*}*/
 
 
 
-.credential-card-wrapper {
-  display: flex;
-  justify-content: center;
-}
+/*.credential-card-wrapper {*/
+/*  display: flex;*/
+/*  justify-content: center;*/
+/*}*/
 
-.credential-card {
-  margin: 50px;
-  min-width: 400px;
-}
+/*.credential-card {*/
+/*  margin: 50px;*/
+/*  min-width: 400px;*/
+/*}*/
 
-.credential-form {
-  margin-top: 20px;
-}
+/*.credential-form {*/
+/*  margin-top: 20px;*/
+/*}*/
 
-.spinner-wrapper > h3 {
+/*.spinner-wrapper > h3 {*/
 
-  text-align: center;
-}
-.spinner-wrapper {
-  margin: 20px;
-}
+/*  text-align: center;*/
+/*}*/
+/*.spinner-wrapper {*/
+/*  margin: 20px;*/
+/*}*/
 
-.error-msg {
-  color: red;
-  font-weight: bold;
-}
+/*.error-msg {*/
+/*  color: red;*/
+/*  font-weight: bold;*/
+/*}*/
 
 
-table, th, td {
-  border: 1px solid black;
-}
+/*table, th, td {*/
+/*  border: 1px solid black;*/
+/*}*/
 
-.productListContainer {
-  margin-top: 2em;
-}
+/*.productListContainer {*/
+/*  margin-top: 2em;*/
+/*}*/
 
-.productTable {
-  background-color: #424242;
-}
+/*.productTable {*/
+/*  background-color: #424242;*/
+/*}*/
 
-.tableHead {
-  text-align: center;
-  background-color: #282828;
-}
+/*.tableHead {*/
+/*  text-align: center;*/
+/*  background-color: #282828;*/
+/*}*/
 
-.popup {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  background-color: rgba(0,0,0, 0.7);
-}
+/*.popup {*/
+/*  position: fixed;*/
+/*  width: 100%;*/
+/*  height: 100%;*/
+/*  top: 0;*/
+/*  left: 0;*/
+/*  right: 0;*/
+/*  bottom: 0;*/
+/*  margin: auto;*/
+/*  background-color: rgba(0,0,0, 0.7);*/
+/*}*/
 
-.popup_inner {
-  position: absolute;
-  left: 25%;
-  right: 25%;
-  top: 25%;
-  bottom: 22.5%;
-  margin: auto;
-  color: white;
-  border: 2px solid rgb(194, 127, 0);
-}
+/*.popup_inner {*/
+/*  position: absolute;*/
+/*  left: 25%;*/
+/*  right: 25%;*/
+/*  top: 25%;*/
+/*  bottom: 22.5%;*/
+/*  margin: auto;*/
+/*  color: white;*/
+/*  border: 2px solid rgb(194, 127, 0);*/
+/*}*/
 
-.header {
-  background: #424242;
-}
+/*.header {*/
+/*  background: #424242;*/
+/*}*/
 
-.content {
-  background: #616161;
-}
+/*.content {*/
+/*  background: #616161;*/
+/*}*/
 
-.link-card {
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  padding: 50px;
-  max-width: 220px;
-  border-radius: 20%;
-  margin: 30px;
-}
+/*.link-card {*/
+/*  display: flex;*/
+/*  justify-content: center;*/
+/*  align-content: center;*/
+/*  padding: 50px;*/
+/*  max-width: 220px;*/
+/*  border-radius: 20%;*/
+/*  margin: 30px;*/
+/*}*/
 
-.App {
-  text-align: center;
-}
+/*.App {*/
+/*  text-align: center;*/
+/*}*/
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
+/*.App-logo {*/
+/*  height: 40vmin;*/
+/*  pointer-events: none;*/
+/*}*/
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
+/*@media (prefers-reduced-motion: no-preference) {*/
+/*  .App-logo {*/
+/*    animation: App-logo-spin infinite 20s linear;*/
+/*  }*/
+/*}*/
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
+/*.App-header {*/
+/*  background-color: #282c34;*/
+/*  min-height: 100vh;*/
+/*  display: flex;*/
+/*  flex-direction: column;*/
+/*  align-items: center;*/
+/*  justify-content: center;*/
+/*  font-size: calc(10px + 2vmin);*/
+/*  color: white;*/
+/*}*/
 
-.App-link {
-  color: #61dafb;
-}
+/*.App-link {*/
+/*  color: #61dafb;*/
+/*}*/
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+/*@keyframes App-logo-spin {*/
+/*  from {*/
+/*    transform: rotate(0deg);*/
+/*  }*/
+/*  to {*/
+/*    transform: rotate(360deg);*/
+/*  }*/
+/*}*/
 
-.pageTitle {
-  text-align: center;
-  font-weight: bolder;
-  font-size: 4em;
-}
+/*.pageTitle {*/
+/*  text-align: center;*/
+/*  font-weight: bolder;*/
+/*  font-size: 4em;*/
+/*}*/
 
-.standardText {
-  font-size: 1.5em;
-}
+/*.standardText {*/
+/*  font-size: 1.5em;*/
+/*}*/
 
-.custom-btn {
-  background-color: #c27f00 !important;
-  color: white;
-}
+/*.custom-btn {*/
+/*  background-color: #c27f00 !important;*/
+/*  color: white;*/
+/*}*/
 
-.close-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-}
+/*.close-btn {*/
+/*  position: absolute;*/
+/*  top: 50%;*/
+/*  transform: translateY(-50%);*/
+/*}*/
 
-.custom-table {
-  background-color: #424242;
-}
+/*.custom-table {*/
+/*  background-color: #424242;*/
+/*}*/
 
-.custom-table-head {
-  text-align: center;
-  background-color: #282828;
-}
+/*.custom-table-head {*/
+/*  text-align: center;*/
+/*  background-color: #282828;*/
+/*}*/

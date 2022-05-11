@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
-import AppHeader from './components/AppHeader/AppHeader';
 import LoginPage from './components/LoginPage/LoginPage';
 import {Route, Routes} from 'react-router-dom';
 import Startpage from "./components/StartPage/Startpage";
@@ -8,6 +7,8 @@ import SearchPage from "./components/SearchPage/SearchPage";
 import {Configuration, DefaultApi, LoginResultDTO} from "./openapi-client";
 import RestrictedWrapper from "./components/LoginPage/RestrictedWrapper";
 import ShoppingCartPage from './components/ShoppingCartPage/ShoppingCartPage';
+import Header from "./components/Header";
+import 'bootstrap';
 
 //set up open api client
 const apiUrl = window.location.origin === "http://localhost:3000" ? "http://localhost:8080" : window.location.origin;
@@ -104,22 +105,18 @@ function App(this: any) {
 
     return (
         <AuthenticationContext.Provider value={authState}>
-            <DarkModeContext.Provider value={darkState}>
-                <div className={darkState.dark ? "bp4-dark" : ""} style={darkState.dark ? {backgroundColor: "#616161", minHeight: "100vh"} : {backgroundColor: "white"}}>
-                    <AppHeader/>
-                    <Routes>
-                        <Route index element={<Startpage/>}/>
-                        <Route path="/login" element={<LoginPage fromManualLink={true}/>}/>
-                        <Route path="/search" element={<SearchPage/>}/>
-                        <Route path="/cart" element={ <ShoppingCartPage/>}/>
-                        <Route path="/restrictedTest" element={
-                            <RestrictedWrapper>
-                                <h1>If you see this without being logged in tell Lukas he fucked up.</h1>
-                            </RestrictedWrapper>
-                        }/>
-                    </Routes>
-                </div>
-            </DarkModeContext.Provider>
+            <Header />
+            <Routes>
+                <Route index element={<Startpage/>}/>
+                <Route path="/login" element={<LoginPage fromManualLink={true}/>}/>
+                <Route path="/search" element={<SearchPage/>}/>
+                <Route path="/cart" element={ <ShoppingCartPage/>}/>
+                <Route path="/restrictedTest" element={
+                    <RestrictedWrapper>
+                        <h1>If you see this without being logged in tell Lukas he fucked up.</h1>
+                    </RestrictedWrapper>
+                }/>
+            </Routes>
         </AuthenticationContext.Provider>
     );
 }
