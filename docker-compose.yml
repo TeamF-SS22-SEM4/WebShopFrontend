@@ -4,7 +4,5 @@ services:
   web-shop-tomify:
     container_name: web-shop-tomify
     build: .
-    networks:
-      - musicshop_backend_network
     ports:
       - "${OUTWARD_PORT:-80}:80"
