@@ -2,6 +2,37 @@
 @import "~@blueprintjs/core/lib/css/blueprint.css";
 @import "~@blueprintjs/icons/lib/css/blueprint-icons.css";
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+}
+
+.header {
+  padding: 10px;
+  background-color: blue;
+  height: 20%;
+  position: sticky;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 1);
+}
+
+.content {
+  height: 90%;
+  position: relative;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+
+
+
+
+
 .accountIcon {
   margin: 10px;
 
