@@ -212,3 +212,12 @@ table, th, td {
   top: 50%;
   transform: translateY(-50%);
 }
+
+.custom-table {
+  background-color: #424242;
+}
+
+.custom-table-head {
+  text-align: center;
+  background-color: #282828;
+}

@@ -37,11 +37,13 @@ paths:
               $ref: '#/components/schemas/Purchase'
       responses:
         '200':
-          description: Ok, placed order
+          description: OK
           content:
-            text/plain:
+            application/json:
               schema:
                 type: string
+        '400':
+          description: Payment information invalid
         '401':
           description: Unauthorized for operation
         '403':
