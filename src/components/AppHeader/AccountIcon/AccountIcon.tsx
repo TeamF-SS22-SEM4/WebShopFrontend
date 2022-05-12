@@ -10,15 +10,20 @@ function AccountIcon() {
 
     return (
         <div className={"accountIcon"}>
-            {!loggedIn && <Link to={"/login"}> <Button large={true} minimal={true}>
-                <Icon icon={"log-in"} size={20} className={"login-icon"} /><span style={{color: "white"}}> Login </span> </Button> </Link>}
-            <Popover content={<AccountDropdown/>}>
-                <div className={"profile-wrapper"}>
-                    <Button minimal={true}>
-                        <Icon icon={"cog"} size={40}/>
-                    </Button>
-                </div>
-            </Popover>
+            {   !loggedIn
+                &&
+                <Link to={"/login"}>
+                <Button large={true} minimal={true}>
+                <Icon icon={"log-in"} size={20} className={"login-icon"} />
+                <span style={{color: "white"}}> Login </span>
+                </Button>
+            </Link>}
+
+            {   loggedIn
+                &&
+                <span style={{color: "white"}}> Login </span>
+            }
+
         </div>
     )
 }
