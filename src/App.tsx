@@ -103,7 +103,7 @@ function App() {
                         <Route path="/search" element={<SearchPage/>}/>
                         <Route path="/cart" element={ <ShoppingCartPage/>}/>
                         <Route path="/playlist" element={
-                            // <RestrictedWrapper>
+                            // <RestrictedWrapper> TODO uncomment
                                 <PlaylistPage/>
                             // </RestrictedWrapper>
                         }/>

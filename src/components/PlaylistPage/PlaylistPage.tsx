@@ -1,12 +1,13 @@
 import './PlaylistPage.css';
 import {useEffect, useState} from "react";
-import SongList from "./SongList";
 import SongPlayer from "./SongPlayer";
+import {Spinner, SpinnerSize} from "@blueprintjs/core";
 
 
 function PlaylistPage() {
     let [songsLoading, setSongsLoading] = useState(true);
     let [songs, setSongs] = useState<string[]>(["bohemian rhapsody", "puppe"]); //TODO change type to PlayableSongDTO
+    let [selectedIndex, setSelectedIndex] = useState<number | undefined>(undefined);
 
     useEffect(() => {
         setTimeout(() =>
@@ -19,12 +20,19 @@ function PlaylistPage() {
     return (
         <>
             <p>Playlist</p>
-            {songsLoading && <p>Loading...</p>}
-            {!songsLoading && <SongList/>}
+            {songsLoading && <Spinner size={SpinnerSize.LARGE}/>}
+            {!songsLoading && <p>list</p>}
             <br/>
             <br/>
 
-            <SongPlayer/>
+
+            <div style={{
+                position: "absolute",
+                bottom: 0,
+                width: "100%",
+            }}>
+                <SongPlayer/>
+            </div>
         </>
     )
 }
