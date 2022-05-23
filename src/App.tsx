@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import './App.css';
 import AppHeader from './components/AppHeader/AppHeader';
 import LoginPage from './components/LoginPage/LoginPage';
@@ -31,11 +31,6 @@ export type AuthenticationContextType = {
     logout: () => void;
 }
 
-export type DarkContextType = {
-    dark: boolean;
-    setDark: (b: boolean) => void
-}
-
 let contextValue: AuthenticationContextType = {
     sessionId: "",
     username: "",
@@ -45,33 +40,24 @@ let contextValue: AuthenticationContextType = {
     logout: () => {
     }
 }
-let darkValue: DarkContextType = {
-    dark: true,
-    setDark: () => {
-    }
-}
+
+type DarkModeType = boolean | undefined;
+
+type DarkModeContextType = [
+    DarkModeType,
+    React.Dispatch<React.SetStateAction<DarkModeType>>
+];
+
+const DarkModeContext = React.createContext<DarkModeContextType | undefined>(undefined);
+export const useDarkModeContext = () => useContext(DarkModeContext) as DarkModeContextType;
+
 
 export const AuthenticationContext = React.createContext(contextValue)
-export const DarkModeContext = React.createContext(darkValue);
 
 function App() {
     let [authState, setAuthState] = useState(contextValue)
-    let [darkState, setDarkState] = useState(darkValue);
 
     useEffect(() => {
-        setDarkState(prev => {
-            return {
-                ...prev,
-                setDark: b => {
-                    setDarkState(p => {
-                        return {
-                            ...p,
-                            dark: b
-                        }
-                    })
-                }
-            }
-        })
 
         setAuthState(prevState => {
             return {
@@ -101,10 +87,13 @@ function App() {
         })
     }, []);
 
+    let darkStateArr = useState<DarkModeType>(true);
+    let isDark = darkStateArr[0]; //needed because value of the state is also read in the same component that provides the context
+
     return (
         <AuthenticationContext.Provider value={authState}>
-            <DarkModeContext.Provider value={darkState}>
-                <div className={darkState.dark ? "bp4-dark" : ""} style={darkState.dark ? {backgroundColor: "#616161", minHeight: "100vh"} : {backgroundColor: "white"}}>
+            <DarkModeContext.Provider value={darkStateArr}>
+                <div className={isDark ? "bp4-dark" : ""} style={isDark ? {backgroundColor: "#616161", minHeight: "100vh"} : {backgroundColor: "white"}}>
                     <AppHeader/>
                     <Routes>
                         <Route index element={<Startpage/>}/>
