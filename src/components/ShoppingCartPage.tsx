@@ -1,9 +1,8 @@
-import { useContext, useEffect, useState } from "react";
-import {apiClient, AuthenticationContext} from "../../App";
-import { ShoppingCartItem } from "../utils/ShoppingCartItem";
-import "./ShoppingCartPage.css";
+import React, { useContext, useEffect, useState } from "react";
+import {apiClient, AuthenticationContext, ShoppingCartContext} from "../App";
+import { ShoppingCartItem } from "./ShoppingCartItem";
 import {InputGroup, Label, Radio, RadioGroup} from "@blueprintjs/core";
-import {OrderItem, PaymentInformation, PlaceOrderRequest, Purchase} from "../../openapi-client";
+import {OrderItem, PaymentInformation, PlaceOrderRequest, Purchase} from "../openapi-client";
 
 const ShoppingCartPage = () => {
     const authenticationContext = useContext(AuthenticationContext);
@@ -14,6 +13,8 @@ const ShoppingCartPage = () => {
     const [creditCardNumber, setCreditCardNumber] = useState<string>("");
     const [cvc, setCvc] = useState<string>("");
     const [saleNumber, setSaleNumber] = useState<string>("");
+    const shoppingCartContext = useContext(ShoppingCartContext);
+
 
     useEffect(() => {     
         calculateTotalPrice();
@@ -55,6 +56,8 @@ const ShoppingCartPage = () => {
 
         if(index !== -1 && index !== undefined) {
             shoppingCart.splice(index, 1);
+            shoppingCartContext.setItems(shoppingCart.length);
+
         }
         
         calculateTotalPrice();
@@ -258,5 +261,3 @@ const ShoppingCartPage = () => {
 
 export const shoppingCart: ShoppingCartItem[] = [];
 export default ShoppingCartPage;
-
-

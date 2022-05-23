@@ -1,13 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import './App.css';
-import LoginPage from './components/LoginPage/LoginPage';
+import LoginPage from './components/LoginPage';
 import {Route, Routes} from 'react-router-dom';
-import Startpage from "./components/StartPage/Startpage";
-import SearchPage from "./components/SearchPage/SearchPage";
+import SearchPage from "./components/SearchPage";
 import {Configuration, DefaultApi, LoginResultDTO} from "./openapi-client";
-import RestrictedWrapper from "./components/LoginPage/RestrictedWrapper";
-import ShoppingCartPage from './components/ShoppingCartPage/ShoppingCartPage';
+import RestrictedWrapper from "./components/RestrictedWrapper";
+import ShoppingCartPage from './components/ShoppingCartPage';
 import Header from "./components/Header";
+
+import 'normalize.css/normalize.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/js/bootstrap.min.js'
+import './App.css';
+import {ShoppingCartItem} from "./components/ShoppingCartItem";
 
 //set up open api client
 const apiUrl = window.location.origin === "http://localhost:3000" ? "http://localhost:8080" : window.location.origin;
@@ -55,9 +59,25 @@ let darkValue: DarkContextType = {
 export const AuthenticationContext = React.createContext(contextValue)
 export const DarkModeContext = React.createContext(darkValue);
 
+type ShoppingCartContextType = {
+    items: number,
+    setItems: (i: number) => void
+}
+
+
+
+let shoppingCartContext: ShoppingCartContextType = {
+    items: 0,
+    setItems: () => {}
+}
+
+export const ShoppingCartContext = React.createContext(shoppingCartContext);
+
+
 function App(this: any) {
     let [authState, setAuthState] = useState(contextValue)
     let [darkState, setDarkState] = useState(darkValue);
+    let [shoppingCartState, setShoppingCartState] = useState(shoppingCartContext);
 
     useEffect(() => {
         setDarkState(prev => {
@@ -70,6 +90,20 @@ function App(this: any) {
                             dark: b
                         }
                     })
+                }
+            }
+        })
+
+        setShoppingCartState(prevState => {
+            return {
+                ...prevState,
+                setItems: (i: number) => {
+                    setShoppingCartState((prev => {
+                        return {
+                            ...prev,
+                            items: i
+                        }
+                    }))
                 }
             }
         })
@@ -104,18 +138,14 @@ function App(this: any) {
 
     return (
         <AuthenticationContext.Provider value={authState}>
+            <ShoppingCartContext.Provider value={shoppingCartState}>
             <Header />
             <Routes>
-                <Route index element={<Startpage/>}/>
+                <Route index element={<SearchPage/>}/>
                 <Route path="/login" element={<LoginPage fromManualLink={true}/>}/>
-                <Route path="/search" element={<SearchPage/>}/>
                 <Route path="/cart" element={ <ShoppingCartPage/>}/>
-                <Route path="/restrictedTest" element={
-                    <RestrictedWrapper>
-                        <h1>If you see this without being logged in tell Lukas he fucked up.</h1>
-                    </RestrictedWrapper>
-                }/>
             </Routes>
+            </ShoppingCartContext.Provider>
         </AuthenticationContext.Provider>
     );
 }

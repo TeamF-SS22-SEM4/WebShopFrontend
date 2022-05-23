@@ -1,8 +1,6 @@
-@import 'normalize.css/normalize.css';
-@import 'bootstrap/dist/css/bootstrap.min.css';
-@import "~@blueprintjs/core/lib/css/blueprint.css";
-@import "~@blueprintjs/icons/lib/css/blueprint-icons.css";
-
+/********************************************************************************/
+/* DEFAULT VALUES                                                               */
+/********************************************************************************/
 * {
   --color-primary: rgb(194, 127, 0);
 
@@ -19,21 +17,14 @@ html, body, #root {
   height: 100%;
   overflow: hidden;
 }
-
+/********************************************************************************/
+/* HEADER                                                                       */
+/********************************************************************************/
 .header {
-  background-color: var(--color-bg-1);
+  background-color: var(--color-bg-2);
   color: var(--color-text-1);
   height: 10%;
   padding: 25px 0 25px 0;
-  box-shadow: 0 0 50px rgba(0, 0, 0, 1);
-}
-
-.content {
-  background-color: var(--color-bg-3);
-  position: relative;
-  height: 90%;
-  overflow-x: hidden;
-  overflow-y: auto;
 }
 
 .header-logo {
@@ -44,76 +35,52 @@ html, body, #root {
   background-repeat: no-repeat;
   background-size: contain;
   background-position: left center;
-  animation-name: move;
-  animation-duration: 5s;
-  animation-iteration-count: infinite;
-  /*-webkit-animation: breathing 5s ease-out infinite normal;*/
-  /*animation: breathing 5s ease-out infinite normal;*/
-}
-@keyframes move {
-  0%, 100% { transform: translateX(0px); }
-  50% { transform: translateX(50px); }
-}
-@keyframes skew {
-  0%, 100% { transform: skewX(0deg); }
-  50% { transform: skewX(15deg); }
-}
-@keyframes opacity {
-  0%, 100% { opacity: 1; }
-  50% { opacity: .5; }
 }
 
-@-webkit-keyframes breathing {
-  0% {
-    -webkit-transform: scale(0.9);
-    transform: scale(0.9);
-  }
-
-  25% {
-    -webkit-transform: scale(1);
-    transform: scale(1);
-  }
-
-  60% {
-    -webkit-transform: scale(0.9);
-    transform: scale(0.9);
-  }
-
-  100% {
-    -webkit-transform: scale(0.9);
-    transform: scale(0.9);
-  }
+.nav li {
+  padding: 0 0 3px 0;
 }
 
-@keyframes breathing {
-  0% {
-    -webkit-transform: scale(0.9);
-    -ms-transform: scale(0.9);
-    transform: scale(0.9);
-  }
-
-  25% {
-    -webkit-transform: scale(1);
-    -ms-transform: scale(1);
-    transform: scale(1);
-  }
-
-  60% {
-    -webkit-transform: scale(0.9);
-    -ms-transform: scale(0.9);
-    transform: scale(0.9);
-  }
-
-  100% {
-    -webkit-transform: scale(0.9);
-    -ms-transform: scale(0.9);
-    transform: scale(0.9);
-  }
+.nav li:hover {
+  padding: 0;
+  border: solid var(--color-primary);
+  border-width: 0 0 3px 0;
 }
 
+.dropdown-menu {
+  background-color: transparent !important;
+  border: none !important;
+}
 
+.dropdown:hover .dropdown-menu {
+  display: block;
+  right: 0;
+  min-width: fit-content !important;
+}
 
+.dropdown-item {
+  background-color: transparent !important;
+  color: var(--color-text-1) !important;
 
+}
+
+.dropdown-menu-custom {
+  border-radius:.25rem;
+  background-color: var(--color-bg-4);
+}
+/********************************************************************************/
+/* CONTENT                                                                      */
+/********************************************************************************/
+.content {
+  /*background-color: var(--color-bg-3);*/
+  background-color: lightgrey;
+  position: relative;
+  height: 90%;
+  overflow: hidden;
+}
+/********************************************************************************/
+/* SCROLL BAR                                                                   */
+/********************************************************************************/
 ::-webkit-scrollbar{
   width: 20px;
 }
@@ -124,206 +91,55 @@ html, body, #root {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: orange;
+  background-color: var(--color-primary);
   border-width: 5px 6px 5px 6px !important;
   border: solid transparent;
   background-clip: padding-box !important;
 }
 
+/* TODO: change colors !!!*/
 ::-webkit-scrollbar-thumb:hover {
   background: darkorange;
 }
+
 ::-webkit-scrollbar-thumb:active {
   background: orangered;
 }
-
-
-
-.accountIcon {
-  margin: 10px;
-
-}
-.profile-wrapper {
-  /*width: 64px;*/
-  /*height: 64px;*/
-  border-radius: 50%;
+/********************************************************************************/
+/* ELEMENTS                                                                     */
+/********************************************************************************/
+.btn:focus, .form-control:focus, .btn-close:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
-img.profile-pic {
-  display: block;
-  object-fit: cover;
-  border-radius: 50%;
-  width: 64px;
-  height: 64px;
+input:focus {
+  border-color: red !important;
 }
 
+.test {
+  background-color: red;
 
-.app-header {
-  background-color: #424242;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 3em;
-}
-
-
-.logo {
-  margin: 10px;
 }
 
 
 
-.credential-card-wrapper {
-  display: flex;
-  justify-content: center;
+.tableContainer {
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
-
-.credential-card {
-  margin: 50px;
-  min-width: 400px;
+table, .table {
+  margin: 0;
+  border-collapse: collapse;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
-
-.credential-form {
-  margin-top: 20px;
-}
-
-.spinner-wrapper > h3 {
-
-  text-align: center;
-}
-.spinner-wrapper {
-  margin: 20px;
-}
-
-.error-msg {
-  color: red;
-  font-weight: bold;
-}
-
-
-table, th, td {
-  border: 1px solid black;
-}
-
-.productListContainer {
-  margin-top: 2em;
-}
-
-.productTable {
-  background-color: #424242;
-}
-
-.tableHead {
-  text-align: center;
-  background-color: #282828;
-}
-
-.popup {
-  position: fixed;
-  width: 100%;
-  height: 100%;
+ thead th {
+  position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  background-color: rgba(0,0,0, 0.7);
 }
 
-.popup_inner {
-  position: absolute;
-  left: 25%;
-  right: 25%;
-  top: 25%;
-  bottom: 22.5%;
-  margin: auto;
-  color: white;
-  border: 2px solid rgb(194, 127, 0);
+.modal-content {
+   background-color: green;
 }
 
-.header {
-  background: #424242;
-}
-
-.content {
-  background: #616161;
-}
-
-.link-card {
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  padding: 50px;
-  max-width: 220px;
-  border-radius: 20%;
-  margin: 30px;
-}
-
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.pageTitle {
-  text-align: center;
-  font-weight: bolder;
-  font-size: 4em;
-}
-
-.standardText {
-  font-size: 1.5em;
-}
-
-.custom-btn {
-  background-color: #c27f00 !important;
-  color: white;
-}
-
-.close-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.custom-table {
-  background-color: #424242;
-}
-
-.custom-table-head {
-  text-align: center;
-  background-color: #282828;
-}

@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import {AuthenticationContext} from "../../App";
+import {AuthenticationContext} from "../App";
 import LoginPage from "./LoginPage";
 
 interface BaseLayoutProps {
