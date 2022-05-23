@@ -6,7 +6,6 @@ import {Route, Routes} from 'react-router-dom';
 import Startpage from "./components/StartPage/Startpage";
 import SearchPage from "./components/SearchPage/SearchPage";
 import {Configuration, DefaultApi, LoginResultDTO} from "./openapi-client";
-import RestrictedWrapper from "./components/LoginPage/RestrictedWrapper";
 import ShoppingCartPage from './components/ShoppingCartPage/ShoppingCartPage';
 
 //set up open api client
@@ -55,7 +54,7 @@ let darkValue: DarkContextType = {
 export const AuthenticationContext = React.createContext(contextValue)
 export const DarkModeContext = React.createContext(darkValue);
 
-function App(this: any) {
+function App() {
     let [authState, setAuthState] = useState(contextValue)
     let [darkState, setDarkState] = useState(darkValue);
 
@@ -112,11 +111,6 @@ function App(this: any) {
                         <Route path="/login" element={<LoginPage fromManualLink={true}/>}/>
                         <Route path="/search" element={<SearchPage/>}/>
                         <Route path="/cart" element={ <ShoppingCartPage/>}/>
-                        <Route path="/restrictedTest" element={
-                            <RestrictedWrapper>
-                                <h1>If you see this without being logged in tell Lukas he fucked up.</h1>
-                            </RestrictedWrapper>
-                        }/>
                     </Routes>
                 </div>
             </DarkModeContext.Provider>
