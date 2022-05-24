@@ -11,6 +11,11 @@ function PlaylistPage() {
     let [songs, setSongs] = useState<string[]>(["bohemian rhapsody", "puppe"]); //TODO change type to PlayableSongDTO
     let [playingIndex, setPlayingIndex] = useState<number | undefined>();
 
+    let downloadSong = (songId: string) => {
+        // TODO: api call with songId
+        alert(songId);
+    }
+
     let playNext = () => {
         //TODO
         console.log("playing next")
@@ -23,7 +28,7 @@ function PlaylistPage() {
     }, []);
 
     let dummySongsDTO = [{title: "Bohemian Rhapsody", duration: "6:00", artist: "Queen"}, {title: "Don't Stop Me Now", duration: "3:30", artist: "Queen"}];
-    let songRows = dummySongsDTO.map((dto, index) => <SongRow index={index} title={dto.title} artist={dto.artist} duration={dto.duration} setPlayingIndex={setPlayingIndex}/>)
+    let songRows = dummySongsDTO.map((dto, index) => <SongRow index={index} title={dto.title} artist={dto.artist} duration={dto.duration} setPlayingIndex={setPlayingIndex} downloadSong={downloadSong}/>)
 
     return (
         <div>
@@ -37,6 +42,7 @@ function PlaylistPage() {
                             <th><h1 style={{textAlign: "center"}}>Title</h1></th>
                             <th><h1 style={{textAlign: "center"}}>Artist</h1></th>
                             <th><h1 style={{textAlign: "center"}}>Duration</h1></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>

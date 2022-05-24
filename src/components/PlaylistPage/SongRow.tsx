@@ -7,8 +7,9 @@ interface RowProps {
     artist: string,
     duration: string,
     setPlayingIndex: (i: number) => void,
+    downloadSong: (s: string) => void
 }
-function SongRow({index, title, artist, duration, setPlayingIndex}: RowProps) {
+function SongRow({index, title, artist, duration, setPlayingIndex, downloadSong}: RowProps) {
     let [hovered, setHovered] = useState(false);
 
     //TODO butto non minimal on hover
@@ -45,6 +46,11 @@ function SongRow({index, title, artist, duration, setPlayingIndex}: RowProps) {
             }}>
                 {duration}
             </span>
+            </td>
+            <td style={{
+                marginLeft: 10,
+            }}>
+                <Button icon={"cloud-download"} minimal={!hovered} onClick={() => downloadSong("hello")}/>
             </td>
         </tr>
     )
