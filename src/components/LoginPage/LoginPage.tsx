@@ -3,6 +3,7 @@ import {Button, Card, Elevation, FormGroup, InputGroup, Label, Spinner, SpinnerS
 import {KeyboardEvent, useContext, useState} from "react";
 import {apiClient, AuthenticationContext} from "../../App";
 import {useNavigate} from "react-router-dom";
+import Cookies from 'universal-cookie';
 
 interface LoginPageProps {
     fromManualLink?: boolean
@@ -11,6 +12,7 @@ interface LoginPageProps {
 function LoginPage({fromManualLink}: LoginPageProps) {
     const navigate = useNavigate();
     const authenticationContext = useContext(AuthenticationContext);
+
     let [fetching, setFetching] = useState(false);
     let [username, setUsername] = useState("");
     let [password, setPassword] = useState("");
@@ -20,12 +22,24 @@ function LoginPage({fromManualLink}: LoginPageProps) {
     let [displayWrongCredentialsMsg, setDisplayWrongCredentialsMsg] = useState(false);
     let [displayGenericErrorMsg, setDisplayGenericErrorMsg] = useState(false);
 
+    const cookie = new Cookies();
 
     const keyDownListener = (event: KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Enter") {
             doLogin();
         }
     }
+    const checkCookies = () => {
+        let sessionCookie = cookie.get("sessionCookie");
+
+        if (sessionCookie.exists) {
+            const sessionIDAndUser = sessionCookie.split("/");
+            authenticationContext.sessionId = sessionIDAndUser[0];
+            authenticationContext.username = sessionIDAndUser[1];
+            authenticationContext.loggedIn = true;
+        }
+    }
+
     const doLogin = () => {
         //cleanup previous state
         setDisplayEmptyUsernameMsg(false);
@@ -45,8 +59,12 @@ function LoginPage({fromManualLink}: LoginPageProps) {
 
         setFetching(true)
         const credentials = {username, password};
+
         apiClient.login({credentials}).then(resultDTO => {
             authenticationContext.storeLogin(resultDTO);
+
+            cookie.set('sessionCookie', resultDTO.sessionId + "/" + resultDTO.username, { path: "/", sameSite: "lax", maxAge: 360000});
+
             setFetching(false);
             if (fromManualLink) {
                 navigate("/")
@@ -62,7 +80,7 @@ function LoginPage({fromManualLink}: LoginPageProps) {
     }
 
     return (
-        <div className={"credential-card-wrapper"}>
+        <div className={"credential-card-wrapper"} onLoad={checkCookies}>
             <Card elevation={Elevation.FOUR} className={"credential-card"} >
                 {!fetching &&
                     <>
