@@ -7,6 +7,8 @@ import Startpage from "./components/StartPage/Startpage";
 import SearchPage from "./components/SearchPage/SearchPage";
 import {Configuration, DefaultApi, LoginResultDTO} from "./openapi-client";
 import ShoppingCartPage from './components/ShoppingCartPage/ShoppingCartPage';
+import RestrictedWrapper from "./components/LoginPage/RestrictedWrapper";
+import PlaylistPage from "./components/PlaylistPage/PlaylistPage";
 
 //set up open api client
 const apiUrl = window.location.origin === "http://localhost:3000" ? "http://localhost:8080" : window.location.origin;
@@ -100,6 +102,11 @@ function App() {
                         <Route path="/login" element={<LoginPage fromManualLink={true}/>}/>
                         <Route path="/search" element={<SearchPage/>}/>
                         <Route path="/cart" element={ <ShoppingCartPage/>}/>
+                        <Route path="/playlist" element={
+                            <RestrictedWrapper>
+                                <PlaylistPage/>
+                            </RestrictedWrapper>
+                        }/>
                     </Routes>
                 </div>
             </DarkModeContext.Provider>

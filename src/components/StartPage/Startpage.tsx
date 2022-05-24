@@ -24,6 +24,13 @@ function Startpage() {
                             </Card>
                         </Link>
                     </div>
+                    <div className="col-4">
+                        <Link to={"/playlist"} >
+                            <Card elevation={Elevation.FOUR} className={"link-card"} interactive={true}>
+                                <Icon icon={"music"} size={100}/>
+                            </Card>
+                        </Link>
+                    </div>
                 </div>
             </div>
         </>
