@@ -2,7 +2,7 @@ import "@blueprintjs/table/lib/css/table.css";
 import './PlaylistPage.css';
 import {useContext, useEffect, useState} from "react";
 import SongPlayer from "./SongPlayer";
-import {Button, Spinner, SpinnerSize} from "@blueprintjs/core";
+import {Spinner, SpinnerSize} from "@blueprintjs/core";
 import SongRow from "./SongRow";
 import {apiClient, AuthenticationContext} from "../../App";
 import {PlayableSongDTO} from "../../openapi-client";
@@ -10,8 +10,8 @@ import {PlayableSongDTO} from "../../openapi-client";
 
 function PlaylistPage() {
     let [songsLoading, setSongsLoading] = useState(true);
-    let [songs, setSongs] = useState<PlayableSongDTO[]>([]); //TODO change type to PlayableSongDTO
-    let [playingIndex, setPlayingIndex] = useState<number | undefined>();
+    let [songs, setSongs] = useState<PlayableSongDTO[]>([]);
+    let [playingIndex, setPlayingIndex] = useState<number>(0);
     let authState = useContext(AuthenticationContext);
 
     let downloadSong = (songId: string) => {
@@ -30,10 +30,11 @@ function PlaylistPage() {
             setSongsLoading(false);
         }).catch(err => {
             alert("something went wrong")
+            //TODO state for misc error
+            //TODO state for 404 error
         })
-    }, []);
+    }, [authState.username]);
 
-    // let dummySongsDTO = [{title: "Bohemian Rhapsody", duration: "6:00", artist: "Queen"}, {title: "Don't Stop Me Now", duration: "3:30", artist: "Queen"}];
     let songRows = songs.map((dto, index) => <SongRow index={index} title={dto.title} artist={"TODO artist"} duration={dto.duration} setPlayingIndex={setPlayingIndex} downloadSong={downloadSong}/>)
 
     return (
@@ -62,7 +63,7 @@ function PlaylistPage() {
                 bottom: 0,
                 width: "100%",
             }}>
-                <SongPlayer source={ playingIndex ? /*TODO source from dto*/ "" : undefined} playNext={playNext}/>
+                {!songsLoading && <SongPlayer source={songs[playingIndex].filePath} playNext={playNext}/>}
             </div>
         </div>
     )
