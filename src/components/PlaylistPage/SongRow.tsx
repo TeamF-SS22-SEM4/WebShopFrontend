@@ -3,16 +3,15 @@ import {useState} from "react";
 
 interface RowProps {
     index: number,
-    title: string,
-    artist: string,
-    duration: string,
+    title?: string,
+    artist?: string,
+    duration?: string,
     setPlayingIndex: (i: number) => void,
     downloadSong: (s: string) => void
 }
 function SongRow({index, title, artist, duration, setPlayingIndex, downloadSong}: RowProps) {
     let [hovered, setHovered] = useState(false);
 
-    //TODO butto non minimal on hover
     return (
         <tr className={"hoverable"} key={index} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
             <td style={{
