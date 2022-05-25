@@ -1,10 +1,8 @@
-import {useContext, useEffect, useState} from "react";
-import {GetProductRequest, ProductDetailsDTO, SearchProductsRequest, SoundCarrierDTO} from "../../openapi-client";
-import {apiClient, ShoppingCartContext} from "../../App";
+import {useEffect, useState} from "react";
+import {GetProductRequest, ProductDetailsDTO, SearchProductsRequest} from "../../openapi-client";
+import {apiClient} from "../../App";
 import React from 'react';
 import { FaSearch } from 'react-icons/fa'
-import {ShoppingCartItem} from "../others/ShoppingCartItem";
-import {shoppingCart} from "./Cart";
 import ProductDetailsPopup from "../others/DetailsModal";
 import BuyProductPopup from "../others/BuyModal";
 
@@ -106,8 +104,6 @@ function Home() {
         });
     }
 
-
-
     const showProductDetails = (productId: string | undefined) => {
         if(productId !== undefined) {
             fetchProductDetails(productId);
@@ -131,69 +127,6 @@ function Home() {
         setProductDetail(undefined);
         setIsBuyProductShown(false);
     }
-
-
-
-
-
-    const[selectedSoundCarriers, setSelectedSoundCarriers] = useState<Map<SoundCarrierDTO, number>>(new Map());
-    const shoppingCartContext = useContext(ShoppingCartContext);
-
-    const[feedbackText, setFeedbackText] = useState<string>("initial");
-    const[feedbackTextVisible, setFeedBackTextVisible] = useState<boolean>(false);
-
-
-
-    const updateSelectedSoundCarriers = (soundCarrier: SoundCarrierDTO, amount: number) => {
-        let temp = selectedSoundCarriers;
-        temp.set(soundCarrier, amount)
-        setSelectedSoundCarriers(temp);
-    }
-
-    const addToCart = () => {
-        setFeedBackTextVisible(false);
-        // Calc sum of selected amount because the amount of every product could be 0
-        let sumOfSelectedAmount: number = 0;
-
-        selectedSoundCarriers.forEach((amount) => {
-            sumOfSelectedAmount += amount;
-        });
-
-        if(selectedSoundCarriers.size === 0 || sumOfSelectedAmount === 0) {
-            setFeedbackText("You have to select at least one sound carrier!");
-            setFeedBackTextVisible(true);
-
-        } else {
-            selectedSoundCarriers.forEach((amount, selectedSoundCarrier) => {
-                if(amount !== 0) {
-                    let shoppingCartItem = new ShoppingCartItem(
-                        productDetail?.name,
-                        productDetail?.artistName,
-                        selectedSoundCarrier.soundCarrierId,
-                        selectedSoundCarrier.soundCarrierName,
-                        selectedSoundCarrier.pricePerCarrier,
-                        selectedSoundCarrier.amountAvailable,
-                        amount
-                    );
-
-                    if(shoppingCart.findIndex(item => item.soundCarrerId === shoppingCartItem.soundCarrerId) === -1) {
-                        shoppingCart.push(shoppingCartItem);
-                        shoppingCartContext.setItems(shoppingCart.length);
-
-                        // Should set amount to 0 so the ui refreshes the table and shows 0
-                        // TODO: Fix this
-                        updateSelectedSoundCarriers(selectedSoundCarrier, 0);
-
-                        alert("Added " + shoppingCartItem.selectedAmount + " of " + shoppingCartItem.productName +
-                            "[" + shoppingCartItem.soundCarrierType + "]" + " to cart");
-                    } else {
-                        alert(shoppingCartItem.productName + "[" + shoppingCartItem.soundCarrierType + "] is already in cart!");
-                    }
-                }
-            });
-        }
-    }
-
 
     return (
         <>
@@ -274,7 +207,7 @@ function Home() {
         }
         {
             isBuyProductShown ?
-                <BuyProductPopup callbackFunction={closeBuyProduct} product={productDetail}/> :
+                <BuyProductPopup callbackFunction={closeBuyProduct} isLoading={productDetailsLoading} product={productDetail}/> :
                 null
         }
     </>

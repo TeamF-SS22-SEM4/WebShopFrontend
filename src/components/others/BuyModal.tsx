@@ -7,9 +7,10 @@ import {ShoppingCartContext} from "../../App";
 interface BuyProductPopupProps {
     callbackFunction: () => void;
     product: ProductDetailsDTO | undefined;
+    isLoading: boolean
 }
 
-const BuyProductPopup = ({callbackFunction, product}: BuyProductPopupProps) => {
+const BuyProductPopup = ({callbackFunction, product, isLoading}: BuyProductPopupProps) => {
     const[selectedSoundCarriers, setSelectedSoundCarriers] = useState<Map<SoundCarrierDTO, number>>(new Map());
     const shoppingCartContext = useContext(ShoppingCartContext);
 
@@ -76,6 +77,11 @@ const BuyProductPopup = ({callbackFunction, product}: BuyProductPopupProps) => {
                         <button className="btn btn-primary btn-sm" onClick={() => callbackFunction()}>close</button>
                     </div>
                     <div className="modal-body">
+                        {!isLoading ?
+                            <p>true</p>
+                        :
+                            <p>false</p>
+                        }
                         <table className="table table-hover table-dark custom-table">
                             <thead className="custom-table-head">
                             <tr>
