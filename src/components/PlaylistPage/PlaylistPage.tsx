@@ -41,7 +41,7 @@ function PlaylistPage() {
         })
     }, [authState.username]);
 
-    let songRows = songs.map((dto, index) => <SongRow index={index} title={dto.title} artist={"TODO artist"} duration={dto.duration} setPlayingIndex={setPlayingIndex} downloadSong={downloadSong}/>)
+    let songRows = songs.map((dto, index) => <SongRow index={index} title={dto.title} artist={dto.artists} duration={dto.duration} setPlayingIndex={setPlayingIndex} downloadSong={downloadSong}/>)
 
     let currentSrc;
     if (songs[playingIndex]) {

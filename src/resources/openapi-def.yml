@@ -246,6 +246,8 @@ components:
           type: string
         filePath:
           type: string
+        artists:
+          type: string
     SongDTO:
       type: object
       properties:
