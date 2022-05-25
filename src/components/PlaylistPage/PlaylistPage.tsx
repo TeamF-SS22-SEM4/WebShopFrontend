@@ -13,6 +13,7 @@ function PlaylistPage() {
     let [songs, setSongs] = useState<PlayableSongDTO[]>([]);
     let [playingIndex, setPlayingIndex] = useState<number>(0);
     let authState = useContext(AuthenticationContext);
+    let [emptyPlaylist, setEmptyPlaylist] = useState(false);
 
     let downloadSong = (songId: string) => {
         // TODO: api call with songId
@@ -28,15 +29,26 @@ function PlaylistPage() {
         apiClient.getPlaylist({username: authState.username}).then(arr => {
             setSongs(arr);
             setSongsLoading(false);
+            setEmptyPlaylist(false)
         }).catch(err => {
-            alert("something went wrong")
+            if (err.status === 404) {
+                setEmptyPlaylist(true);
+                setSongsLoading(false);
+            } else {
+                alert("something went wrong")
+            }
             //TODO state for misc error
-            //TODO state for 404 error
         })
     }, [authState.username]);
 
     let songRows = songs.map((dto, index) => <SongRow index={index} title={dto.title} artist={"TODO artist"} duration={dto.duration} setPlayingIndex={setPlayingIndex} downloadSong={downloadSong}/>)
 
+    let currentSrc;
+    if (songs[playingIndex]) {
+        currentSrc = songs[playingIndex].filePath
+    } else {
+        currentSrc = "";
+    }
     return (
         <div>
             <h1 style={{textAlign: "center", fontSize: 45}}>Your songs</h1>
@@ -58,12 +70,14 @@ function PlaylistPage() {
                 </table>
             </div>}
 
+            {emptyPlaylist && <h1 style={{textAlign: "center"}}>There seems to be nothing here. &#128577;</h1>}
+
             <div style={{
                 position: "absolute",
                 bottom: 0,
                 width: "100%",
             }}>
-                {!songsLoading && <SongPlayer source={songs[playingIndex].filePath} playNext={playNext}/>}
+                <SongPlayer source={currentSrc} playNext={playNext}/>
             </div>
         </div>
     )
