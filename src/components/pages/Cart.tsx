@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import {apiClient, AuthenticationContext, ShoppingCartContext} from "../App";
-import { ShoppingCartItem } from "./ShoppingCartItem";
-import {InputGroup, Label, Radio, RadioGroup} from "@blueprintjs/core";
-import {OrderItem, PaymentInformation, PlaceOrderRequest, Purchase} from "../openapi-client";
+import {apiClient, AuthenticationContext, ShoppingCartContext} from "../../App";
+import { ShoppingCartItem } from "../others/ShoppingCartItem";
+import {OrderItem, PaymentInformation, PlaceOrderRequest, Purchase} from "../../openapi-client";
+import {Link} from "react-router-dom";
 
-const ShoppingCartPage = () => {
+const Cart = () => {
     const authenticationContext = useContext(AuthenticationContext);
     let sessionId = authenticationContext.sessionId;
     const [totalPrice, setTotalPrice] = useState<number>(0);
@@ -127,7 +127,8 @@ const ShoppingCartPage = () => {
 
     return (
         <>
-            <div className="container">
+            <div className="content">
+                <div className="container">
                 <div className="row">
                     <div className="col-12">
                         <h1 className="pageTitle">Shopping Cart</h1>
@@ -181,16 +182,31 @@ const ShoppingCartPage = () => {
                     <div className="row">
                         <div className="col-6">
                             { (authenticationContext.loggedIn && shoppingCart.length > 0) &&
-                                <RadioGroup
-                                    inline={false}
-                                    label="Payment method:"
-                                    name="group"
-                                    onChange={(evt) => setPaymentMethod(evt.currentTarget.value)}
-                                    selectedValue={paymentMethod}
-                                >
-                                    <Radio {...paymentMethod} label="Credit Card" value="Credit Card" />
-                                    <Radio {...paymentMethod} label="Invoice" value="Invoice" />
-                                </RadioGroup>
+                                <>
+                                <div className="form-check">
+                                    <input className="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="Credit Card"
+                                           onChange={(evt) => setPaymentMethod(evt.currentTarget.value)}
+                                    />
+                                    <label className="form-check-label" htmlFor="exampleRadios1">Credit Card</label>
+                                </div>
+                                <div className="form-check">
+                                    <input className="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="Invoice"
+                                           onChange={(evt) => setPaymentMethod(evt.currentTarget.value)}
+                                    />
+                                    <label className="form-check-label" htmlFor="exampleRadios2">Invoice</label>
+                                </div>
+
+                                    {/*<input*/}
+                                    {/*    inline={false}*/}
+                                    {/*    label="Payment method:"*/}
+                                    {/*    name="group"*/}
+                                    {/*    onChange={(evt) => setPaymentMethod(evt.currentTarget.value)}*/}
+                                    {/*    selectedValue={paymentMethod}*/}
+                                    {/*>*/}
+                                    {/*    <Radio {...paymentMethod} label="Credit Card" value="Credit Card" />*/}
+                                    {/*    <Radio {...paymentMethod} label="Invoice" value="Invoice" />*/}
+                                    {/*</input>*/}
+                                </>
                             }
                         </div>
                         <div className="col-6">
@@ -218,10 +234,10 @@ const ShoppingCartPage = () => {
                         </div>
                         <div className="row">
                             <div className="col-3">
-                                <Label htmlFor="creditCardNumber-input">
+                                <label htmlFor="creditCardNumber-input">
                                     Credit card number:
-                                </Label>
-                                <InputGroup
+                                </label>
+                                <input
                                     id="creditCardNumber-input"
                                     value={creditCardNumber}
                                     onInput={(evt) => setCreditCardNumber(evt.currentTarget.value)}
@@ -231,10 +247,10 @@ const ShoppingCartPage = () => {
                         </div>
                         <div className="row">
                             <div className="col-3">
-                                <Label htmlFor="cvc-input">
+                                <label htmlFor="cvc-input">
                                     CVC:
-                                </Label>
-                                <InputGroup
+                                </label>
+                                <input
                                     id="cvc-input"
                                     value={cvc}
                                     onInput={(evt) => setCvc(evt.currentTarget.value)}
@@ -249,15 +265,26 @@ const ShoppingCartPage = () => {
 
                     <div className="row">
                         <div className="col-12">
-                            <button onClick={() => placeOrder()} className="btn custom-btn">Check out</button>
+                            <button onClick={() => placeOrder()} className="btn btn-success">Check out</button>
                         </div>
                     </div>
                 }
-               
+                {
+                    (!authenticationContext.loggedIn && shoppingCart.length > 0) &&
+
+                        <div className="row">
+                            <div className="col-12">
+                                <Link to={"/login"}>
+                                    <button className="btn btn-success">Check out</button>
+                                </Link>
+                            </div>
+                        </div>
+                }
+                </div>
             </div>
         </>
     );
 }
 
 export const shoppingCart: ShoppingCartItem[] = [];
-export default ShoppingCartPage;
+export default Cart;

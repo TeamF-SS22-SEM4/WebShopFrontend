@@ -3,30 +3,40 @@
 /********************************************************************************/
 * {
   --color-primary: rgb(194, 127, 0);
+  --color-success: green;
+  --color-alert: red;
+
+  --color-text-1: #fafafa;
+  --color-text-2: #bebebe;
+  --color-btn-text: #fafafa;
 
   --color-bg-1: #282828;
   --color-bg-2: #373737;
   --color-bg-3: #464646;
   --color-bg-4: #646464;
-
-  --color-text-1: #fafafa;
-  --color-text-2: #bebebe;
+  --color-bg-hover: rgba(194, 127, 0, 0.15);
 }
 
 html, body, #root {
   height: 100%;
   overflow: hidden;
 }
+
+.header {
+  height: 10%;
+  background-color: var(--color-bg-1);
+}
+
+.content {
+  height: 90%;
+  background-color: var(--color-bg-2);
+  overflow-y: scroll;
+  overflow-x: hidden;
+  color: var(--color-text-1);
+}
 /********************************************************************************/
 /* HEADER                                                                       */
 /********************************************************************************/
-.header {
-  background-color: var(--color-bg-2);
-  color: var(--color-text-1);
-  height: 10%;
-  padding: 25px 0 25px 0;
-}
-
 .header-logo {
   height: 100%;
   /*min-height: 40px;*/
@@ -71,13 +81,7 @@ html, body, #root {
 /********************************************************************************/
 /* CONTENT                                                                      */
 /********************************************************************************/
-.content {
-  /*background-color: var(--color-bg-3);*/
-  background-color: lightgrey;
-  position: relative;
-  height: 90%;
-  overflow: hidden;
-}
+
 /********************************************************************************/
 /* SCROLL BAR                                                                   */
 /********************************************************************************/
@@ -91,19 +95,11 @@ html, body, #root {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--color-primary);
+  background-color: var(--color-bg-4);
+  min-height: 75px;
   border-width: 5px 6px 5px 6px !important;
   border: solid transparent;
   background-clip: padding-box !important;
-}
-
-/* TODO: change colors !!!*/
-::-webkit-scrollbar-thumb:hover {
-  background: darkorange;
-}
-
-::-webkit-scrollbar-thumb:active {
-  background: orangered;
 }
 /********************************************************************************/
 /* ELEMENTS                                                                     */
@@ -113,15 +109,67 @@ html, body, #root {
   box-shadow: none !important;
 }
 
+
+
+.spinner-border {
+  color: var(--color-text-1);
+}
+
+
+
+
+
+
 input:focus {
-  border-color: red !important;
+  border-color: var(--color-primary) !important;
 }
 
-.test {
-  background-color: red;
 
+
+
+.modal-outer {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.75);
 }
 
+
+.modal-content {
+  background-color: var(--color-bg-3);
+  color: var(--color-text-1);
+  border: 2px solid var(--color-primary);
+}
+
+.modal-header, .modal-footer {
+  border: 0;
+}
+
+.modal-footer {
+  padding-top: 0;
+}
+
+
+
+
+.login-input::placeholder {
+  color: red;
+}
+
+.login-input {
+  background-color: transparent !important;
+  border-width: 0 0 3px 0;
+  border-radius: 0;
+  transition: none;
+}
+
+.login-input:focus {
+  border: solid var(--color-primary) !important;
+  border-width: 0 0 3px 0 !important;
+}
 
 
 .tableContainer {
@@ -139,7 +187,5 @@ table, .table {
   top: 0;
 }
 
-.modal-content {
-   background-color: green;
-}
+
 

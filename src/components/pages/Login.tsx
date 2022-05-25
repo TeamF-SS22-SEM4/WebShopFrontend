@@ -1,23 +1,27 @@
 import React, {KeyboardEvent, useContext, useState} from "react";
-import {apiClient, AuthenticationContext} from "../App";
+import {apiClient, AuthenticationContext} from "../../App";
 import {useNavigate} from "react-router-dom";
+import {FaLock, FaUserAlt} from "react-icons/fa";
 
 interface LoginPageProps {
     fromManualLink?: boolean
 }
 
-function LoginPage({fromManualLink}: LoginPageProps) {
+function Login({fromManualLink}: LoginPageProps) {
     const navigate = useNavigate();
     const authenticationContext = useContext(AuthenticationContext);
     let [fetching, setFetching] = useState(false);
-    let [username, setUsername] = useState("jst2559");
-    let [password, setPassword] = useState("password");
-
     let [displayEmptyUsernameMsg, setDisplayEmptyUsernameMsg] = useState(false);
     let [displayEmptyPasswordMsg, setDisplayEmptyPasswordMsg] = useState(false)
 
     let [displayWrongCredentialsMsg, setDisplayWrongCredentialsMsg] = useState(false);
     let [displayGenericErrorMsg, setDisplayGenericErrorMsg] = useState(false);
+
+
+    //TODO: remove values!!!
+    let username = "jst2559";
+    let password = "password";
+
 
     const doLogin = () => {
         //cleanup previous state
@@ -57,40 +61,35 @@ function LoginPage({fromManualLink}: LoginPageProps) {
     return (
         <div className="content">
             <div className="container">
-                <div className="test d-inline">
-
-                    <p>Feedback</p>
-                    {displayWrongCredentialsMsg && <p style={{color: "red", fontSize: 20}}>Wrong Username or Credentials</p>}
+                    {displayWrongCredentialsMsg && <p style={{color: "red", fontSize: 20}}>Wrong Username or Password</p>}
                     {displayGenericErrorMsg && <p style={{color: "red", fontSize: 20}}>Something went wrong...</p>}
-                    {displayEmptyPasswordMsg && <p style={{color: "red", fontSize: 20}}>Something went wrong...</p>}
+                    <form>
+                        <div className="input-group align-items-center">
+                            <FaUserAlt className="me-2"></FaUserAlt>
+                            <input className="form-control login-input" type="text" placeholder="username" onInput={e => username = ((e.target as HTMLInputElement).value)} />
+                        </div>
+                        <div className="input-group align-items-center">
+                            <FaLock className="me-2"></FaLock>
+                            <input className="form-control login-input" type="password" placeholder="password" onInput={e => password = ((e.target as HTMLInputElement).value)} onKeyDown={e => e.key === 'Enter' && doLogin()} />
 
-                    <form className="w-25 m-5">
-                        <div className="mb-3">
-                            <label className="form-label">Username</label>
-                            <input type="text" className="form-control" value={username} onInput={e => setUsername((e.target as HTMLInputElement).value)} />
-                            <div className="form-text text-danger">We'll never share your email with anyone else.</div>
                         </div>
-                        <div className="mb-3">
-                            <label className="form-label">Password</label>
-                            <input type="password" className="form-control" value={password} onInput={e => setPassword((e.target as HTMLInputElement).value)} onKeyDown={e => e.key === 'Enter' && doLogin()} />
-                        </div>
-                        <button onClick={() => doLogin()} className="btn btn-lg btn-primary w-100 d-flex justify-content-center">
-                            {!fetching ?
-                                <>
+                    </form>
+
+                    <button className="btn btn-lg btn-primary w-100 d-flex justify-content-center" onClick={() => doLogin()}>
+                        {!fetching ?
+                            <>
                                 <div className="spinner-border text-white invisible"></div>
                                 Login
                                 <div className="spinner-border text-white invisible"></div>
-                                </>
-                                :
-                                <div className="spinner-border text-white"></div>
-                            }
-                        </button>
-                    </form>
-                </div>
+                            </>
+                            :
+                            <div className="spinner-border text-white"></div>
+                        }
+                    </button>
+
             </div>
         </div>
     )
-
 }
 
-export default LoginPage;
+export default Login;

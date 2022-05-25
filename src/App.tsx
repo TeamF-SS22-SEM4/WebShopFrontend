@@ -1,17 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import LoginPage from './components/LoginPage';
+import Login from './components/pages/Login';
 import {Route, Routes} from 'react-router-dom';
-import SearchPage from "./components/SearchPage";
+import Home from "./components/pages/Home";
 import {Configuration, DefaultApi, LoginResultDTO} from "./openapi-client";
-import RestrictedWrapper from "./components/RestrictedWrapper";
-import ShoppingCartPage from './components/ShoppingCartPage';
-import Header from "./components/Header";
+import Cart from './components/pages/Cart';
+import Header from "./components/others/Header";
 
 import 'normalize.css/normalize.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 import './App.css';
-import {ShoppingCartItem} from "./components/ShoppingCartItem";
 
 //set up open api client
 const apiUrl = window.location.origin === "http://localhost:3000" ? "http://localhost:8080" : window.location.origin;
@@ -141,9 +139,9 @@ function App(this: any) {
             <ShoppingCartContext.Provider value={shoppingCartState}>
             <Header />
             <Routes>
-                <Route index element={<SearchPage/>}/>
-                <Route path="/login" element={<LoginPage fromManualLink={true}/>}/>
-                <Route path="/cart" element={ <ShoppingCartPage/>}/>
+                <Route index element={<Home/>}/>
+                <Route path="/login" element={<Login fromManualLink={true}/>}/>
+                <Route path="/cart" element={ <Cart/>}/>
             </Routes>
             </ShoppingCartContext.Provider>
         </AuthenticationContext.Provider>
