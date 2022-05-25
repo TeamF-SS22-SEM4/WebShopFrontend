@@ -1,8 +1,9 @@
 import './LoginPage.css'
 import {Button, Card, Elevation, FormGroup, InputGroup, Label, Spinner, SpinnerSize} from "@blueprintjs/core";
-import {KeyboardEvent, useContext, useState} from "react";
+import {KeyboardEvent, useContext, useEffect, useState} from "react";
 import {apiClient, AuthenticationContext} from "../../App";
 import {useNavigate} from "react-router-dom";
+import Cookies from 'universal-cookie';
 
 interface LoginPageProps {
     fromManualLink?: boolean
@@ -11,6 +12,7 @@ interface LoginPageProps {
 function LoginPage({fromManualLink}: LoginPageProps) {
     const navigate = useNavigate();
     const authenticationContext = useContext(AuthenticationContext);
+
     let [fetching, setFetching] = useState(false);
     let [username, setUsername] = useState("");
     let [password, setPassword] = useState("");
@@ -20,12 +22,27 @@ function LoginPage({fromManualLink}: LoginPageProps) {
     let [displayWrongCredentialsMsg, setDisplayWrongCredentialsMsg] = useState(false);
     let [displayGenericErrorMsg, setDisplayGenericErrorMsg] = useState(false);
 
+    const cookie = new Cookies();
+
+    useEffect(() => {                                           //Checks cookie when login-page gets loaded
+        if(!authenticationContext.loggedIn){
+            let sessionCookie = cookie.get("sessionCookie");
+
+            if (sessionCookie != null && !authenticationContext.loggedIn) {
+                const sessionIDAndUser = sessionCookie.split("/");
+                let cookieLoginInfo = {sessionId: sessionIDAndUser[0], username: sessionIDAndUser[1], loggedIn: true}; // pass to function as JSON, so it re-renders
+                authenticationContext.storeLogin(cookieLoginInfo);
+                navigate("/");                                    //navigates back to main page after successful login
+            }
+        }
+    });
 
     const keyDownListener = (event: KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Enter") {
             doLogin();
         }
     }
+
     const doLogin = () => {
         //cleanup previous state
         setDisplayEmptyUsernameMsg(false);
@@ -45,8 +62,12 @@ function LoginPage({fromManualLink}: LoginPageProps) {
 
         setFetching(true)
         const credentials = {username, password};
+
         apiClient.login({credentials}).then(resultDTO => {
             authenticationContext.storeLogin(resultDTO);
+
+            cookie.set('sessionCookie', resultDTO.sessionId + "/" + resultDTO.username, {maxAge: 360000, path: "/"});
+
             setFetching(false);
             if (fromManualLink) {
                 navigate("/")
@@ -87,7 +108,6 @@ function LoginPage({fromManualLink}: LoginPageProps) {
             </Card>
         </div>
     )
-
 }
 
 export default LoginPage;
