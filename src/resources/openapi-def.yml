@@ -60,6 +60,10 @@ paths:
           required: true
           schema:
             type: string
+        - name: session-id
+          in: header
+          schema:
+            type: string
       responses:
         '200':
           description: OK
