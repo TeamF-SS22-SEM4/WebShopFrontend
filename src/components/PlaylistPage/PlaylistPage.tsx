@@ -5,7 +5,7 @@ import SongPlayer from "./SongPlayer";
 import {Spinner, SpinnerSize} from "@blueprintjs/core";
 import SongRow from "./SongRow";
 import {apiClient, AuthenticationContext} from "../../App";
-import {PlayableSongDTO} from "../../openapi-client";
+import {GetSongRequest, PlayableSongDTO} from "../../openapi-client";
 
 
 function PlaylistPage() {
@@ -15,9 +15,23 @@ function PlaylistPage() {
     let authState = useContext(AuthenticationContext);
     let [emptyPlaylist, setEmptyPlaylist] = useState(false);
 
-    let downloadSong = (songId: string) => {
-        // TODO: api call with songId
-        alert(songId);
+    let downloadSong = (songId?: string) => {
+        if(songId !== undefined) {
+            const getSongRequest: GetSongRequest = {
+                songId: songId
+            };
+
+            apiClient.getSong(getSongRequest).then(result => {
+                let data = new Blob([result], {type: 'audio/mpeg'});
+                let url = window.URL.createObjectURL(data);
+                let tempLink = document.createElement('a');
+                tempLink.href = url;
+                tempLink.setAttribute('download', 'sample.mp3');
+                tempLink.click();
+            }).catch(response => {
+                // TODO: Error handling
+            });
+        }
     }
 
     let playNext = () => {
@@ -41,7 +55,7 @@ function PlaylistPage() {
         })
     }, [authState.username]);
 
-    let songRows = songs.map((dto, index) => <SongRow index={index} title={dto.title} artist={dto.artists} duration={dto.duration} setPlayingIndex={setPlayingIndex} downloadSong={downloadSong}/>)
+    let songRows = songs.map((dto, index) => <SongRow index={index} songId={dto.songId} title={dto.title} artist={dto.artists} duration={dto.duration} setPlayingIndex={setPlayingIndex} downloadSong={downloadSong}/>)
 
     let currentSrc;
     if (songs[playingIndex]) {
