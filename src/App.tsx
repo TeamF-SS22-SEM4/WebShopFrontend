@@ -10,6 +10,9 @@ import 'normalize.css/normalize.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 import './App.css';
+import ShoppingCartPage from './components/ShoppingCartPage/ShoppingCartPage';
+import RestrictedWrapper from "./components/LoginPage/RestrictedWrapper";
+import PlaylistPage from "./components/PlaylistPage/PlaylistPage";
 
 //set up open api client
 const apiUrl = window.location.origin === "http://localhost:3000" ? "http://localhost:8080" : window.location.origin;
@@ -34,11 +37,6 @@ export type AuthenticationContextType = {
     logout: () => void;
 }
 
-export type DarkContextType = {
-    dark: boolean;
-    setDark: (b: boolean) => void
-}
-
 let contextValue: AuthenticationContextType = {
     sessionId: "",
     username: "",
@@ -48,14 +46,19 @@ let contextValue: AuthenticationContextType = {
     logout: () => {
     }
 }
-let darkValue: DarkContextType = {
-    dark: true,
-    setDark: () => {
-    }
-}
+
+type DarkModeType = boolean | undefined;
+
+type DarkModeContextType = [
+    DarkModeType,
+    React.Dispatch<React.SetStateAction<DarkModeType>>
+];
+
+const DarkModeContext = React.createContext<DarkModeContextType | undefined>(undefined);
+export const useDarkModeContext = () => useContext(DarkModeContext) as DarkModeContextType;
+
 
 export const AuthenticationContext = React.createContext(contextValue)
-export const DarkModeContext = React.createContext(darkValue);
 
 type ShoppingCartContextType = {
     items: number,
@@ -78,19 +81,6 @@ function App(this: any) {
     let [shoppingCartState, setShoppingCartState] = useState(shoppingCartContext);
 
     useEffect(() => {
-        setDarkState(prev => {
-            return {
-                ...prev,
-                setDark: b => {
-                    setDarkState(p => {
-                        return {
-                            ...p,
-                            dark: b
-                        }
-                    })
-                }
-            }
-        })
 
         setShoppingCartState(prevState => {
             return {
@@ -134,14 +124,23 @@ function App(this: any) {
         })
     }, []);
 
+    let darkStateArr = useState<DarkModeType>(true);
+    let isDark = darkStateArr[0]; //needed because value of the state is also read in the same component that provides the context
+
     return (
         <AuthenticationContext.Provider value={authState}>
             <ShoppingCartContext.Provider value={shoppingCartState}>
             <Header />
             <Routes>
                 <Route index element={<Home/>}/>
-                <Route path="/login" element={<Login fromManualLink={true}/>}/>
-                <Route path="/cart" element={ <Cart/>}/>
+                <Route path="/login" element={<LoginPage fromManualLink={true}/>}/>
+                <Route path="/search" element={<SearchPage/>}/>
+                <Route path="/cart" element={ <ShoppingCartPage/>}/>
+                <Route path="/playlist" element={
+                    <RestrictedWrapper>
+                        <PlaylistPage/>
+                    </RestrictedWrapper>
+                }/>
             </Routes>
             </ShoppingCartContext.Provider>
         </AuthenticationContext.Provider>
