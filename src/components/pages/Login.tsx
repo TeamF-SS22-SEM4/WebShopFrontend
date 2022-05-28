@@ -1,7 +1,8 @@
-import React, {KeyboardEvent, useContext, useState} from "react";
+import React, {KeyboardEvent, useContext, useEffect, useState} from "react";
 import {apiClient, AuthenticationContext} from "../../App";
 import {useNavigate} from "react-router-dom";
 import {FaLock, FaUserAlt} from "react-icons/fa";
+import Cookies from "universal-cookie";
 
 interface LoginPageProps {
     fromManualLink?: boolean
@@ -16,6 +17,22 @@ function Login({fromManualLink}: LoginPageProps) {
 
     let [displayWrongCredentialsMsg, setDisplayWrongCredentialsMsg] = useState(false);
     let [displayGenericErrorMsg, setDisplayGenericErrorMsg] = useState(false);
+
+    const cookie = new Cookies();
+
+    useEffect(() => {                                           //Checks cookie when login-page gets loaded
+        if(!authenticationContext.loggedIn){
+            let sessionCookie = cookie.get("sessionCookie");
+
+            if (sessionCookie != null && !authenticationContext.loggedIn) {
+                const sessionIDAndUser = sessionCookie.split("/");
+                let cookieLoginInfo = {sessionId: sessionIDAndUser[0], username: sessionIDAndUser[1], loggedIn: true}; // pass to function as JSON, so it re-renders
+                authenticationContext.storeLogin(cookieLoginInfo);
+                navigate("/");                                    //navigates back to main page after successful login
+            }
+        }
+    });
+
 
 
     //TODO: remove values!!!
@@ -44,6 +61,9 @@ function Login({fromManualLink}: LoginPageProps) {
         const credentials = {username, password};
         apiClient.login({credentials}).then(resultDTO => {
             authenticationContext.storeLogin(resultDTO);
+
+            cookie.set('sessionCookie', resultDTO.sessionId + "/" + resultDTO.username, {maxAge: 360000, path: "/"});
+
             setFetching(false);
             if (fromManualLink) {
                 navigate("/")

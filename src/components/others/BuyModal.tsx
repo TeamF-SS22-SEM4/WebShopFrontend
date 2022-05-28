@@ -31,6 +31,7 @@ const BuyProductPopup = ({callbackFunction, product, isLoading}: BuyProductPopup
         setDisplayMessage(false);
         text = text + " ";
 
+
         // Calc sum of selected amount because the amount of every product could be 0
         let sumOfSelectedAmount: number = 0;
 
@@ -121,6 +122,7 @@ const BuyProductPopup = ({callbackFunction, product, isLoading}: BuyProductPopup
                                                         updateSelectedSoundCarriers(soundCarrier, parseInt(event.target.value))
                                                     }}
                                                 />
+
                                             </td>
                                         </tr>
                                 )

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Login from './components/pages/Login';
 import {Route, Routes} from 'react-router-dom';
 import Home from "./components/pages/Home";
@@ -10,9 +10,8 @@ import 'normalize.css/normalize.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 import './App.css';
-import ShoppingCartPage from './components/ShoppingCartPage/ShoppingCartPage';
-import RestrictedWrapper from "./components/LoginPage/RestrictedWrapper";
 import PlaylistPage from "./components/PlaylistPage/PlaylistPage";
+import RestrictedWrapper from "./components/others/RestrictedWrapper";
 
 //set up open api client
 const apiUrl = window.location.origin === "http://localhost:3000" ? "http://localhost:8080" : window.location.origin;
@@ -77,7 +76,6 @@ export const ShoppingCartContext = React.createContext(shoppingCartContext);
 
 function App(this: any) {
     let [authState, setAuthState] = useState(contextValue)
-    let [darkState, setDarkState] = useState(darkValue);
     let [shoppingCartState, setShoppingCartState] = useState(shoppingCartContext);
 
     useEffect(() => {
@@ -133,9 +131,9 @@ function App(this: any) {
             <Header />
             <Routes>
                 <Route index element={<Home/>}/>
-                <Route path="/login" element={<LoginPage fromManualLink={true}/>}/>
-                <Route path="/search" element={<SearchPage/>}/>
-                <Route path="/cart" element={ <ShoppingCartPage/>}/>
+                <Route path="/login" element={<Login fromManualLink={true}/>}/>
+                <Route path="/search" element={<Home/>}/>
+                <Route path="/cart" element={ <Cart/>}/>
                 <Route path="/playlist" element={
                     <RestrictedWrapper>
                         <PlaylistPage/>
