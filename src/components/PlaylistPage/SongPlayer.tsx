@@ -13,7 +13,7 @@ function SongPlayer({songTitle = "", source = "", playNext}: PlayerProps) {
     // docs https://www.npmjs.com/package/react-h5-audio-player
     return (
         <>
-            <AudioPlayer src={source} autoPlay={false} onEnded={playNext} onClickNext={playNext} showJumpControls={false} showSkipControls={true}/>
+            <AudioPlayer src={source} autoPlay={false} autoPlayAfterSrcChange={false} onEnded={playNext} onClickNext={playNext} showJumpControls={false} showSkipControls={true}/>
         </>
     )
 }
