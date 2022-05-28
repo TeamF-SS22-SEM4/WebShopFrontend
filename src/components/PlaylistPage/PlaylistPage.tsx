@@ -25,7 +25,11 @@ function PlaylistPage() {
             apiClient.getSong(getSongRequest).then(result => {
                 fileDownload(result, "example.mp3", "audio/mpeg");
             }).catch(response => {
-                // TODO: Error handling
+                if (response.status === 404) {
+                    alert("Song not found");
+                } else {
+                    alert("Something went wrong...");
+                }
             });
         }
     }
