@@ -31,7 +31,7 @@ const Header = () => {
                             {shoppingCartContext.items === 0 ?
                                 <span />
                             :
-                                <span className="position-absolute top-25 start-100 translate-middle badge rounded-pill bg-danger">{shoppingCartContext.items}</span>
+                                <span key={shoppingCartContext.items} className="position-absolute top-25 start-100 translate-middle badge rounded-pill bg-danger testtt">{shoppingCartContext.items}</span>
                             }
                         </Link>
                     </li>

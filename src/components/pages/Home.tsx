@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import {GetProductRequest, ProductDetailsDTO, SearchProductsRequest} from "../../openapi-client";
 import {apiClient} from "../../App";
 import React from 'react';
-import { FaSearch } from 'react-icons/fa'
+import { FaSearch } from 'react-icons/fa';
 import ProductDetailsPopup from "../others/DetailsModal";
 import BuyProductPopup from "../others/BuyModal";
 
@@ -14,7 +14,6 @@ function Home() {
 
     const [products, setProducts] = useState<Product[]>([]);
     const [productDetail, setProductDetail] = useState<ProductDetailsDTO>();
-
 
     const [isProductDetailsShown, setIsProductDetailsShown] = useState<boolean>(false);
     const [isBuyProductShown, setIsBuyProductShown] = useState<boolean>(false);
@@ -57,7 +56,6 @@ function Home() {
 
 
     function fetchProducts() {
-        console.log(searchTerm);
         setProductsLoading(true);
         const searchProductsRequest: SearchProductsRequest = {search: searchTerm};
 

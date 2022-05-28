@@ -1,4 +1,4 @@
-import {useContext, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {ProductDetailsDTO, SoundCarrierDTO} from "../../openapi-client";
 import {ShoppingCartItem} from "./ShoppingCartItem";
 import {shoppingCart} from "../pages/Cart";
@@ -10,13 +10,15 @@ interface BuyProductPopupProps {
     isLoading: boolean
 }
 
+let text = " ";
+
 const BuyProductPopup = ({callbackFunction, product, isLoading}: BuyProductPopupProps) => {
     const[selectedSoundCarriers, setSelectedSoundCarriers] = useState<Map<SoundCarrierDTO, number>>(new Map());
     const shoppingCartContext = useContext(ShoppingCartContext);
 
     const[displayMessage, setDisplayMessage] = useState<boolean>(false);
     const[messageText, setMessageText] = useState<string>("");
-
+    const[displayAsError, setDisplayAsError] = useState<boolean>(false);
 
     const updateSelectedSoundCarriers = (soundCarrier: SoundCarrierDTO, amount: number) => {
         let temp = selectedSoundCarriers;
@@ -25,6 +27,10 @@ const BuyProductPopup = ({callbackFunction, product, isLoading}: BuyProductPopup
     }
 
     const addToCart = () => {
+        setDisplayAsError(false);
+        setDisplayMessage(false);
+        text = text + " ";
+
         // Calc sum of selected amount because the amount of every product could be 0
         let sumOfSelectedAmount: number = 0;
 
@@ -33,7 +39,8 @@ const BuyProductPopup = ({callbackFunction, product, isLoading}: BuyProductPopup
         });
 
         if(selectedSoundCarriers.size === 0 || sumOfSelectedAmount === 0) {
-            setMessageText("Failed - You have to choose at least one item!");
+            setMessageText("Failed - You have to choose at least one item!" + text);
+            setDisplayAsError(true)
             setDisplayMessage(true);
         } else {
             selectedSoundCarriers.forEach((amount, selectedSoundCarrier) => {
@@ -56,13 +63,15 @@ const BuyProductPopup = ({callbackFunction, product, isLoading}: BuyProductPopup
                         // TODO: Fix this
                         updateSelectedSoundCarriers(selectedSoundCarrier, 0);
 
-                        setMessageText("Success - Your article(s) are now in the shopping cart!");
+                        setMessageText("Success - Your article(s) are now in the shopping cart!" + text);
                         setDisplayMessage(true);
                     } else {
-                        setMessageText("Failed - This product(s) are already in the cart!");
+                        setMessageText("Failed - This product(s) are already in the cart!" + text);
+                        setDisplayAsError(true);
                         setDisplayMessage(true);
                     }
                 }
+
             });
         }
     }
@@ -79,7 +88,7 @@ const BuyProductPopup = ({callbackFunction, product, isLoading}: BuyProductPopup
                     <div className="modal-body">
                         {!isLoading ?
                             <p>true</p>
-                        :
+                            :
                             <p>false</p>
                         }
                         <table className="table table-hover table-dark custom-table">
@@ -101,9 +110,9 @@ const BuyProductPopup = ({callbackFunction, product, isLoading}: BuyProductPopup
                                             <td className="align-middle">{soundCarrier.pricePerCarrier}€</td>
                                             <td className="align-middle">
                                                 <input
+                                                    id={soundCarrier.soundCarrierId}
                                                     type="number"
                                                     placeholder='0'
-                                                    min="0"
                                                     max={soundCarrier.amountAvailable}
                                                     onChange={(event) => {
                                                         if (soundCarrier.amountAvailable !== undefined && parseInt(event.target.value) > soundCarrier.amountAvailable) {
@@ -120,7 +129,7 @@ const BuyProductPopup = ({callbackFunction, product, isLoading}: BuyProductPopup
                         </table>
                     </div>
                     <div className="modal-footer justify-content-between">
-                        <p>{!displayMessage ? "" : <>{messageText}</>}</p>
+                        <p key={messageText} className={displayAsError ? "test error" : "test"}>{!displayMessage ? "" : <>{messageText}</>}</p>
                         <button className="btn btn-success btn-sm" onClick={() => addToCart()}>Add to cart</button>
                     </div>
                 </div>

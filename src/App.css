@@ -116,14 +116,44 @@ html, body, #root {
 }
 
 
+.testtt {
+  animation: testanimation 1s ease ;
+}
+
+@keyframes testanimation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 
 
+/*.test {*/
+/*  animation: try 6s ease ;*/
+/*  opacity: 0;*/
+/*}*/
+
+@keyframes try {
+  0% {opacity: 1; transform: scale(1)}
+  5% {transform: scale(1.05);}
+  10% {transform: scale(1);}
+  90% {opacity: 1}
+  100% {opacity: 0}
+}
 
 
 input:focus {
   border-color: var(--color-primary) !important;
 }
 
+.error {
+  color: red;
+}
 
 
 
