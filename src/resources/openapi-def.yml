@@ -95,7 +95,8 @@ paths:
           content:
             application/octet-stream:
               schema:
-                $ref: '#/components/schemas/File'
+                format: binary
+                type: string
         "404":
           description: When the song cannot be found.
         "500":
@@ -284,41 +285,3 @@ components:
       format : uuid
       pattern : '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
       type : string
-    File:
-      type: object
-      properties:
-        path:
-          type: string
-        invalid:
-          type: boolean
-        name:
-          type: string
-        parent:
-          type: string
-        parentFile:
-          $ref: '#/components/schemas/File'
-        absolute:
-          type: boolean
-        absolutePath:
-          type: string
-        absoluteFile:
-          $ref: '#/components/schemas/File'
-        canonicalPath:
-          type: string
-        canonicalFile:
-          $ref: '#/components/schemas/File'
-        directory:
-          type: boolean
-        file:
-          type: boolean
-        hidden:
-          type: boolean
-        totalSpace:
-          format: int64
-          type: integer
-        freeSpace:
-          format: int64
-          type: integer
-        usableSpace:
-          format: int64
-          type: integer

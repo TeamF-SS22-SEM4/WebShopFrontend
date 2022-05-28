@@ -6,6 +6,7 @@ import {Spinner, SpinnerSize} from "@blueprintjs/core";
 import SongRow from "./SongRow";
 import {apiClient, AuthenticationContext} from "../../App";
 import {GetSongRequest, PlayableSongDTO} from "../../openapi-client";
+import fileDownload from 'js-file-download'
 
 
 function PlaylistPage() {
@@ -22,12 +23,7 @@ function PlaylistPage() {
             };
 
             apiClient.getSong(getSongRequest).then(result => {
-                let data = new Blob([result], {type: 'audio/mpeg'});
-                let url = window.URL.createObjectURL(data);
-                let tempLink = document.createElement('a');
-                tempLink.href = url;
-                tempLink.setAttribute('download', 'sample.mp3');
-                tempLink.click();
+                fileDownload(result, "example.mp3", "audio/mpeg");
             }).catch(response => {
                 // TODO: Error handling
             });
