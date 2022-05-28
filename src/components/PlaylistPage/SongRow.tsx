@@ -3,13 +3,14 @@ import {useState} from "react";
 
 interface RowProps {
     index: number,
+    songId?: string,
     title?: string,
     artist?: string,
     duration?: string,
     setPlayingIndex: (i: number) => void,
-    downloadSong: (s: string) => void
+    downloadSong: (s?: string) => void
 }
-function SongRow({index, title, artist, duration, setPlayingIndex, downloadSong}: RowProps) {
+function SongRow({index, songId, title, artist, duration, setPlayingIndex, downloadSong}: RowProps) {
     let [hovered, setHovered] = useState(false);
 
     return (
@@ -49,7 +50,7 @@ function SongRow({index, title, artist, duration, setPlayingIndex, downloadSong}
             <td style={{
                 marginLeft: 10,
             }}>
-                <Button icon={"cloud-download"} minimal={!hovered} onClick={() => downloadSong("hello")}/>
+                <Button icon={"cloud-download"} minimal={!hovered} onClick={() => downloadSong(songId)}/>
             </td>
         </tr>
     )

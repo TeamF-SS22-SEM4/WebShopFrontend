@@ -90,11 +90,16 @@ paths:
           schema:
             $ref: '#/components/schemas/UUID'
       responses:
-        '200':
+        "200":
           description: OK
-        '404':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+        "404":
           description: When the song cannot be found.
-        '500':
+        "500":
           description: if the method is not yet implemented
   /api/v1/products:
     get:

@@ -58,7 +58,6 @@ function SearchPage() {
         apiClient.getProduct(getProductRequest).then(result => {
             setProduct(result);
         }).catch(response => {
-            //TODO handling
             if (response.status === 403) {
                 alert("Not Authenticated");
             } else if (response.status === 401) {
