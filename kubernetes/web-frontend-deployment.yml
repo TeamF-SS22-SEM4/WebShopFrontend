@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-shop-tomify
+spec:
+  selector:
+    matchLabels:
+      app: web-shop-tomify
+  template:
+    metadata:
+      name: web-shop-tomify
+      labels:
+        app: web-shop-tomify
+    spec:
+      containers:
+        - name: web-shop-tomify
+          image: team-f-web-shop-tomify
+          imagePullPolicy: Never
+          ports:
+            - name: http
+              containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-shop-tomify
+spec:
+  type: LoadBalancer
+  selector:
+    app: web-shop-tomify
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+
