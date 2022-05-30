@@ -19,7 +19,8 @@ function PlaylistPage() {
     let downloadSong = (songId?: string) => {
         if(songId !== undefined) {
             const getSongRequest: GetSongRequest = {
-                songId: songId
+                songId: songId,
+				username: authState.username
             };
 
             apiClient.getSong(getSongRequest).then(result => {
