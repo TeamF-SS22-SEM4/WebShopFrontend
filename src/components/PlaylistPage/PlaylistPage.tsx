@@ -87,7 +87,7 @@ function PlaylistPage() {
             {emptyPlaylist && <h1 style={{textAlign: "center"}}>There seems to be nothing here. &#128577;</h1>}
 
             <div style={{
-                position: "absolute",
+                position: "fixed",
                 bottom: 0,
                 width: "100%",
             }}>
