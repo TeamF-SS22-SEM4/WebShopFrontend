@@ -79,9 +79,9 @@ paths:
           description: Not Authenticated
         '404':
           description: User not found
-  /playlist-api/v1/songs/{songId}:
+  /download-api/v1/songs/{username}/{songId}:
     get:
-      description: Responds with the MP3 of the song
+      description: Responds with the MP3 of the song as bytes
       operationId: getSong
       parameters:
         - name: songId
@@ -89,6 +89,11 @@ paths:
           required: true
           schema:
             $ref: '#/components/schemas/UUID'
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         "200":
           description: OK
@@ -99,8 +104,6 @@ paths:
                 type: string
         "404":
           description: When the song cannot be found.
-        "500":
-          description: if the method is not yet implemented
   /api/v1/products:
     get:
       operationId: searchProducts
