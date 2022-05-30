@@ -66,7 +66,7 @@ function LoginPage({fromManualLink}: LoginPageProps) {
         apiClient.login({credentials}).then(resultDTO => {
             authenticationContext.storeLogin(resultDTO);
 
-            cookie.set('sessionCookie', resultDTO.sessionId + "/" + resultDTO.username, {maxAge: 360000, path: "/"});
+            cookie.set('sessionCookie', resultDTO.sessionId + "/" + resultDTO.username, {maxAge: 3600, path: "/"});
 
             setFetching(false);
             if (fromManualLink) {
