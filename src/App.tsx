@@ -11,7 +11,7 @@ import RestrictedWrapper from "./components/LoginPage/RestrictedWrapper";
 import PlaylistPage from "./components/PlaylistPage/PlaylistPage";
 
 //set up open api client
-const apiUrl = window.location.origin === "http://localhost:3000" ? "http://localhost:8080" : window.location.origin;
+const apiUrl = window.location.origin === "http://localhost:3000" ? "http://localhost:80" : window.location.origin;
 const configParams = {
     basePath: apiUrl
 }
