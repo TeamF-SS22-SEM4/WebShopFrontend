@@ -1,6 +1,8 @@
 import {MenuItem, Menu, Icon} from "@blueprintjs/core";
 import {useContext} from "react";
 import {AuthenticationContext, useDarkModeContext} from "../../../App";
+import Cookie from "universal-cookie";
+
 
 function AccountDropdown() {
     const authenticationContext = useContext(AuthenticationContext);
@@ -19,7 +21,12 @@ function AccountDropdown() {
                 </>
                 } onClick={() => setDarkContext(false)}/>
             </MenuItem>
-            {loggedIn && <MenuItem onClick={() => authenticationContext.logout()} text={<><Icon icon={"log-out"}/> <span>Log out</span> </>}/> }
+            {loggedIn && <MenuItem onClick={() => {
+                const cookie = new Cookie();
+                cookie.remove("sessionCookie", {path:"/"});
+
+                authenticationContext.logout()}}
+                text={<><Icon icon={"log-out"}/> <span>Log out</span> </>}/> }
         </Menu>
     )
 }
