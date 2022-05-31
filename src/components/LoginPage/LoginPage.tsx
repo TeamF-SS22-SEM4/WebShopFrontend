@@ -24,19 +24,6 @@ function LoginPage({fromManualLink}: LoginPageProps) {
 
     const cookie = new Cookies();
 
-    useEffect(() => {                                           //Checks cookie when login-page gets loaded
-        if(!authenticationContext.loggedIn){
-            let sessionCookie = cookie.get("sessionCookie");
-
-            if (sessionCookie != null && !authenticationContext.loggedIn) {
-                const sessionIDAndUser = sessionCookie.split("/");
-                let cookieLoginInfo = {sessionId: sessionIDAndUser[0], username: sessionIDAndUser[1], loggedIn: true}; // pass to function as JSON, so it re-renders
-                authenticationContext.storeLogin(cookieLoginInfo);
-                navigate("/");                                    //navigates back to main page after successful login
-            }
-        }
-    });
-
     const keyDownListener = (event: KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Enter") {
             doLogin();
