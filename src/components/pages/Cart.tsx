@@ -139,8 +139,8 @@ const Cart = () => {
                 { shoppingCart.length > 0 ?
                     <>
                         <div className="h-100">
-                        <div className="tableContainer">
-                            <table className="table">
+                        <div className="tableContainer d-flex flex-column">
+                            <table className="table flex-grow-1">
                                 <thead>
                                 <tr>
                                     <th>Product</th>
