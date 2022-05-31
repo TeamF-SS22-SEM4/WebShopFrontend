@@ -15,7 +15,7 @@ spec:
       containers:
         - name: web-shop-tomify
           image: team-f-web-shop-tomify
-          imagePullPolicy: Never
+          imagePullPolicy: Always
           ports:
             - name: http
               containerPort: 80
