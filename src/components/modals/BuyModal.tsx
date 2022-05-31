@@ -1,13 +1,13 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import {ProductDetailsDTO, SoundCarrierDTO} from "../../openapi-client";
-import {ShoppingCartItem} from "./ShoppingCartItem";
+import {ShoppingCartItem} from "../others/ShoppingCartItem";
 import {shoppingCart} from "../pages/Cart";
 import {ShoppingCartContext} from "../../App";
 
 interface BuyProductPopupProps {
     callbackFunction: () => void;
     product: ProductDetailsDTO | undefined;
-    isLoading: boolean
+    isLoading: boolean;
 }
 
 let text = " ";
@@ -66,6 +66,11 @@ const BuyProductPopup = ({callbackFunction, product, isLoading}: BuyProductPopup
 
                         setMessageText("Success - Your article(s) are now in the shopping cart!" + text);
                         setDisplayMessage(true);
+                        callbackFunction();
+                        //TODO message elimineren
+                        // setTimeout(function() {
+                        //     callbackFunction();
+                        // }, 3000);
                     } else {
                         setMessageText("Failed - This product(s) are already in the cart!" + text);
                         setDisplayAsError(true);
@@ -79,59 +84,60 @@ const BuyProductPopup = ({callbackFunction, product, isLoading}: BuyProductPopup
 
     return (
         <div className='modal-outer'>
-
             <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h5 className="modal-title" id="exampleModalLabel">{product?.name}</h5>
+                        <h5 className="modal-title">{!isLoading && product?.name}</h5>
                         <button className="btn btn-primary btn-sm" onClick={() => callbackFunction()}>close</button>
                     </div>
                     <div className="modal-body">
                         {!isLoading ?
-                            <p>true</p>
-                            :
-                            <p>false</p>
-                        }
-                        <table className="table table-hover table-dark custom-table">
-                            <thead className="custom-table-head">
-                            <tr>
-                                <th>Type</th>
-                                <th>Available</th>
-                                <th>Price</th>
-                                <th>Selected Amount</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {
-                                product?.soundCarriers?.map(
-                                    soundCarrier =>
-                                        <tr key={soundCarrier.soundCarrierId}>
-                                            <td className="align-middle">{soundCarrier.soundCarrierName}</td>
-                                            <td className="align-middle">{soundCarrier.amountAvailable}</td>
-                                            <td className="align-middle">{soundCarrier.pricePerCarrier}€</td>
-                                            <td className="align-middle">
-                                                <input
-                                                    id={soundCarrier.soundCarrierId}
-                                                    type="number"
-                                                    placeholder='0'
-                                                    max={soundCarrier.amountAvailable}
-                                                    onChange={(event) => {
-                                                        if (soundCarrier.amountAvailable !== undefined && parseInt(event.target.value) > soundCarrier.amountAvailable) {
-                                                            event.target.value = String(soundCarrier.amountAvailable);
-                                                        }
-                                                        updateSelectedSoundCarriers(soundCarrier, parseInt(event.target.value))
-                                                    }}
-                                                />
+                            <table className="table">
+                                <thead className="custom-table-head">
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Available</th>
+                                    <th>Price</th>
+                                    <th>Selected Amount</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {
+                                    product?.soundCarriers?.map(
+                                        soundCarrier =>
+                                            <tr key={soundCarrier.soundCarrierId}>
+                                                <td className="align-middle">{soundCarrier.soundCarrierName}</td>
+                                                <td className="align-middle">{soundCarrier.amountAvailable}</td>
+                                                <td className="align-middle">{soundCarrier.pricePerCarrier}€</td>
+                                                <td className="align-middle">
+                                                    <input
+                                                        className="form-control"
+                                                        type="number"
+                                                        placeholder='0'
+                                                        min="0"
+                                                        max={soundCarrier.amountAvailable}
+                                                        onChange={(event) => {
+                                                            if (soundCarrier.amountAvailable !== undefined && parseInt(event.target.value) > soundCarrier.amountAvailable) {
+                                                                event.target.value = String(soundCarrier.amountAvailable);
+                                                            }
+                                                            updateSelectedSoundCarriers(soundCarrier, parseInt(event.target.value))
+                                                        }}
+                                                    />
 
-                                            </td>
-                                        </tr>
-                                )
-                            }
-                            </tbody>
-                        </table>
+                                                </td>
+                                            </tr>
+                                    )
+                                }
+                                </tbody>
+                            </table>
+                        :
+                            <div className="row justify-content-center">
+                                <div className="spinner-border align-self-center"></div>
+                            </div>
+                        }
                     </div>
                     <div className="modal-footer justify-content-between">
-                        <p key={messageText} className={displayAsError ? "test error" : "test"}>{!displayMessage ? "" : <>{messageText}</>}</p>
+                        <p key={messageText} className={displayAsError ? "fw-bolder test error" : "fw-bolder test"}>{!displayMessage ? "" : <>{messageText}</>}</p>
                         <button className="btn btn-success btn-sm" onClick={() => addToCart()}>Add to cart</button>
                     </div>
                 </div>

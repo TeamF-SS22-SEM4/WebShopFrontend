@@ -2,6 +2,8 @@
 /* DEFAULT VALUES                                                               */
 /********************************************************************************/
 * {
+  /*TODO: !!! default value verwednungen überall prüfen*/
+
   --color-primary: rgb(194, 127, 0);
   --color-success: green;
   --color-alert: red;
@@ -11,9 +13,8 @@
   --color-btn-text: #fafafa;
 
   --color-bg-1: #282828;
-  --color-bg-2: #373737;
-  --color-bg-3: #464646;
-  --color-bg-4: #646464;
+  --color-bg-2: #464646;
+  --color-bg-3: #646464;
   --color-bg-hover: rgba(194, 127, 0, 0.15);
 }
 
@@ -29,7 +30,7 @@ html, body, #root {
 
 .content {
   height: 90%;
-  background-color: var(--color-bg-2);
+  background-color: var(--color-bg-3);
   overflow-y: scroll;
   overflow-x: hidden;
   color: var(--color-text-1);
@@ -73,10 +74,9 @@ html, body, #root {
   color: var(--color-text-1) !important;
 
 }
-
 .dropdown-menu-custom {
   border-radius:.25rem;
-  background-color: var(--color-bg-4);
+  background-color: var(--color-bg-2);
 }
 /********************************************************************************/
 /* CONTENT                                                                      */
@@ -117,26 +117,108 @@ html, body, #root {
 
 
 .testtt {
-  animation: testanimation 1s ease ;
+  z-index: 100;
+  animation: testanimation 1s ease-out;
 }
 
 @keyframes testanimation {
-  0% {
-    transform: scale(1);
+  50% {transform: scale(1.5);}
+  100% {transform: scale(1);}
+  100% {transform: translate(-50%, -50%);}
+}
+
+
+@-webkit-keyframes swing
+{
+  15%
+  {
+    -webkit-transform: translateX(5px);
+    transform: translateX(5px);
   }
-  50% {
-    transform: scale(5);
+  30%
+  {
+    -webkit-transform: translateX(-5px);
+    transform: translateX(-5px);
   }
-  100% {
-    transform: scale(1);
+  50%
+  {
+    -webkit-transform: translateX(3px);
+    transform: translateX(3px);
+  }
+  65%
+  {
+    -webkit-transform: translateX(-3px);
+    transform: translateX(-3px);
+  }
+  80%
+  {
+    -webkit-transform: translateX(2px);
+    transform: translateX(2px);
+  }
+  100%
+  {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+}
+@keyframes swing
+{
+  15%
+  {
+    -webkit-transform: translateX(5px);
+    transform: translateX(5px);
+  }
+  30%
+  {
+    -webkit-transform: translateX(-5px);
+    transform: translateX(-5px);
+  }
+  50%
+  {
+    -webkit-transform: translateX(3px);
+    transform: translateX(3px);
+  }
+  65%
+  {
+    -webkit-transform: translateX(-3px);
+    transform: translateX(-3px);
+  }
+  80%
+  {
+    -webkit-transform: translateX(2px);
+    transform: translateX(2px);
+  }
+  100%
+  {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
   }
 }
 
 
-/*.test {*/
-/*  animation: try 6s ease ;*/
-/*  opacity: 0;*/
-/*}*/
+@keyframes fadeInDown{
+  from{
+    opacity:0;
+  }
+  to{
+    opacity:1;
+  }
+}
+
+@-webkit-keyframes fadeInDown{
+  from{
+    opacity:0;
+  }
+  to{
+    opacity:1;
+  }
+}
+
+
+.test {
+  animation: try 6s ease ;
+  opacity: 0;
+}
 
 @keyframes try {
   0% {opacity: 1; transform: scale(1)}
@@ -186,11 +268,12 @@ input:focus {
 
 
 .login-input::placeholder {
-  color: red;
+  color: var(--color-text-2);
 }
 
 .login-input {
   background-color: transparent !important;
+  color: var(--color-text-1) !important;
   border-width: 0 0 3px 0;
   border-radius: 0;
   transition: none;
@@ -203,11 +286,13 @@ input:focus {
 
 
 .tableContainer {
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
 }
 table, .table {
   margin: 0;
+  background-color: var(--color-bg-2);
+  color: var(--color-text-1);
   border-collapse: collapse;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -215,7 +300,15 @@ table, .table {
  thead th {
   position: sticky;
   top: 0;
+   background-color: var(--color-bg-2) !important;
+}
+
+tbody tr:hover {
+  background-color: var(--color-bg-hover);
 }
 
 
 
+.form-control, .form-select {
+  padding: 0.15rem 0.4rem !important;
+}

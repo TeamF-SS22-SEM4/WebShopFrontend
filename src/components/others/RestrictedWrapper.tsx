@@ -1,6 +1,6 @@
 import React, {useContext} from "react";
 import {AuthenticationContext} from "../../App";
-import Login from "../pages/Login";
+import Home from "../pages/Home";
 
 interface BaseLayoutProps {
     children?: React.ReactNode;
@@ -9,7 +9,7 @@ interface BaseLayoutProps {
 function RestrictedWrapper({children}: BaseLayoutProps) {
     let authContext = useContext(AuthenticationContext)
     if (!authContext.loggedIn) {
-        return <Login/>;
+        return <Home/>;
     }
     return <>{children}</>
 }

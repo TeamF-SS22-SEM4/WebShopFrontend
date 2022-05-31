@@ -1,11 +1,25 @@
-import React, {useContext} from "react";
+import React, {useContext, useState} from "react";
 import {AuthenticationContext, ShoppingCartContext} from "../../App";
 import {Link} from "react-router-dom";
 import {FaHome, FaShoppingCart, FaUserAlt} from "react-icons/fa";
 import { FiLogIn, FiLogOut } from "react-icons/fi";
 import { BsBox } from "react-icons/bs";
+import LoginPopup from "../modals/LoginModal";
 
 const Header = () => {
+
+
+    //TODO: modal outside click und escape einfügen
+
+    const [isProductDetailsShown, setIsProductDetailsShown] = useState<boolean>(false);
+
+    const showProductDetails = () => {
+        setIsProductDetailsShown(true);
+    }
+
+    const closeProductDetails = () => {
+        setIsProductDetailsShown(false);
+    }
 
     const authenticationContext = useContext(AuthenticationContext);
     let loggedIn = authenticationContext.loggedIn;
@@ -37,23 +51,23 @@ const Header = () => {
                     </li>
                     <li className="m-2">
                         {!loggedIn ?
-                            <Link to={"/login"} className="nav-link text-white">
+                            <a className="nav-link text-white" onClick={() => showProductDetails()}>
                                 <FiLogIn size={20}></FiLogIn>
                                 &nbsp;&nbsp;&nbsp;Login
-                            </Link>
+                            </a>
                         :
                             <div className="dropdown">
                                 <a className="dropdown-toggle nav-link text-white">
-                                    <FaUserAlt size={18}></FaUserAlt>
+                                    <FaUserAlt size={16}></FaUserAlt>
                                     &nbsp;&nbsp;&nbsp;{username}
                                 </a>
                                 <ul className="dropdown-menu">
                                     <div className="pt-1 pb-2 px-2 dropdown-menu-custom">
-                                        <li><a className="dropdown-item" href="src/components/others/Header#">
+                                        <li><a className="dropdown-item">
                                             <BsBox size={15}></BsBox>
                                             &nbsp;&nbsp;&nbsp;My Orders</a></li>
                                         <li>
-                                            <a onClick={() => authenticationContext.logout()} className="dropdown-item" href="src/components/others/Header#">
+                                            <a onClick={() => authenticationContext.logout()} className="dropdown-item">
                                                 <FiLogOut size={15}></FiLogOut>
                                                 &nbsp;&nbsp;&nbsp;Logout
                                             </a>
@@ -65,6 +79,11 @@ const Header = () => {
                     </li>
                 </ul>
             </div>
+            {
+                isProductDetailsShown ?
+                    <LoginPopup callbackFunction={closeProductDetails}/> :
+                    null
+            }
         </div>
     );
 }

@@ -3,8 +3,10 @@ import {GetProductRequest, ProductDetailsDTO, SearchProductsRequest} from "../..
 import {apiClient} from "../../App";
 import React from 'react';
 import { FaSearch } from 'react-icons/fa';
-import ProductDetailsPopup from "../others/DetailsModal";
-import BuyProductPopup from "../others/BuyModal";
+import ProductDetailsPopup from "../modals/DetailModal";
+import BuyProductPopup from "../modals/BuyModal";
+
+//TODO: einheitlihc function oder const
 
 function Home() {
     const [searchTerm, setSearchTerm] = useState<string>("");
@@ -105,20 +107,24 @@ function Home() {
     const showProductDetails = (productId: string | undefined) => {
         if(productId !== undefined) {
             fetchProductDetails(productId);
-            setIsProductDetailsShown(true);
+            setTimeout(function() {
+                setIsProductDetailsShown(true);
+            }, 150);
+        }
+    }
+
+    const showBuyProduct = (productId: string | undefined) => {
+        if(productId !== undefined) {
+            fetchProductDetails(productId);
+            setTimeout(function() {
+                setIsBuyProductShown(true);
+            }, 150);
         }
     }
 
     const closeProductDetails = () => {
         setProductDetail(undefined);
         setIsProductDetailsShown(false);
-    }
-
-    const showBuyProduct = (productId: string | undefined) => {
-        if(productId !== undefined) {
-            fetchProductDetails(productId);
-            setIsBuyProductShown(true);
-        }
     }
 
     const closeBuyProduct = () => {
@@ -130,7 +136,6 @@ function Home() {
         <>
         <div className="content">
             <div className="container h-100 pb-5">
-
                 <div className="row w-50 m-auto" style={{"height": "20%"}}>
                     <div className="col align-self-center input-group">
                         <input className="form-control" placeholder="Search" type="text" onKeyDown={e => e.key === 'Enter' && fetchProducts()} onChange={(e) => setSearchTerm(e.target.value)} />
@@ -152,7 +157,7 @@ function Home() {
                             :
                             <div className="justify-content-center" style={{"height": "80%"}}>
                                 <div className="tableContainer h-100">
-                                    <table className="table table-hover table-dark ">
+                                    <table className="table">
                                         <thead>
                                         <tr>
                                             <th>Name</th>
@@ -198,18 +203,10 @@ function Home() {
                 {/*TODO: was ist wenn modal content noch nicht da ist*/}
             </div>
         </div>
-        {
-            isProductDetailsShown ?
-                <ProductDetailsPopup callbackFunction={closeProductDetails} product={productDetail}/> :
-                null
-        }
-        {
-            isBuyProductShown ?
-                <BuyProductPopup callbackFunction={closeBuyProduct} isLoading={productDetailsLoading} product={productDetail}/> :
-                null
-        }
+        {isProductDetailsShown && <ProductDetailsPopup callbackFunction={closeProductDetails} isLoading={productDetailsLoading} product={productDetail}/>}
+        {isBuyProductShown && <BuyProductPopup callbackFunction={closeBuyProduct} isLoading={productDetailsLoading} product={productDetail}/>}
     </>
     )
 }
 
-export default Home
+export default Home;

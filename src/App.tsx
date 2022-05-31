@@ -1,5 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
-import Login from './components/pages/Login';
+import React, {useEffect, useState} from 'react';
 import {Route, Routes} from 'react-router-dom';
 import Home from "./components/pages/Home";
 import {Configuration, DefaultApi, LoginResultDTO} from "./openapi-client";
@@ -45,17 +44,6 @@ let contextValue: AuthenticationContextType = {
     logout: () => {
     }
 }
-
-type DarkModeType = boolean | undefined;
-
-type DarkModeContextType = [
-    DarkModeType,
-    React.Dispatch<React.SetStateAction<DarkModeType>>
-];
-
-const DarkModeContext = React.createContext<DarkModeContextType | undefined>(undefined);
-export const useDarkModeContext = () => useContext(DarkModeContext) as DarkModeContextType;
-
 
 export const AuthenticationContext = React.createContext(contextValue)
 
@@ -122,8 +110,7 @@ function App(this: any) {
         })
     }, []);
 
-    let darkStateArr = useState<DarkModeType>(true);
-    let isDark = darkStateArr[0]; //needed because value of the state is also read in the same component that provides the context
+    //TODO: was wenn unangemeldet auf playlist??
 
     return (
         <AuthenticationContext.Provider value={authState}>
@@ -131,8 +118,6 @@ function App(this: any) {
             <Header />
             <Routes>
                 <Route index element={<Home/>}/>
-                <Route path="/login" element={<Login fromManualLink={true}/>}/>
-                <Route path="/search" element={<Home/>}/>
                 <Route path="/cart" element={ <Cart/>}/>
                 <Route path="/playlist" element={
                     <RestrictedWrapper>
