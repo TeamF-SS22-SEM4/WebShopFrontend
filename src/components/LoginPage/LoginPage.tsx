@@ -90,7 +90,6 @@ function LoginPage({fromManualLink}: LoginPageProps) {
                     <div className={"spinner-wrapper"}>
                         <h3>Logging you in</h3>
                         <Spinner size={SpinnerSize.LARGE}/>
-
                     </div>
                 }
             </Card>

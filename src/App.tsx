@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import './App.css';
 import AppHeader from './components/AppHeader/AppHeader';
 import LoginPage from './components/LoginPage/LoginPage';
@@ -6,8 +6,9 @@ import {Route, Routes} from 'react-router-dom';
 import Startpage from "./components/StartPage/Startpage";
 import SearchPage from "./components/SearchPage/SearchPage";
 import {Configuration, DefaultApi, LoginResultDTO} from "./openapi-client";
-import RestrictedWrapper from "./components/LoginPage/RestrictedWrapper";
 import ShoppingCartPage from './components/ShoppingCartPage/ShoppingCartPage';
+import RestrictedWrapper from "./components/LoginPage/RestrictedWrapper";
+import PlaylistPage from "./components/PlaylistPage/PlaylistPage";
 
 //set up open api client
 const apiUrl = window.location.origin === "http://localhost:3000" ? "http://localhost:8080" : window.location.origin;
@@ -32,11 +33,6 @@ export type AuthenticationContextType = {
     logout: () => void;
 }
 
-export type DarkContextType = {
-    dark: boolean;
-    setDark: (b: boolean) => void
-}
-
 let contextValue: AuthenticationContextType = {
     sessionId: "",
     username: "",
@@ -46,33 +42,24 @@ let contextValue: AuthenticationContextType = {
     logout: () => {
     }
 }
-let darkValue: DarkContextType = {
-    dark: true,
-    setDark: () => {
-    }
-}
+
+type DarkModeType = boolean | undefined;
+
+type DarkModeContextType = [
+    DarkModeType,
+    React.Dispatch<React.SetStateAction<DarkModeType>>
+];
+
+const DarkModeContext = React.createContext<DarkModeContextType | undefined>(undefined);
+export const useDarkModeContext = () => useContext(DarkModeContext) as DarkModeContextType;
+
 
 export const AuthenticationContext = React.createContext(contextValue)
-export const DarkModeContext = React.createContext(darkValue);
 
-function App(this: any) {
+function App() {
     let [authState, setAuthState] = useState(contextValue)
-    let [darkState, setDarkState] = useState(darkValue);
 
     useEffect(() => {
-        setDarkState(prev => {
-            return {
-                ...prev,
-                setDark: b => {
-                    setDarkState(p => {
-                        return {
-                            ...p,
-                            dark: b
-                        }
-                    })
-                }
-            }
-        })
 
         setAuthState(prevState => {
             return {
@@ -102,19 +89,22 @@ function App(this: any) {
         })
     }, []);
 
+    let darkStateArr = useState<DarkModeType>(true);
+    let isDark = darkStateArr[0]; //needed because value of the state is also read in the same component that provides the context
+
     return (
         <AuthenticationContext.Provider value={authState}>
-            <DarkModeContext.Provider value={darkState}>
-                <div className={darkState.dark ? "bp4-dark" : ""} style={darkState.dark ? {backgroundColor: "#616161", minHeight: "100vh"} : {backgroundColor: "white"}}>
+            <DarkModeContext.Provider value={darkStateArr}>
+                <div className={isDark ? "bp4-dark" : ""} style={isDark ? {backgroundColor: "#616161", minHeight: "100vh"} : {backgroundColor: "white"}}>
                     <AppHeader/>
                     <Routes>
                         <Route index element={<Startpage/>}/>
                         <Route path="/login" element={<LoginPage fromManualLink={true}/>}/>
                         <Route path="/search" element={<SearchPage/>}/>
                         <Route path="/cart" element={ <ShoppingCartPage/>}/>
-                        <Route path="/restrictedTest" element={
+                        <Route path="/playlist" element={
                             <RestrictedWrapper>
-                                <h1>If you see this without being logged in tell Lukas he fucked up.</h1>
+                                <PlaylistPage/>
                             </RestrictedWrapper>
                         }/>
                     </Routes>
