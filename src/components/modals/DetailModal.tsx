@@ -46,7 +46,7 @@ const ProductDetailsPopup = ({callbackFunction, product, isLoading}: ProductDeta
                                 </table>
                             </>
                             :
-                            <div className="row justify-content-center pb-5">
+                            <div className="row justify-content-center py-5">
                                 <div className="spinner-border align-self-center"></div>
                             </div>
                         }

@@ -131,15 +131,17 @@ const BuyProductPopup = ({callbackFunction, product, isLoading}: BuyProductPopup
                                 </tbody>
                             </table>
                         :
-                            <div className="row justify-content-center">
+                            <div className="row justify-content-center py-5">
                                 <div className="spinner-border align-self-center"></div>
                             </div>
                         }
                     </div>
-                    <div className="modal-footer justify-content-between">
-                        <p key={messageText} className={displayAsError ? "fw-bolder test error" : "fw-bolder test"}>{!displayMessage ? "" : <>{messageText}</>}</p>
-                        <button className="btn btn-success btn-sm" onClick={() => addToCart()}>Add to cart</button>
-                    </div>
+                    { !isLoading &&
+                        <div className="modal-footer justify-content-between">
+                            <p key={messageText} className={displayAsError ? "fw-bolder test error" : "fw-bolder test"}>{!displayMessage ? "" : <>{messageText}</>}</p>
+                            <button className="btn btn-success btn-sm" onClick={() => addToCart()}>Add to cart</button>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

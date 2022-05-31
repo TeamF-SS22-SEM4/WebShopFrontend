@@ -133,6 +133,8 @@ const Cart = () => {
         }
     }
 
+    // todo: zu viel auswählen bei cart möglich
+
     return (
         <div className="content">
             <div className="container h-100 py-5">

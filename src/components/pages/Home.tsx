@@ -6,19 +6,16 @@ import { FaSearch } from 'react-icons/fa';
 import ProductDetailsPopup from "../modals/DetailModal";
 import BuyProductPopup from "../modals/BuyModal";
 
-//TODO: einheitlihc function oder const
+const Home = () => {
 
-function Home() {
     const [searchTerm, setSearchTerm] = useState<string>("");
-
-    const [productsLoading, setProductsLoading] = useState<boolean>(false);
-    const [productDetailsLoading, setProductDetailsLoading] = useState<boolean>(false);
-
     const [products, setProducts] = useState<Product[]>([]);
     const [productDetail, setProductDetail] = useState<ProductDetailsDTO>();
 
-    const [isProductDetailsShown, setIsProductDetailsShown] = useState<boolean>(false);
-    const [isBuyProductShown, setIsBuyProductShown] = useState<boolean>(false);
+    const [isLoadingProducts, setIsLoadingProducts] = useState<boolean>(false);
+    const [isLoadingProductDetail, setIsLoadingProductDetail] = useState<boolean>(false);
+    const [displayDetailModal, setDisplayDetailModal] = useState<boolean>(false);
+    const [displayBuyModal, setDisplayBuyModal] = useState<boolean>(false);
 
     type Product = {
         id: string,
@@ -32,38 +29,62 @@ function Home() {
     useEffect(() => {
         fetchProducts();
 
-        const close = (e: any) => {
+        function closeByEsc(e: any) {
             if(e.key === 'Escape'){
-                closeProductDetails();
-                closeBuyProduct();
+                closeDetailModal();
+                closeBuyModal();
             }
         }
 
-        function test(event: any) {
+        function closeByOutsideClick(event: any) {
             if (!event.target.closest(".modal-dialog") && event.target.closest(".modal-outer")) {
-                closeProductDetails();
-                closeBuyProduct();
+                closeDetailModal();
+                closeBuyModal();
             }
         }
 
-        window.addEventListener('click', test);
-        window.addEventListener('keydown', close);
-
+        window.addEventListener('keydown', closeByEsc);
+        window.addEventListener('click', closeByOutsideClick);
 
         return () => {
-            window.removeEventListener('keydown', close);
-            window.removeEventListener('click', test);
+            window.addEventListener('keydown', closeByEsc);
+            window.addEventListener('click', closeByOutsideClick);
         }
     }, []);
 
+    function showDetailModal(productId: string | undefined) {
+        if(productId !== undefined) {
+            fetchProductDetails(productId);
+            setTimeout(function() {
+                setDisplayDetailModal(true);
+            }, 150);
+        }
+    }
+
+    function closeDetailModal () {
+        setProductDetail(undefined);
+        setDisplayDetailModal(false);
+    }
+
+    function showBuyModal (productId: string | undefined) {
+        if(productId !== undefined) {
+            fetchProductDetails(productId);
+            setTimeout(function() {
+                setDisplayBuyModal(true);
+            }, 150);
+        }
+    }
+
+    function closeBuyModal () {
+        setProductDetail(undefined);
+        setDisplayBuyModal(false);
+    }
 
     function fetchProducts() {
-        setProductsLoading(true);
+        setIsLoadingProducts(true);
         const searchProductsRequest: SearchProductsRequest = {search: searchTerm};
-
         apiClient.searchProducts(searchProductsRequest).then(result => {
             let products: Product[] = [];
-
             result.forEach((element) => {
                 if (element.productId && element.name && element.artistName && element.genre && element.releaseYear && element.smallestPrice) {
                     let product: Product = {
@@ -77,59 +98,23 @@ function Home() {
                     products.push(product);
                 }
             })
-
             products.sort((a,b) => (a.album > b.album) ? 1 : ((b.album > a.album) ? -1 : 0));
             setProducts(products);
-            setProductsLoading(false);
-        }).catch(() => {});
-    }
-
-    function fetchProductDetails(productId: string) {
-        setProductDetailsLoading(true);
-        const getProductRequest: GetProductRequest = {id: productId};
-
-        apiClient.getProduct(getProductRequest).then(result => {
-            setProductDetail(result);
-            setProductDetailsLoading(false);
-        }).catch(response => {
-            if (response.status === 403) {
-                alert("Not Authenticated");
-            } else if (response.status === 401) {
-                alert("Unauthorized for operation");
-            } else if (response.status === 403) {
-                alert("Unknown product id");
-            } else {
-                alert("Something went wrong...");
-            }
+            setIsLoadingProducts(false);
+        }).catch(() => {
+            alert("Loading products failed!");
         });
     }
 
-    const showProductDetails = (productId: string | undefined) => {
-        if(productId !== undefined) {
-            fetchProductDetails(productId);
-            setTimeout(function() {
-                setIsProductDetailsShown(true);
-            }, 150);
-        }
-    }
-
-    const showBuyProduct = (productId: string | undefined) => {
-        if(productId !== undefined) {
-            fetchProductDetails(productId);
-            setTimeout(function() {
-                setIsBuyProductShown(true);
-            }, 150);
-        }
-    }
-
-    const closeProductDetails = () => {
-        setProductDetail(undefined);
-        setIsProductDetailsShown(false);
-    }
-
-    const closeBuyProduct = () => {
-        setProductDetail(undefined);
-        setIsBuyProductShown(false);
+    function fetchProductDetails(productId: string) {
+        setIsLoadingProductDetail(true);
+        const getProductRequest: GetProductRequest = {id: productId};
+        apiClient.getProduct(getProductRequest).then(result => {
+            setProductDetail(result);
+            setIsLoadingProductDetail(false);
+        }).catch(() => {
+            alert("Loading product details failed!");
+        });
     }
 
     return (
@@ -139,57 +124,56 @@ function Home() {
                 <div className="row w-50 m-auto" style={{"height": "20%"}}>
                     <div className="col align-self-center input-group">
                         <input className="form-control" placeholder="Search" type="text" onKeyDown={e => e.key === 'Enter' && fetchProducts()} onChange={(e) => setSearchTerm(e.target.value)} />
-                        <button className="btn btn-primary" onClick={() => {fetchProducts()}}><FaSearch className="d-flex" size={20}></FaSearch></button>
+                        <button className="btn btn-p" onClick={() => {fetchProducts()}}><FaSearch className="d-flex" size={20}></FaSearch></button>
                     </div>
                 </div>
 
-                {productsLoading ?
+                { isLoadingProducts ?
                     <div className="row justify-content-center h-25">
                         <div className="spinner-border align-self-center"></div>
                     </div>
                 :
                     <>
-                        {products.length <= 0 ?
+                        { products.length <= 0 ?
                             <div className="row justify-content-center h-25">
                                 <span className="h3 text-center m-auto">No entry found!</span>
                             </div>
 
-                            :
+                        :
                             <div className="justify-content-center" style={{"height": "80%"}}>
-                                <div className="tableContainer h-100">
+                                <div className="table-wrapper h-100">
                                     <table className="table">
                                         <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Artist</th>
-                                            <th>Genre</th>
-                                            <th>Release Year</th>
-                                            <th>Price [from]</th>
-                                            <th></th>
-                                            <th></th>
-                                        </tr>
+                                            <tr>
+                                                <th className="py-4">Album</th>
+                                                <th className="py-4">Artist</th>
+                                                <th className="py-4">Genre</th>
+                                                <th className="py-4">Release</th>
+                                                <th className="py-4">Price</th>
+                                                <th className="py-4"></th>
+                                                <th className="py-4"></th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        {
-                                            products?.map(
-                                                product =>
-                                                    <tr key={product.id}>
-                                                        <td className="align-middle">{product.album}</td>
-                                                        <td className="align-middle">{product.artist}</td>
-                                                        <td className="align-middle">{product.genre}</td>
-                                                        <td className="align-middle">{product.release}</td>
-                                                        <td className="align-middle">{product.price} €</td>
-                                                        <td className="align-middle">
-                                                            <button className='btn btn-primary btn-sm' onClick={() => showProductDetails(product.id)}>
-                                                                Details
-                                                            </button>
-                                                        </td>
-                                                        <td className="align-middle">
-                                                            <button className='btn btn-success btn-sm' onClick={() => showBuyProduct(product.id)}>
-                                                                Buy
-                                                            </button>
-                                                        </td>
-                                                    </tr>
+                                        { products?.map(
+                                            product =>
+                                                <tr key={product.id}>
+                                                    <td className="align-middle">{product.album}</td>
+                                                    <td className="align-middle">{product.artist}</td>
+                                                    <td className="align-middle">{product.genre}</td>
+                                                    <td className="align-middle text-center">{product.release}</td>
+                                                    <td className="align-middle text-center">{product.price} €</td>
+                                                    <td className="align-middle">
+                                                        <button className='btn btn-p btn-sm' onClick={() => showDetailModal(product.id)}>
+                                                            Details
+                                                        </button>
+                                                    </td>
+                                                    <td className="align-middle">
+                                                        <button className='btn btn-s btn-sm' onClick={() => showBuyModal(product.id)}>
+                                                            Buy
+                                                        </button>
+                                                    </td>
+                                                </tr>
                                             )
                                         }
                                         </tbody>
@@ -199,12 +183,10 @@ function Home() {
                         }
                     </>
                 }
-
-                {/*TODO: was ist wenn modal content noch nicht da ist*/}
             </div>
         </div>
-        {isProductDetailsShown && <ProductDetailsPopup callbackFunction={closeProductDetails} isLoading={productDetailsLoading} product={productDetail}/>}
-        {isBuyProductShown && <BuyProductPopup callbackFunction={closeBuyProduct} isLoading={productDetailsLoading} product={productDetail}/>}
+        {displayDetailModal && <ProductDetailsPopup callbackFunction={closeDetailModal} isLoading={isLoadingProductDetail} product={productDetail}/>}
+        {displayBuyModal && <BuyProductPopup callbackFunction={closeBuyModal} isLoading={isLoadingProductDetail} product={productDetail}/>}
     </>
     )
 }

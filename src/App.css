@@ -3,12 +3,17 @@
 /********************************************************************************/
 * {
   --color-primary: rgb(194, 127, 0);
+  --value-primary: 194, 127, 0;
   --color-success: green;
+  --value-success: 0, 128, 0;
   --color-alert: red;
+  --value-alert: 255, 0, 0;
 
   --color-text-1: #fafafa;
   --color-text-2: #bebebe;
   --color-btn-text: #fafafa;
+  --value-btn-hover: 0.85;
+  --value-btn-acitve: 0.75;
 
   --color-bg-1: #373737;
   --color-bg-2: #464646;
@@ -86,13 +91,6 @@ html, body, #root {
 }
 
 
-
-
-
-
-
-
-
 .error {
   color: var(--color-alert);
 }
@@ -111,6 +109,95 @@ html, body, #root {
   100% {transform: scale(1);}
   100% {transform: translate(-50%, -50%);}
 }
+
+.btn-p {
+  color: var(--color-btn-text) !important;
+  background-color: var(--color-primary) !important;
+}
+
+.btn-p:hover {
+  background-color: rgba(var(--value-primary), var(--value-btn-hover)) !important;
+}
+
+.btn-p:active {
+  background-color: rgba(var(--value-primary), var(--value-btn-acitve)) !important;
+}
+
+
+.btn-s {
+  color: var(--color-btn-text) !important;
+  background-color: var(--color-success) !important;
+}
+
+.btn-s:hover {
+  background-color: rgba(var(--value-success), var(--value-btn-hover)) !important;
+}
+
+.btn-s:active {
+  background-color: rgba(var(--value-success), var(--value-btn-acitve)) !important;
+}
+
+
+
+
+
+.spinner-border {
+  color: var(--color-text-1) !important;
+}
+
+
+
+input {
+  color: var(--color-text-1) !important;
+  background-color: var(--color-bg-3) !important;
+}
+
+input:focus {
+  border-color: var(--color-primary) !important;
+}
+
+input::placeholder {
+  color: var(--color-text-2) !important;
+}
+
+
+
+.table-wrapper {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.table {
+  margin: 0;
+  background-color: var(--color-bg-1);
+  color: var(--color-text-1);
+  border-collapse: collapse;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.table thead th {
+  top: 0;
+  position: sticky;
+  background-color: var(--color-bg-1) !important;
+}
+
+.table tbody tr:hover {
+  background-color: var(--color-bg-hover);
+}
+
+
+
+
+
+
+
+.modal-body {
+  background-color: var(--color-bg-1);
+}
+
+
+
 
 
 /********************************************************************************/
@@ -268,9 +355,7 @@ html, body, #root {
 }
 
 
-input:focus {
-  border-color: var(--color-primary) !important;
-}
+
 
 
 
@@ -297,9 +382,7 @@ input:focus {
   border: 0;
 }
 
-.modal-footer {
-  padding-top: 0;
-}
+
 
 
 
@@ -322,35 +405,10 @@ input:focus {
 }
 
 
-.tableContainer {
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-table, .table {
-  margin: 0;
-  background-color: var(--color-bg-2);
-  color: var(--color-text-1);
-  border-collapse: collapse;
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
- thead th {
-  position: sticky;
-  top: 0;
-   background-color: var(--color-bg-2) !important;
-}
-
-
-/*TODO: !!! default value verwednungen überall prüfen*/
 
 
 
-tbody tr:hover {
-  background-color: var(--color-bg-hover);
-}
-
-
-
-.form-control, .form-select {
-  padding: 0.15rem 0.4rem !important;
-}
+/*TODO spezifisch damit rest ungestört bleibt*/
+/*.form-control, .form-select {*/
+/*  padding: 0.15rem 0.4rem !important;*/
+/*}*/
