@@ -10,8 +10,8 @@ interface ProductDetailsPopupProps {
 const LoginPopup = ({callbackFunction}: ProductDetailsPopupProps) => {
     const authenticationContext = useContext(AuthenticationContext);
     const cookie = new Cookies();
-    const [username, setUsername] = useState<string>("jst2559");
-    const [password, setPassword] = useState<string>("password");   //TODO: remove values!
+    const [username, setUsername] = useState<string>();
+    const [password, setPassword] = useState<string>();
 
     let [isLoading, setIsLoading] = useState<boolean>(false);
     let [displayErrorMsg, setDisplayErrorMsg] = useState<boolean>(false);

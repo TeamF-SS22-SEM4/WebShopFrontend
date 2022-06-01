@@ -133,8 +133,6 @@ const Cart = () => {
         }
     }
 
-    // todo: zu viel auswählen bei cart möglich
-
     return (
         <div className="content">
             <div className="container h-100 py-5">
@@ -164,13 +162,17 @@ const Cart = () => {
                                                 <td className="align-middle">{shoppingCartItem.pricePerCarrier} €</td>
                                                 <td className="align-middle col-1">
                                                     <input
-                                                        //TODO spinner problem
                                                         className="form-control"
                                                         type="number"
                                                         value={shoppingCartItem.selectedAmount}
                                                         min="1"
                                                         max={shoppingCartItem.amountAvailable}
-                                                        onChange={(event) => updateSelectedAmount(shoppingCartItem, parseInt(event.target.value))}
+                                                        onChange={(event) => {
+                                                            if(shoppingCartItem.amountAvailable !== undefined && parseInt(event.target.value) > shoppingCartItem.amountAvailable) {
+                                                                event.target.value = String(shoppingCartItem.amountAvailable);
+                                                            }
+                                                            updateSelectedAmount(shoppingCartItem, parseInt(event.target.value))
+                                                        }}
                                                     />
                                                 </td>
                                                 <td className="align-middle">

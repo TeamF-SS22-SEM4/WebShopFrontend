@@ -95,9 +95,6 @@ html, body, #root {
   color: var(--color-alert);
 }
 
-.bg-error {
-  background-color: var(--color-alert);
-}
 
 
 .grow-animation {
@@ -408,7 +405,6 @@ input::placeholder {
 
 
 
-/*TODO spezifisch damit rest ungestört bleibt*/
-/*.form-control, .form-select {*/
-/*  padding: 0.15rem 0.4rem !important;*/
-/*}*/
+.small-control {
+  padding: 0.15rem 0.4rem !important;
+}

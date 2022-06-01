@@ -61,7 +61,7 @@ const Header = () => {
                             <FaShoppingCart size={18}></FaShoppingCart>
                             &nbsp;&nbsp;&nbsp;Cart
                             { shoppingCartContext.items > 0 &&
-                                <span key={shoppingCartContext.items} className="position-absolute top-25 start-100 translate-middle badge rounded-pill bg-error grow-animation">
+                                <span key={shoppingCartContext.items} className="position-absolute top-25 start-100 translate-middle badge rounded-pill bg-danger grow-animation">
                                     {shoppingCartContext.items}
                                 </span>
                             }
