@@ -5,6 +5,8 @@ import {FaHome, FaShoppingCart, FaUserAlt} from "react-icons/fa";
 import { FiLogIn, FiLogOut } from "react-icons/fi";
 import { BsBox } from "react-icons/bs";
 import LoginPopup from "../modals/LoginModal";
+import Cookie from "universal-cookie";
+import Cookies from "universal-cookie";
 
 const Header = () => {
 
@@ -16,6 +18,16 @@ const Header = () => {
     const [displayLoginModal, setDisplayLoginModal] = useState<boolean>(false);
 
     useEffect(() => {
+        const cookie = new Cookies();
+        if(!authenticationContext.loggedIn){
+            let sessionCookie = cookie.get("sessionCookie");
+            if (sessionCookie != null) {
+                const sessionIDAndUser = sessionCookie.split("/");
+                let cookieLoginInfo = {sessionId: sessionIDAndUser[0], username: sessionIDAndUser[1], loggedIn: true}; // pass to function as JSON, so it re-renders
+                authenticationContext.storeLogin(cookieLoginInfo);
+            }
+        }
+
         function closeByEsc(e: any) {
             if(e.key === 'Escape'){
                 closeLoginModal();
@@ -43,6 +55,12 @@ const Header = () => {
 
     function closeLoginModal() {
         setDisplayLoginModal(false);
+    }
+
+    function logout() {
+        const cookie = new Cookie();
+        cookie.remove("sessionCookie", {path:"/"});
+        authenticationContext.logout()
     }
 
     return (
@@ -88,7 +106,7 @@ const Header = () => {
                                             </a>
                                         </li>
                                         <li>
-                                            <a onClick={() => authenticationContext.logout()} className="dropdown-item nav-link">
+                                            <a onClick={() => logout()} className="dropdown-item nav-link">
                                                 <FiLogOut size={15}></FiLogOut>
                                                 &nbsp;&nbsp;&nbsp;Logout
                                             </a>

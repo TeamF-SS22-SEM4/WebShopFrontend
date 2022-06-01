@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useState} from "react";
 import {apiClient, AuthenticationContext} from "../../App";
 import Cookies from "universal-cookie";
 import {FaLock, FaUserAlt} from "react-icons/fa";
@@ -17,18 +17,6 @@ const LoginPopup = ({callbackFunction}: ProductDetailsPopupProps) => {
     const [displayErrorMsg, setDisplayErrorMsg] = useState<boolean>(false);
     const [errorMsg, setErrorMsg] = useState<string>("Error");
 
-    useEffect(() => {                                           //Checks cookie when login-page gets loaded
-        if (!authenticationContext.loggedIn) {
-            let sessionCookie = cookie.get("sessionCookie");
-
-            if (sessionCookie != null && !authenticationContext.loggedIn) {
-                const sessionIDAndUser = sessionCookie.split("/");
-                let cookieLoginInfo = {sessionId: sessionIDAndUser[0], username: sessionIDAndUser[1], loggedIn: true}; // pass to function as JSON, so it re-renders
-                authenticationContext.storeLogin(cookieLoginInfo);
-            }
-        }
-    });
-
     function doLogin() {
         setIsLoading(true);
         setDisplayErrorMsg(false);
@@ -43,7 +31,7 @@ const LoginPopup = ({callbackFunction}: ProductDetailsPopupProps) => {
                 setUsername("");
                 setPassword("")
                 authenticationContext.storeLogin(resultDTO);
-                cookie.set('sessionCookie', resultDTO.sessionId + "/" + resultDTO.username, {maxAge: 600, path: "/"});
+                cookie.set('sessionCookie', resultDTO.sessionId + "/" + resultDTO.username, {maxAge: 1800, path: "/"});
                 callbackFunction();
             }).catch(response => {
                 if (response.status === 403) {
