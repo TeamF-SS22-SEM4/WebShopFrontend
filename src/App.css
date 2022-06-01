@@ -138,22 +138,23 @@ html, body, #root {
 
 
 
+
 .spinner-border {
   color: var(--color-text-1) !important;
 }
 
 
 
-input {
+input, select {
   color: var(--color-text-1) !important;
   background-color: var(--color-bg-3) !important;
 }
 
-input:focus {
+input:focus, select:focus {
   border-color: var(--color-primary) !important;
 }
 
-input::placeholder {
+input::placeholder, select::placeholder {
   color: var(--color-text-2) !important;
 }
 
@@ -185,6 +186,11 @@ input::placeholder {
 
 
 
+.btn:focus, .btn-close:focus, input:focus, select:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 
 
 
@@ -194,17 +200,75 @@ input::placeholder {
 }
 
 
+.small-control {
+  padding: 0.15rem 0.4rem !important;
+}
 
+
+
+.modal-outer {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+
+.modal-content {
+  background-color: var(--color-bg-3);
+  color: var(--color-text-1);
+  border: 2px solid var(--color-primary);
+}
+
+.modal-header, .modal-footer {
+  border: 0;
+}
+
+
+
+
+
+.login-input::placeholder {
+  color: var(--color-text-2);
+}
+
+.login-input {
+  background-color: transparent !important;
+  color: var(--color-text-1) !important;
+  border-width: 0 0 3px 0;
+  border-radius: 0;
+  transition: none;
+}
+
+.login-input:focus {
+  border: solid var(--color-primary) !important;
+  border-width: 0 0 3px 0 !important;
+}
+
+
+
+
+
+.breath-animation {
+  animation: breath 6s ease ;
+  opacity: 0;
+}
+
+@keyframes breath {
+  0% {opacity: 1; transform: scale(1)}
+  5% {transform: scale(1.05);}
+  10% {transform: scale(1);}
+  90% {opacity: 1}
+  100% {opacity: 0}
+}
 
 
 /********************************************************************************/
 /********************************************************************************/
 /********************************************************************************/
-
-
-
-
-
 
 
 
@@ -236,175 +300,3 @@ input::placeholder {
 /********************************************************************************/
 /* ELEMENTS                                                                     */
 /********************************************************************************/
-.btn:focus, .form-control:focus, .btn-close:focus {
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-
-
-.spinner-border {
-  color: var(--color-text-1);
-}
-
-
-
-
-
-@-webkit-keyframes swing
-{
-  15%
-  {
-    -webkit-transform: translateX(5px);
-    transform: translateX(5px);
-  }
-  30%
-  {
-    -webkit-transform: translateX(-5px);
-    transform: translateX(-5px);
-  }
-  50%
-  {
-    -webkit-transform: translateX(3px);
-    transform: translateX(3px);
-  }
-  65%
-  {
-    -webkit-transform: translateX(-3px);
-    transform: translateX(-3px);
-  }
-  80%
-  {
-    -webkit-transform: translateX(2px);
-    transform: translateX(2px);
-  }
-  100%
-  {
-    -webkit-transform: translateX(0);
-    transform: translateX(0);
-  }
-}
-@keyframes swing
-{
-  15%
-  {
-    -webkit-transform: translateX(5px);
-    transform: translateX(5px);
-  }
-  30%
-  {
-    -webkit-transform: translateX(-5px);
-    transform: translateX(-5px);
-  }
-  50%
-  {
-    -webkit-transform: translateX(3px);
-    transform: translateX(3px);
-  }
-  65%
-  {
-    -webkit-transform: translateX(-3px);
-    transform: translateX(-3px);
-  }
-  80%
-  {
-    -webkit-transform: translateX(2px);
-    transform: translateX(2px);
-  }
-  100%
-  {
-    -webkit-transform: translateX(0);
-    transform: translateX(0);
-  }
-}
-
-
-@keyframes fadeInDown{
-  from{
-    opacity:0;
-  }
-  to{
-    opacity:1;
-  }
-}
-
-@-webkit-keyframes fadeInDown{
-  from{
-    opacity:0;
-  }
-  to{
-    opacity:1;
-  }
-}
-
-
-.test {
-  animation: try 6s ease ;
-  opacity: 0;
-}
-
-@keyframes try {
-  0% {opacity: 1; transform: scale(1)}
-  5% {transform: scale(1.05);}
-  10% {transform: scale(1);}
-  90% {opacity: 1}
-  100% {opacity: 0}
-}
-
-
-
-
-
-
-
-
-.modal-outer {
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  left: 0;
-  z-index: 1000;
-  background-color: rgba(0, 0, 0, 0.75);
-}
-
-
-.modal-content {
-  background-color: var(--color-bg-3);
-  color: var(--color-text-1);
-  border: 2px solid var(--color-primary);
-}
-
-.modal-header, .modal-footer {
-  border: 0;
-}
-
-
-
-
-
-
-.login-input::placeholder {
-  color: var(--color-text-2);
-}
-
-.login-input {
-  background-color: transparent !important;
-  color: var(--color-text-1) !important;
-  border-width: 0 0 3px 0;
-  border-radius: 0;
-  transition: none;
-}
-
-.login-input:focus {
-  border: solid var(--color-primary) !important;
-  border-width: 0 0 3px 0 !important;
-}
-
-
-
-
-
-.small-control {
-  padding: 0.15rem 0.4rem !important;
-}

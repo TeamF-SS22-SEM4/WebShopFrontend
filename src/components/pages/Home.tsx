@@ -136,7 +136,7 @@ const Home = () => {
                     <>
                         { products.length <= 0 ?
                             <div className="row justify-content-center h-25">
-                                <span className="h3 text-center m-auto">No entry found!</span>
+                                <span className="h4 text-center m-auto">No entry found!</span>
                             </div>
 
                         :

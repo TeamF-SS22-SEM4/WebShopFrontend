@@ -2,18 +2,23 @@ import React, { useContext, useEffect, useState } from "react";
 import {apiClient, AuthenticationContext, ShoppingCartContext} from "../../App";
 import { ShoppingCartItem } from "../others/ShoppingCartItem";
 import {OrderItem, PaymentInformation, PlaceOrderRequest, Purchase} from "../../openapi-client";
-import {Link} from "react-router-dom";
 
 const Cart = () => {
+    const shoppingCartContext = useContext(ShoppingCartContext);
     const authenticationContext = useContext(AuthenticationContext);
-    let sessionId = authenticationContext.sessionId;
+    const sessionId = authenticationContext.sessionId;
+
     const [totalPrice, setTotalPrice] = useState<number>(0);
+
+
+    const [isPaid, setIsPaid] = useState<boolean>(false);
+
+
     const [paymentMethod, setPaymentMethod] = useState<string>("");
     const [creditCardType, setCreditCardType] = useState<string>("MASTERCARD");
     const [creditCardNumber, setCreditCardNumber] = useState<string>("");
     const [cvc, setCvc] = useState<string>("");
     const [saleNumber, setSaleNumber] = useState<string>("");
-    const shoppingCartContext = useContext(ShoppingCartContext);
 
 
     const[displayMessage, setDisplayMessage] = useState<boolean>(false);
@@ -25,7 +30,7 @@ const Cart = () => {
         calculateTotalPrice();
     });
 
-    const calculateTotalPrice = () => {
+    function calculateTotalPrice() {
         let total: number = 0;
 
         shoppingCart?.forEach((shoppingCartItem) => {
@@ -42,7 +47,7 @@ const Cart = () => {
             let newShoppingCartItem = new ShoppingCartItem(
                 shoppingCartItem.productName,
                 shoppingCartItem.artistName,
-                shoppingCartItem.soundCarrerId,
+                shoppingCartItem.soundCarrierId,
                 shoppingCartItem.soundCarrierType,
                 shoppingCartItem.pricePerCarrier,
                 shoppingCartItem.amountAvailable,
@@ -89,11 +94,11 @@ const Cart = () => {
             let selectedItems: OrderItem[] = [];
             shoppingCart.forEach((item) => {
                 let orderItem: OrderItem = {
-                    carrierId: item.soundCarrerId,
+                    carrierId: item.soundCarrierId,
                     amount: item.selectedAmount,
                 };
 
-                console.log(item.soundCarrerId);
+                console.log(item.soundCarrierId);
 
                 selectedItems.push(orderItem);
             });
@@ -109,7 +114,9 @@ const Cart = () => {
             };
 
             apiClient.placeOrder(placeOrderRequest).then(result => {
+                setIsPaid(true);
                 setMessageText(result);
+                //TODO weiterleiten zu orders statt rechnungsnummer anzeigen
 
                 setPaymentMethod("");
                 setCreditCardNumber("");
@@ -138,70 +145,67 @@ const Cart = () => {
             <div className="container h-100 py-5">
                 { shoppingCart.length > 0 ?
                     <>
-                        <div className="h-100">
-                        <div className="tableContainer d-flex flex-column">
-                            <table className="table flex-grow-1">
-                                <thead>
+                        <table className="table">
+                            <thead>
                                 <tr>
-                                    <th>Product</th>
+                                    <th>Album</th>
                                     <th>Artist</th>
-                                    <th>Sound Carrier</th>
-                                    <th>Price per Carrier</th>
-                                    <th>Selected Amount</th>
+                                    <th>Type</th>
+                                    <th>Unit price</th>
+                                    <th></th>
                                     <th></th>
                                 </tr>
-                                </thead>
-                                <tbody>
-                                {
-                                    shoppingCart?.map(
-                                        shoppingCartItem =>
-                                            <tr key={shoppingCartItem.soundCarrerId}>
-                                                <td className="align-middle">{shoppingCartItem.productName}</td>
-                                                <td className="align-middle">{shoppingCartItem.artistName}</td>
-                                                <td className="align-middle">{shoppingCartItem.soundCarrierType}</td>
-                                                <td className="align-middle">{shoppingCartItem.pricePerCarrier} €</td>
-                                                <td className="align-middle col-1">
-                                                    <input
-                                                        className="form-control"
-                                                        type="number"
-                                                        value={shoppingCartItem.selectedAmount}
-                                                        min="1"
-                                                        max={shoppingCartItem.amountAvailable}
-                                                        onChange={(event) => {
-                                                            if(shoppingCartItem.amountAvailable !== undefined && parseInt(event.target.value) > shoppingCartItem.amountAvailable) {
-                                                                event.target.value = String(shoppingCartItem.amountAvailable);
-                                                            }
-                                                            updateSelectedAmount(shoppingCartItem, parseInt(event.target.value))
-                                                        }}
-                                                    />
-                                                </td>
-                                                <td className="align-middle">
-                                                    <button className="btn btn-danger btn-sm" onClick={() => removeProductFromCart(shoppingCartItem)}>
-                                                        Remove
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                    )
-                                }
-                                </tbody>
-                            </table>
-                        </div>
+                            </thead>
+                            <tbody>
+                            { shoppingCart?.map(
+                                shoppingCartItem =>
+                                    <tr key={shoppingCartItem.soundCarrierId}>
+                                        <td className="align-middle">{shoppingCartItem.productName}</td>
+                                        <td className="align-middle">{shoppingCartItem.artistName}</td>
+                                        <td className="align-middle">{shoppingCartItem.soundCarrierType}</td>
+                                        <td className="align-middle">{shoppingCartItem.pricePerCarrier} €</td>
+                                        <td className="align-middle col-1">
+                                            <input
+                                                className="form-control small-control"
+                                                disabled={ isPaid }
+                                                type="number"
+                                                value={shoppingCartItem.selectedAmount}
+                                                min="1"
+                                                max={shoppingCartItem.amountAvailable}
+                                                onChange={(event) => {
+                                                    if(shoppingCartItem.amountAvailable !== undefined && parseInt(event.target.value) > shoppingCartItem.amountAvailable) {
+                                                        event.target.value = String(shoppingCartItem.amountAvailable);
+                                                    }
+                                                    updateSelectedAmount(shoppingCartItem, parseInt(event.target.value))
+                                                }}
+                                            />
+                                        </td>
+                                        <td className="align-middle text-end">
+                                            <button className={ !isPaid ? "btn btn-danger btn-sm" : "btn btn-danger btn-sm disabled" } onClick={() => removeProductFromCart(shoppingCartItem)}>
+                                                Remove
+                                            </button>
+                                        </td>
+                                    </tr>
+                                )
+                            }
+                            </tbody>
+                        </table>
                         <div className="row justify-content-between py-3">
-                            <div className="col-3">
-                                <select className="form-select" onChange={(evt) => setPaymentMethod(evt.currentTarget.value)}>
+                            <div className="col-3 align-self-center">
+                                <select className="form-select small-control" onChange={(evt) => setPaymentMethod(evt.currentTarget.value)}>
                                     <option value="Invoice">Invoice</option>
                                     <option value="Credit card">Credit card</option>
                                 </select>
                                 { paymentMethod === "Credit card" &&
                                     <>
-                                        <select className="form-select my-1" value={creditCardType} onChange={(evt) => setCreditCardType(evt.target.value)}>
+                                        <select className="form-select small-control my-1" value={creditCardType} onChange={(evt) => setCreditCardType(evt.target.value)}>
                                             <option value="MASTERCARD">Mastercard</option>
                                             <option value="VISA">Visa</option>
                                         </select>
                                         <div className="row">
                                             <div className="col">
                                                 <input
-                                                    className="form-control"
+                                                    className="form-control small-control"
                                                     id="creditCardNumber-input"
                                                     value={creditCardNumber}
                                                     onInput={(evt) => setCreditCardNumber(evt.currentTarget.value)}
@@ -210,7 +214,7 @@ const Cart = () => {
                                             </div>
                                             <div className="col-3">
                                                 <input
-                                                    className="form-control"
+                                                    className="form-control small-control"
                                                     id="cvc-input"
                                                     value={cvc}
                                                     onInput={(evt) => setCvc(evt.currentTarget.value)}
@@ -221,25 +225,24 @@ const Cart = () => {
                                     </>
                                 }
                             </div>
-                            <div className="col text-end d-flex flex-column">
-                                <p className="flex-grow-1">Total price<br/>{totalPrice} €</p>
+                            <div className="col align-self-center text-center">
+                                {authenticationContext.loggedIn ?
+                                    <span className="fw-bolder">{messageText}</span>
+                                    :
+                                    <span className="fw-bolder error">You have to login for paying!</span>
+                                }
+                            </div>
+                            <div className="col-2 align-self-center text-end">
+                                <span>Total price<br/><span className="fw-bolder">{totalPrice} €</span></span>
                                 <div>
-                                    {authenticationContext.loggedIn ?
-                                        <>
-                                        <span className="pe-3">{messageText}</span>
-                                        <button onClick={() => placeOrder()} className="btn btn-success">Check out</button>
-                                        </>
-                                        :
-                                        <span>log in!</span>
-                                    }
+                                    { authenticationContext.loggedIn && <button onClick={() => placeOrder()} className="btn btn-s py-2">Check out</button> }
                                 </div>
                             </div>
-                        </div>
                         </div>
                     </>
                 :
                     <div className="row justify-content-center" style={{"height": "20%"}}>
-                        <h5 className="align-self-center text-center">Cart is empty!</h5>
+                        <h4 className="align-self-center text-center">Cart is empty!</h4>
                     </div>
                 }
             </div>

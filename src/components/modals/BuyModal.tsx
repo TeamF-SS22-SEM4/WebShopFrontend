@@ -43,7 +43,7 @@ const BuyModal = ({callbackFunction, product, isLoading}: BuyModalProps) => {
             let productAlreadyInCart: boolean = false;
 
             selectedSoundCarriers.forEach((amount, selectedSoundCarrier) => {
-                if(shoppingCart.findIndex(item => item.soundCarrerId === selectedSoundCarrier.soundCarrierId) !== -1 && amount > 0) {
+                if(shoppingCart.findIndex(item => item.soundCarrierId === selectedSoundCarrier.soundCarrierId) !== -1 && amount > 0) {
                     productAlreadyInCart = true;
                 }
             })
@@ -61,7 +61,7 @@ const BuyModal = ({callbackFunction, product, isLoading}: BuyModalProps) => {
                             amount
                         );
 
-                        if(shoppingCart.findIndex(item => item.soundCarrerId === shoppingCartItem.soundCarrerId) === -1) {
+                        if(shoppingCart.findIndex(item => item.soundCarrierId === shoppingCartItem.soundCarrierId) === -1) {
                             shoppingCart.push(shoppingCartItem);
                             shoppingCartContext.setItems(shoppingCart.length);
                             callbackFunction();
@@ -129,7 +129,7 @@ const BuyModal = ({callbackFunction, product, isLoading}: BuyModalProps) => {
                     </div>
                     { !isLoading &&
                         <div className="modal-footer justify-content-between">
-                            <p key={messageText} className="fw-bolder test error">{!displayMessage ? "" : <>{messageText}</>}</p>
+                            <p key={messageText} className="fw-bolder breath-animation error">{!displayMessage ? "" : <>{messageText}</>}</p>
                             <button className="btn btn-success btn-sm" onClick={() => addToCart()}>Add to cart</button>
                         </div>
                     }
