@@ -3,8 +3,8 @@ import {GetProductRequest, ProductDetailsDTO, SearchProductsRequest} from "../..
 import {apiClient} from "../../App";
 import React from 'react';
 import { FaSearch } from 'react-icons/fa';
-import ProductDetailsPopup from "../modals/DetailModal";
-import BuyProductPopup from "../modals/BuyModal";
+import DetailModal from "../modals/DetailModal";
+import BuyModal from "../modals/BuyModal";
 
 const Home = () => {
 
@@ -185,8 +185,8 @@ const Home = () => {
                 }
             </div>
         </div>
-        {displayDetailModal && <ProductDetailsPopup callbackFunction={closeDetailModal} isLoading={isLoadingProductDetail} product={productDetail}/>}
-        {displayBuyModal && <BuyProductPopup callbackFunction={closeBuyModal} isLoading={isLoadingProductDetail} product={productDetail}/>}
+        {displayDetailModal && <DetailModal callbackFunction={closeDetailModal} isLoading={isLoadingProductDetail} product={productDetail}/>}
+        {displayBuyModal && <BuyModal callbackFunction={closeBuyModal} isLoading={isLoadingProductDetail} product={productDetail}/>}
     </>
     )
 }

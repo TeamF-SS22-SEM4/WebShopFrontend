@@ -4,7 +4,7 @@ import {ShoppingCartItem} from "../others/ShoppingCartItem";
 import {shoppingCart} from "../pages/Cart";
 import {ShoppingCartContext} from "../../App";
 
-interface BuyProductPopupProps {
+interface BuyModalProps {
     callbackFunction: () => void;
     product: ProductDetailsDTO | undefined;
     isLoading: boolean;
@@ -12,7 +12,7 @@ interface BuyProductPopupProps {
 
 let text = " ";
 
-const BuyProductPopup = ({callbackFunction, product, isLoading}: BuyProductPopupProps) => {
+const BuyModal = ({callbackFunction, product, isLoading}: BuyModalProps) => {
 
     const shoppingCartContext = useContext(ShoppingCartContext);
 
@@ -139,4 +139,4 @@ const BuyProductPopup = ({callbackFunction, product, isLoading}: BuyProductPopup
     )
 }
 
-export default BuyProductPopup;
+export default BuyModal;

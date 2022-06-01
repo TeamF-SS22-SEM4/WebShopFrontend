@@ -1,13 +1,13 @@
 import {ProductDetailsDTO} from "../../openapi-client";
 import React from "react";
 
-interface ProductDetailsPopupProps {
+interface DetailModalProps {
     callbackFunction: () => void;
     product: ProductDetailsDTO | undefined
     isLoading: boolean;
 }
 
-const ProductDetailsPopup = ({callbackFunction, product, isLoading}: ProductDetailsPopupProps) => {
+const DetailModal = ({callbackFunction, product, isLoading}: DetailModalProps) => {
 
     return (
         <div className='modal-outer'>
@@ -15,31 +15,47 @@ const ProductDetailsPopup = ({callbackFunction, product, isLoading}: ProductDeta
                 <div className="modal-content">
                     <div className="modal-header">
                         <h5 className="modal-title">{!isLoading && product?.name}</h5>
-                        <button className="btn btn-primary btn-sm" onClick={() => callbackFunction()}>close</button>
+                        <button className="btn btn-p btn-sm" onClick={() => callbackFunction()}>close</button>
                     </div>
                     <div className="modal-body">
-                        {!isLoading ?
+                        { !isLoading ?
                             <>
-                                <p>Album {product?.artistName}</p>
-                                <p>Artist {product?.genre}</p>
-                                <p>Genre {product?.releaseYear}</p>
-                                <p>Release {product?.duration}</p>
-                                <p>Label {product?.labelName}</p>
-                                <table className="table">
-                                    <thead className="custom-table-head">
-                                    <tr>
-                                        <th>Title</th>
-                                        <th>Duration</th>
-                                    </tr>
+                                <table className="table mb-5">
+                                    <thead>
+                                        <tr>
+                                            <th>Album</th>
+                                            <th>Artist</th>
+                                            <th>Genre</th>
+                                            <th>Release</th>
+                                            <th>Duration</th>
+                                            <th>Label</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    {
-                                        product?.songs?.map(
-                                            song =>
-                                                <tr>
-                                                    <td className="align-middle">{song.title}</td>
-                                                    <td className="align-middle">{song.duration}</td>
-                                                </tr>
+                                        <tr>
+                                            <td className="align-middle">{product?.name}</td>
+                                            <td className="align-middle">{product?.artistName}</td>
+                                            <td className="align-middle">{product?.genre}</td>
+                                            <td className="align-middle">{product?.releaseYear}</td>
+                                            <td className="align-middle">{product?.duration}</td>
+                                            <td className="align-middle">{product?.labelName}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table className="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th className="text-center">Duration</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    { product?.songs?.map(
+                                        song =>
+                                            <tr>
+                                                <td className="align-middle">{song.title}</td>
+                                                <td className="align-middle text-center">{song.duration}</td>
+                                            </tr>
                                         )
                                     }
                                     </tbody>
@@ -57,4 +73,4 @@ const ProductDetailsPopup = ({callbackFunction, product, isLoading}: ProductDeta
     )
 }
 
-export default ProductDetailsPopup;
+export default DetailModal;
