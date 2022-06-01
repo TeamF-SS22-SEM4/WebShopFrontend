@@ -108,6 +108,12 @@ paths:
     get:
       operationId: searchProducts
       parameters:
+        - name: pageNumber
+          in: query
+          schema:
+            format: int32
+            default: 0
+            type: integer
         - name: search
           in: query
           schema:
