@@ -13,9 +13,21 @@ const LoginPopup = ({callbackFunction}: ProductDetailsPopupProps) => {
     const [username, setUsername] = useState<string>();
     const [password, setPassword] = useState<string>();
 
-    let [isLoading, setIsLoading] = useState<boolean>(false);
-    let [displayErrorMsg, setDisplayErrorMsg] = useState<boolean>(false);
-    let [errorMsg, setErrorMsg] = useState<string>("Error");
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [displayErrorMsg, setDisplayErrorMsg] = useState<boolean>(false);
+    const [errorMsg, setErrorMsg] = useState<string>("Error");
+
+    useEffect(() => {                                           //Checks cookie when login-page gets loaded
+        if (!authenticationContext.loggedIn) {
+            let sessionCookie = cookie.get("sessionCookie");
+
+            if (sessionCookie != null && !authenticationContext.loggedIn) {
+                const sessionIDAndUser = sessionCookie.split("/");
+                let cookieLoginInfo = {sessionId: sessionIDAndUser[0], username: sessionIDAndUser[1], loggedIn: true}; // pass to function as JSON, so it re-renders
+                authenticationContext.storeLogin(cookieLoginInfo);
+            }
+        }
+    });
 
     function doLogin() {
         setIsLoading(true);
@@ -47,41 +59,28 @@ const LoginPopup = ({callbackFunction}: ProductDetailsPopupProps) => {
         }
     }
 
-    useEffect(() => {                                           //Checks cookie when login-page gets loaded
-        if (!authenticationContext.loggedIn) {
-            let sessionCookie = cookie.get("sessionCookie");
-
-            if (sessionCookie != null && !authenticationContext.loggedIn) {
-                const sessionIDAndUser = sessionCookie.split("/");
-                let cookieLoginInfo = {sessionId: sessionIDAndUser[0], username: sessionIDAndUser[1], loggedIn: true}; // pass to function as JSON, so it re-renders
-                authenticationContext.storeLogin(cookieLoginInfo);
-            }
-        }
-    });
-
-
     return (
         <div className='modal-outer'>
-            <div className="modal-dialog" style={{"maxWidth": "400px"}}>
+            <div className="modal-dialog">
                 <div className="modal-content">
-                    <div className="modal-header p-3">
-                        <h5 className="modal-title" id="exampleModalLabel">Login</h5>
-                        <button className="btn btn-primary btn-sm" onClick={() => callbackFunction()}>close</button>
+                    <div className="modal-header">
+                        <h5 className="modal-title">Login</h5>
+                        <button className="btn btn-p btn-sm" onClick={() => callbackFunction()}>close</button>
                     </div>
                     <div className="modal-body">
-                        <p className={displayErrorMsg ? "col text-center error fw-bolder" : "col text-center error fw-bolder invisible"}>{errorMsg}</p>
-                        <div className="input-group align-items-center w-75 m-auto pb-2">
+                        <p className={displayErrorMsg ? "col text-center error fw-bolder py-2" : "col text-center error fw-bolder py-2 invisible"}>{errorMsg}</p>
+                        <div className="input-group align-items-center w-50 m-auto pb-2">
                             <FaUserAlt className="me-3"></FaUserAlt>
                             <input className="form-control login-input" type="text" placeholder="username"
                                    onInput={e => setUsername((e.target as HTMLInputElement).value)}/>
                         </div>
-                        <div className="input-group align-items-center w-75 m-auto pb-3">
+                        <div className="input-group align-items-center w-50 m-auto pb-3">
                             <FaLock className="me-3"></FaLock>
                             <input className="form-control login-input" type="password" placeholder="password"
                                    onInput={e => setPassword((e.target as HTMLInputElement).value)}
                                    onKeyDown={e => e.key === 'Enter' && doLogin()}/>
                         </div>
-                        <button className="btn btn-primary w-50 m-auto d-flex justify-content-center my-4" onClick={() => doLogin()}>
+                        <button className="btn btn-p w-25 m-auto d-flex justify-content-center my-4" onClick={() => doLogin()}>
                             {!isLoading ?
                                 <>Login</>
                             :
