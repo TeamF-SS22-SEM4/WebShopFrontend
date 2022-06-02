@@ -1,7 +1,7 @@
 /********************************************************************************/
 /* DEFAULT VALUES                                                               */
 /********************************************************************************/
-* {
+.mode-dark {
   --color-primary: rgb(194, 127, 0);
   --value-primary: 194, 127, 0;
   --color-success: green;
@@ -19,8 +19,38 @@
   --color-bg-2: #464646;
   --color-bg-3: #646464;
   --color-bg-hover: rgba(194, 127, 0, 0.15);
+
+  --logo-url: url("resources/logo_2.png");
 }
-html, body, #root {
+
+.mode-light {
+  --color-text-1: #323232 !important;
+  --color-text-2: #464646 !important;
+
+  --color-bg-1: #f0f0f0 !important;
+  --color-bg-2: #e1e1e1 !important;
+  --color-bg-3: #f0f0f0 !important;
+}
+
+.mode-violet {
+  --color-primary: #583475 !important;
+  --color-bg-hover: rgba(88, 52, 117, 0.15) !important;
+  --logo-url: url("resources/logo_1.png") !important;
+}
+
+.mode-orange {
+  --color-primary: #C27F00 !important;
+  --color-bg-hover: rgba(194, 127, 0, 0.15) !important;
+  --logo-url: url("resources/logo_2.png") !important;
+}
+
+.mode-blue {
+  --color-primary: #005078 !important;
+  --color-bg-hover: rgba(0, 80, 120, 0.15) !important;
+  --logo-url: url("resources/logo_3.png") !important;
+}
+
+html, body, #root, .mode-dark, .mode-light, .mode-violet, .mode-orange, .mode-blue {
   height: 100%;
   overflow: hidden;
 }
@@ -45,7 +75,7 @@ html, body, #root {
   height: 60%;
   width: 25%;
   max-width: 200px;
-  background-image: url("resources/logo_2.png");
+  background-image: var(--logo-url);
   background-repeat: no-repeat;
   background-size: contain;
   background-position: left center;

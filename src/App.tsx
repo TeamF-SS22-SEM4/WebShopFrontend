@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Route, Routes} from 'react-router-dom';
 import Home from "./components/pages/Home";
 import {Configuration, DefaultApi, LoginResultDTO} from "./openapi-client";
@@ -62,6 +62,18 @@ let shoppingCartContext: ShoppingCartContextType = {
 export const ShoppingCartContext = React.createContext(shoppingCartContext);
 
 
+type ThemeType = string | undefined;
+
+type ThemeContextType = [
+    ThemeType,
+    React.Dispatch<React.SetStateAction<ThemeType>>
+]
+
+const ThemeContext = React.createContext<ThemeContextType | undefined>(undefined);
+export const useThemeContext = () => useContext(ThemeContext) as ThemeContextType;
+
+
+
 function App(this: any) {
     let [authState, setAuthState] = useState(contextValue)
     let [shoppingCartState, setShoppingCartState] = useState(shoppingCartContext);
@@ -112,19 +124,28 @@ function App(this: any) {
 
     //TODO: was wenn unangemeldet auf playlist??
 
+
+
+    let [theme, setTheme] = useState<ThemeType>("mode-dark");
+
     return (
         <AuthenticationContext.Provider value={authState}>
             <ShoppingCartContext.Provider value={shoppingCartState}>
-            <Header />
-            <Routes>
-                <Route index element={<Home/>}/>
-                <Route path="/cart" element={ <Cart/>}/>
-                <Route path="/playlist" element={
-                    <RestrictedWrapper>
-                        <PlaylistPage/>
-                    </RestrictedWrapper>
-                }/>
-            </Routes>
+                <ThemeContext.Provider value={[theme, setTheme]}>
+                    <div className={theme}>
+                        <Header />
+                        <Routes>
+                            <Route index element={<Home/>}/>
+                            <Route path="/cart" element={ <Cart/>}/>
+                            <Route path="/playlist" element={
+                                <RestrictedWrapper>
+                                    <PlaylistPage/>
+                                </RestrictedWrapper>
+                            }/>
+                        </Routes>
+                    </div>
+                </ThemeContext.Provider>
+
             </ShoppingCartContext.Provider>
         </AuthenticationContext.Provider>
     );
