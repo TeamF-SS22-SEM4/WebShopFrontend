@@ -84,6 +84,7 @@ const BuyModal = ({callbackFunction, product, isLoading}: BuyModalProps) => {
                         <button className="btn btn-p btn-sm" onClick={() => callbackFunction()}>close</button>
                     </div>
                     <div className="modal-body">
+                        {/*TODO: sort carriers?!*/}
                         { !isLoading ?
                             <table className="table">
                                 <thead className="">

@@ -1,12 +1,16 @@
 import React, {useContext, useEffect, useState} from "react";
-import {AuthenticationContext, ShoppingCartContext} from "../../App";
+import {AuthenticationContext, ShoppingCartContext, useThemeContext} from "../../App";
 import {Link} from "react-router-dom";
-import {FaHome, FaShoppingCart, FaUserAlt} from "react-icons/fa";
+import {FaHome, FaMusic, FaShoppingCart, FaSquareFull, FaUserAlt} from "react-icons/fa";
 import { FiLogIn, FiLogOut } from "react-icons/fi";
 import { BsBox } from "react-icons/bs";
 import LoginPopup from "../modals/LoginModal";
 import Cookie from "universal-cookie";
 import Cookies from "universal-cookie";
+import {CgColorPicker} from "react-icons/cg";
+
+let color = "mode-orange";
+let style = "mode-dark";
 
 const Header = () => {
 
@@ -16,6 +20,7 @@ const Header = () => {
     const isLoggedIn = authenticationContext.loggedIn;
     const username = authenticationContext.username;
     const [displayLoginModal, setDisplayLoginModal] = useState<boolean>(false);
+    const [theme, setTheme] = useThemeContext();
 
     useEffect(() => {
         const cookie = new Cookies();
@@ -63,6 +68,10 @@ const Header = () => {
         authenticationContext.logout()
     }
 
+    function loadTheme() {
+        setTheme(style + " " +  color);
+    }
+
     return (
         <div className="header d-flex">
             <div className="container d-flex align-items-center justify-content-between">
@@ -98,12 +107,18 @@ const Header = () => {
                                     &nbsp;&nbsp;&nbsp;{username}
                                 </a>
                                 <ul className="dropdown-menu">
-                                    <div className="pt-1 pb-2 px-3 dropdown-menu-custom">
+                                    <div className="pt-1 pb-2 px-2 dropdown-menu-custom">
                                         <li>
-                                            <a className="dropdown-item nav-link">
+                                            <Link to={"/playlist"} className="dropdown-item nav-link">
+                                                <FaMusic size={15}></FaMusic>
+                                                &nbsp;&nbsp;&nbsp;Playlist
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <Link to={"/orders"} className="dropdown-item nav-link">
                                                 <BsBox size={15}></BsBox>
                                                 &nbsp;&nbsp;&nbsp;My Orders
-                                            </a>
+                                            </Link>
                                         </li>
                                         <li>
                                             <a onClick={() => logout()} className="dropdown-item nav-link">
@@ -115,6 +130,44 @@ const Header = () => {
                                 </ul>
                             </div>
                         }
+                    </li>
+                    <li className="m-2">
+                        <div className="dropdown">
+                            <a className="nav-link">
+                                <CgColorPicker size={20}></CgColorPicker>
+                            </a>
+                            <ul className="dropdown-menu">
+                                <div className="dropdown-menu-custom p-2">
+                                    <li className="no-border d-flex">
+                                        <a className="pointer p-1 d-flex">
+                                            <FaSquareFull className="align-self-center" style={{color: "#000000", border: "2px solid black", borderRadius: "5px"}} size={18}
+                                                          onClick={() => {style = "mode-dark"; loadTheme()}}>
+                                            </FaSquareFull>
+                                        </a>
+                                        <a className="pointer p-1 pe-4 d-flex">
+                                            <FaSquareFull className="align-self-center" style={{color: "#ffffff", border: "2px solid black", borderRadius: "5px"}} size={18}
+                                                          onClick={() => {style = "mode-dark mode-light"; loadTheme()}}>
+                                            </FaSquareFull>
+                                        </a>
+                                        <a className="pointer p-1 d-flex">
+                                            <FaSquareFull className="align-self-center" style={{color: "#583475", border: "2px solid black", borderRadius: "5px"}} size={18}
+                                                          onClick={() => {color = "mode-violet"; loadTheme()}}>
+                                            </FaSquareFull>
+                                        </a>
+                                        <a className="pointer p-1 d-flex">
+                                            <FaSquareFull className="align-self-center" style={{color: "#C27F00", border: "2px solid black", borderRadius: "5px"}} size={18}
+                                                          onClick={() => {color = "mode-orange"; loadTheme()}}>
+                                            </FaSquareFull>
+                                        </a>
+                                        <a className="pointer p-1 d-flex">
+                                            <FaSquareFull className="align-self-center" style={{color: "#005078", border: "2px solid black", borderRadius: "5px"}} size={18}
+                                                          onClick={() => {color = "mode-blue"; loadTheme()}}>
+                                            </FaSquareFull>
+                                        </a>
+                                    </li>
+                                </div>
+                            </ul>
+                        </div>
                     </li>
                 </ul>
             </div>

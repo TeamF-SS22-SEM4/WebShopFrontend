@@ -11,6 +11,7 @@ import 'bootstrap/dist/js/bootstrap.min.js'
 import './App.css';
 import PlaylistPage from "./components/PlaylistPage/PlaylistPage";
 import RestrictedWrapper from "./components/others/RestrictedWrapper";
+import Orders from "./components/pages/Orders";
 
 //set up open api client
 const apiUrl = window.location.origin === "http://localhost:3000" ? "http://localhost:80" : window.location.origin;
@@ -122,10 +123,6 @@ function App(this: any) {
         })
     }, []);
 
-    //TODO: was wenn unangemeldet auf playlist??
-
-
-
     let [theme, setTheme] = useState<ThemeType>("mode-dark");
 
     return (
@@ -140,6 +137,11 @@ function App(this: any) {
                             <Route path="/playlist" element={
                                 <RestrictedWrapper>
                                     <PlaylistPage/>
+                                </RestrictedWrapper>
+                            }/>
+                            <Route path="/orders" element={
+                                <RestrictedWrapper>
+                                    <Orders/>
                                 </RestrictedWrapper>
                             }/>
                         </Routes>

@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import {apiClient, AuthenticationContext, ShoppingCartContext} from "../../App";
 import { ShoppingCartItem } from "../others/ShoppingCartItem";
 import {OrderItem, PaymentInformation, PlaceOrderRequest, Purchase} from "../../openapi-client";
+import {FaTrashAlt} from "react-icons/fa";
+import {useNavigate} from "react-router-dom";
 
 const Cart = () => {
     const shoppingCartContext = useContext(ShoppingCartContext);
@@ -10,16 +12,12 @@ const Cart = () => {
 
     const [totalPrice, setTotalPrice] = useState<number>(0);
 
-
-    const [isPaid, setIsPaid] = useState<boolean>(false);
-
+    const navigate = useNavigate();
 
     const [paymentMethod, setPaymentMethod] = useState<string>("");
     const [creditCardType, setCreditCardType] = useState<string>("MASTERCARD");
     const [creditCardNumber, setCreditCardNumber] = useState<string>("");
     const [cvc, setCvc] = useState<string>("");
-    const [saleNumber, setSaleNumber] = useState<string>("");
-
 
     const[displayMessage, setDisplayMessage] = useState<boolean>(false);
     const[messageText, setMessageText] = useState<string>("");
@@ -74,6 +72,7 @@ const Cart = () => {
     }
 
     const placeOrder = () => {
+        setMessageText("");
         setDisplayAsError(false);
 
         let isValidForm: boolean = true;
@@ -82,6 +81,8 @@ const Cart = () => {
                 isValidForm = false;
             }
         }
+
+        //TODO: kredikartendaten prüfen ja/nein?
 
         if(isValidForm) {
             let providedPaymentInformation: PaymentInformation = {
@@ -113,14 +114,13 @@ const Cart = () => {
                 purchase: purchase,
             };
 
-            apiClient.placeOrder(placeOrderRequest).then(result => {
-                setIsPaid(true);
-                setMessageText(result);
-                //TODO weiterleiten zu orders statt rechnungsnummer anzeigen
-
+            apiClient.placeOrder(placeOrderRequest).then(() => {
                 setPaymentMethod("");
                 setCreditCardNumber("");
                 setCvc("");
+                shoppingCart = [];
+                shoppingCartContext.setItems(shoppingCart.length);
+                navigate("/orders");
             }).catch(response => {
                 setDisplayAsError(true);
                 if (response.status === 403) {
@@ -136,6 +136,7 @@ const Cart = () => {
                 }
             });
         } else {
+            setDisplayAsError(true);
             setMessageText("You have to enter the payment information");
         }
     }
@@ -151,9 +152,8 @@ const Cart = () => {
                                     <th>Album</th>
                                     <th>Artist</th>
                                     <th>Type</th>
-                                    <th>Unit price</th>
-                                    <th></th>
-                                    <th></th>
+                                    <th className="col-2 text-end pe-4">Unit price</th>
+                                    <th style={{width: "120px"}}></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -163,11 +163,10 @@ const Cart = () => {
                                         <td className="align-middle">{shoppingCartItem.productName}</td>
                                         <td className="align-middle">{shoppingCartItem.artistName}</td>
                                         <td className="align-middle">{shoppingCartItem.soundCarrierType}</td>
-                                        <td className="align-middle">{shoppingCartItem.pricePerCarrier} €</td>
-                                        <td className="align-middle col-1">
+                                        <td className="align-middle text-end pe-5">{shoppingCartItem.pricePerCarrier} €</td>
+                                        <td className="align-middle d-flex justify-content-end">
                                             <input
-                                                className="form-control small-control"
-                                                disabled={ isPaid }
+                                                className="form-control small-control me-2"
                                                 type="number"
                                                 value={shoppingCartItem.selectedAmount}
                                                 min="1"
@@ -179,10 +178,8 @@ const Cart = () => {
                                                     updateSelectedAmount(shoppingCartItem, parseInt(event.target.value))
                                                 }}
                                             />
-                                        </td>
-                                        <td className="align-middle text-end">
-                                            <button className={ !isPaid ? "btn btn-danger btn-sm" : "btn btn-danger btn-sm disabled" } onClick={() => removeProductFromCart(shoppingCartItem)}>
-                                                Remove
+                                            <button className="btn btn-danger btn-sm d-flex" onClick={() => removeProductFromCart(shoppingCartItem)}>
+                                                <FaTrashAlt className="align-self-center my-1" size={16}></FaTrashAlt>
                                             </button>
                                         </td>
                                     </tr>
@@ -227,7 +224,7 @@ const Cart = () => {
                             </div>
                             <div className="col align-self-center text-center">
                                 {authenticationContext.loggedIn ?
-                                    <span className="fw-bolder">{messageText}</span>
+                                    <span className={ displayAsError ? "fw-bolder error" : "fw-bolder" }>{messageText}</span>
                                     :
                                     <span className="fw-bolder error">You have to login for paying!</span>
                                 }
@@ -235,7 +232,7 @@ const Cart = () => {
                             <div className="col-2 align-self-center text-end">
                                 <span>Total price<br/><span className="fw-bolder">{totalPrice} €</span></span>
                                 <div>
-                                    { authenticationContext.loggedIn && <button onClick={() => placeOrder()} className="btn btn-s py-2">Check out</button> }
+                                    { authenticationContext.loggedIn && <button onClick={() => placeOrder()} className="btn btn-s btn-sm my-3">Check out</button> }
                                 </div>
                             </div>
                         </div>
@@ -250,5 +247,5 @@ const Cart = () => {
     );
 }
 
-export const shoppingCart: ShoppingCartItem[] = [];
+export let shoppingCart: ShoppingCartItem[] = [];
 export default Cart;

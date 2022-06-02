@@ -101,9 +101,7 @@ const Home = () => {
             products.sort((a,b) => (a.album > b.album) ? 1 : ((b.album > a.album) ? -1 : 0));
             setProducts(products);
             setIsLoadingProducts(false);
-        }).catch(() => {
-            alert("Loading products failed!");
-        });
+        }).catch(() => {});
     }
 
     function fetchProductDetails(productId: string) {
@@ -112,9 +110,7 @@ const Home = () => {
         apiClient.getProduct(getProductRequest).then(result => {
             setProductDetail(result);
             setIsLoadingProductDetail(false);
-        }).catch(() => {
-            alert("Loading product details failed!");
-        });
+        }).catch(() => {});
     }
 
     return (
