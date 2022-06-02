@@ -5,13 +5,18 @@ import {apiClient} from "../../App";
 import SearchBar from "./SearchBar/SearchBar";
 import ProductDetailsPopup from './ProductDetailsPopup';
 import BuyProductPopup from './BuyProductPopup';
+import {Spinner, SpinnerSize} from "@blueprintjs/core";
 
 function SearchPage() {
     const [searchTerm, setSearchTerm] = useState<string>('a');
-    const [products, setProducts] = useState<ProductOverviewDTO[]>();
+    const [products, setProducts] = useState<ProductOverviewDTO[]>([]);
     const [product, setProduct] = useState<ProductDetailsDTO | undefined>();
     const [isProductDetailsShown, setIsProductDetailsShown] = useState<boolean>(false);
     const [isBuyProductShown, setIsBuyProductShown] = useState<boolean>(false);
+    const [pageNumber, setPageNumber] = useState<number>(1);
+    const [isFetching, setIsFetching] = useState<boolean>(false);
+    const [allProductsLoaded, setAllProductsLoaded] = useState<boolean>(false);
+
 
     const showProductDetails = (productId: string | undefined) => {
         if(productId !== undefined) {
@@ -37,17 +42,29 @@ function SearchPage() {
         setIsBuyProductShown(false);
     }
 
-    const fetchProducts = (searchTerm: string) => {
+    const fetchProducts = (isSearchButtonClicked: boolean) => {
+        setIsFetching(true);
         const searchProductsRequest: SearchProductsRequest = {
-            search: searchTerm
+            search: searchTerm,
+            pageNumber: pageNumber
         };
 
         apiClient.searchProducts(searchProductsRequest).then(result => {
-            setProducts(result);
+            if(result.length === 0){
+                setAllProductsLoaded(true);
+            }
+            if (isSearchButtonClicked) {
+                setAllProductsLoaded(false);
+                setProducts(result);
+            } else {
+                let productList: ProductOverviewDTO[] = products.concat(result);
+                setProducts(productList);
+            }
         }).catch(() => {
             // Should only return 200 or a empty list
             alert("Something went wrong...");
         });
+        setIsFetching(false);
     }
 
     const fetchProductDetails = (productId: string) => {
@@ -70,6 +87,16 @@ function SearchPage() {
         });
     }
 
+    window.onscroll = function(ev) {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+            // you're at the bottom of the page
+            if (products.length > 0) {
+                setPageNumber(pageNumber + 1);
+                fetchProducts(false);
+            }
+        }
+    };
+
     return (
         <>
             <div className="container">
@@ -83,7 +110,7 @@ function SearchPage() {
                         <SearchBar callbackFunction={setSearchTerm} />
                     </div>
                     <div className="col-2">
-                        <button className="btn custom-btn" onClick={() => fetchProducts(searchTerm)}>Search</button>
+                        <button className="btn custom-btn" onClick={() => fetchProducts(true)}>Search</button>
                     </div>
                 </div>
                 <div className="row productListContainer">
@@ -128,6 +155,19 @@ function SearchPage() {
                     </div>
                 </div>
             </div>
+            {
+                (isFetching && !allProductsLoaded) &&
+                    <div className={"spinner-wrapper"}>
+                        <h3>Loading products...</h3>
+                        <Spinner size={SpinnerSize.LARGE}/>
+                    </div>
+            }
+            {
+                allProductsLoaded &&
+                    <div>
+                        <h3>All products loaded</h3>
+                    </div>
+            }
             {
                 isProductDetailsShown ?
                 <ProductDetailsPopup callbackFunction={closeProductDetails} product={product}/> :
