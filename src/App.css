@@ -4,13 +4,14 @@
 .mode-dark {
   --color-primary: rgb(194, 127, 0);
   --value-primary: 194, 127, 0;
-  --color-success: green;
+  --color-success: rgb(0, 128, 0);
   --value-success: 0, 128, 0;
-  --color-alert: red;
+  --color-alert: rgb(255, 0, 0);
   --value-alert: 255, 0, 0;
 
   --color-text-1: #fafafa;
   --color-text-2: #bebebe;
+
   --color-btn-text: #fafafa;
   --value-btn-hover: 0.85;
   --value-btn-acitve: 0.75;
@@ -23,10 +24,11 @@
   --logo-url: url("resources/logo_2.png");
 }
 
+/*TODO background aktuell hässlich*/
 .mode-light {
   --color-text-1: #323232 !important;
   --color-text-2: #464646 !important;
-  /*TODO background aktuell hässlich*/
+
   --color-bg-1: #f0f0f0 !important;
   --color-bg-2: #e1e1e1 !important;
   --color-bg-3: #f0f0f0 !important;
@@ -102,20 +104,15 @@ html, body, #root, .mode-dark, .mode-light, .mode-violet, .mode-orange, .mode-bl
   border-width: 0 0 3px 0;
 }
 
-.no-border, .no-border:hover {
-  padding: 0!important;
-  border-width: 0 !important;
+.dropdown-menu {
+  background-color: transparent !important;
+  border: none !important;
 }
 
 .dropdown:hover .dropdown-menu {
   display: block;
   right: 0;
   min-width: fit-content !important;
-}
-
-.dropdown-menu {
-  background-color: transparent !important;
-  border: none !important;
 }
 
 .dropdown-menu-custom {
@@ -127,77 +124,28 @@ html, body, #root, .mode-dark, .mode-light, .mode-violet, .mode-orange, .mode-bl
   background-color: transparent !important;
   color: var(--color-text-1) !important;
 }
-
-
-.error {
-  color: var(--color-alert);
-}
-
-
-
-.grow-animation {
-  animation: grow 0.75s ease-out;
-}
-
-@keyframes grow {
-  50% {transform: scale(2);}
-  100% {transform: scale(1);}
-  100% {transform: translate(-50%, -50%);}
-}
-
-.btn-p {
-  color: var(--color-btn-text) !important;
-  background-color: var(--color-primary) !important;
-}
-
-.btn-p:hover {
-  background-color: rgba(var(--value-primary), var(--value-btn-hover)) !important;
-}
-
-.btn-p:active {
-  background-color: rgba(var(--value-primary), var(--value-btn-acitve)) !important;
-}
-
-
-.btn-s {
-  color: var(--color-btn-text) !important;
-  background-color: var(--color-success) !important;
-}
-
-.btn-s:hover {
-  background-color: rgba(var(--value-success), var(--value-btn-hover)) !important;
-}
-
-.btn-s:active {
-  background-color: rgba(var(--value-success), var(--value-btn-acitve)) !important;
-}
-
-
-
-
-
-
-.spinner-border {
+/********************************************************************************/
+/* LOGIN                                                                        */
+/********************************************************************************/
+.login-input {
+  background-color: transparent !important;
   color: var(--color-text-1) !important;
+  border-width: 0 0 3px 0;
+  border-radius: 0;
+  transition: none;
 }
 
-
-
-input, select {
-  color: var(--color-text-1) !important;
-  background-color: var(--color-bg-3) !important;
+.login-input::placeholder {
+  color: var(--color-text-2);
 }
 
-input:focus, select:focus {
-  border-color: var(--color-primary) !important;
+.login-input:focus {
+  border: solid var(--color-primary) !important;
+  border-width: 0 0 3px 0 !important;
 }
-
-input::placeholder, select::placeholder {
-  color: var(--color-text-2) !important;
-}
-
-
-
+/********************************************************************************/
+/* TABLE                                                                        */
+/********************************************************************************/
 .table-wrapper {
   overflow-y: auto;
   overflow-x: hidden;
@@ -221,29 +169,57 @@ input::placeholder, select::placeholder {
 .table tbody tr:hover {
   background-color: var(--color-bg-hover);
 }
+/********************************************************************************/
+/* INPUT                                                                        */
+/********************************************************************************/
+input, select {
+  color: var(--color-text-1) !important;
+  background-color: var(--color-bg-3) !important;
+}
 
+input:focus, select:focus {
+  box-shadow: none !important;
+  border-color: var(--color-primary) !important;
+}
 
-
-.btn:focus, .btn-close:focus, input:focus, select:focus {
-  outline: none !important;
+input::placeholder, select::placeholder {
+  color: var(--color-text-2) !important;
+}
+/********************************************************************************/
+/* BUTTONS                                                                      */
+/********************************************************************************/
+.btn:focus {
   box-shadow: none !important;
 }
 
-
-
-
-
-.modal-body {
-  background-color: var(--color-bg-1);
+.btn-p {
+  color: var(--color-btn-text) !important;
+  background-color: var(--color-primary) !important;
 }
 
-
-.small-control {
-  padding: 0.15rem 0.4rem !important;
+.btn-p:hover {
+  background-color: rgba(var(--value-primary), var(--value-btn-hover)) !important;
 }
 
+.btn-p:active {
+  background-color: rgba(var(--value-primary), var(--value-btn-acitve)) !important;
+}
 
+.btn-s {
+  color: var(--color-btn-text) !important;
+  background-color: var(--color-success) !important;
+}
 
+.btn-s:hover {
+  background-color: rgba(var(--value-success), var(--value-btn-hover)) !important;
+}
+
+.btn-s:active {
+  background-color: rgba(var(--value-success), var(--value-btn-acitve)) !important;
+}
+/********************************************************************************/
+/* MODAL                                                                        */
+/********************************************************************************/
 .modal-outer {
   position: fixed;
   height: 100%;
@@ -253,7 +229,6 @@ input::placeholder, select::placeholder {
   z-index: 1000;
   background-color: rgba(0, 0, 0, 0.75);
 }
-
 
 .modal-content {
   background-color: var(--color-bg-3);
@@ -265,34 +240,21 @@ input::placeholder, select::placeholder {
   border: 0;
 }
 
-
-
-
-.pointer {
-  cursor: pointer;
+.modal-body {
+  background-color: var(--color-bg-1);
+}
+/********************************************************************************/
+/* ANIMATIONS                                                                   */
+/********************************************************************************/
+.grow-animation {
+  animation: grow 0.75s ease-out;
 }
 
-
-.login-input::placeholder {
-  color: var(--color-text-2);
+@keyframes grow {
+  50% {transform: scale(2);}
+  100% {transform: scale(1);}
+  100% {transform: translate(-50%, -50%);}
 }
-
-.login-input {
-  background-color: transparent !important;
-  color: var(--color-text-1) !important;
-  border-width: 0 0 3px 0;
-  border-radius: 0;
-  transition: none;
-}
-
-.login-input:focus {
-  border: solid var(--color-primary) !important;
-  border-width: 0 0 3px 0 !important;
-}
-
-
-
-
 
 .breath-animation {
   animation: breath 6s ease ;
@@ -306,38 +268,8 @@ input::placeholder, select::placeholder {
   90% {opacity: 1}
   100% {opacity: 0}
 }
-
-
 /********************************************************************************/
-/********************************************************************************/
-/********************************************************************************/
-
-
-.btn-p-outline {
-  color: var(--color-primary);
-  border-radius: 5px;
-}
-.btn-p-outline:hover {
-  color: var(--color-btn-text);
-  background-color: var(--color-primary);
-}
-
-.btn-check:checked + .btn-p-outline, .btn-check:active + .btn-p-outline, .btn-p-outline:active, .btn-p-outline.active, .btn-p-outline.dropdown-toggle.show {
-  color: var(--color-btn-text);
-  background-color: var(--color-primary);
-}
-.btn-p-outline:disabled, .btn-p-outline.disabled {
-  color:  var(--color-primary);
-  background-color: transparent;
-}
-
-
-/********************************************************************************/
-/* CONTENT                                                                      */
-/********************************************************************************/
-
-/********************************************************************************/
-/* SCROLL BAR                                                                   */
+/* SCROLLBAR                                                                    */
 /********************************************************************************/
 ::-webkit-scrollbar{
   width: 20px;
@@ -362,3 +294,23 @@ input::placeholder, select::placeholder {
 /********************************************************************************/
 /* ELEMENTS                                                                     */
 /********************************************************************************/
+.error {
+  color: var(--color-alert);
+}
+
+.spinner-border {
+  color: var(--color-text-1) !important;
+}
+
+.small-control {
+  padding: 0.15rem 0.4rem !important;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.no-border, .no-border:hover {
+  padding: 0!important;
+  border-width: 0 !important;
+}
