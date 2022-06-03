@@ -33,6 +33,12 @@ const Header = () => {
             }
         }
 
+        let themeCookie = cookie.get("Theme");
+        if (themeCookie != null) {
+            loadTheme(themeCookie);
+            console.log(themeCookie);
+        }
+
         function closeByEsc(e: any) {
             if(e.key === 'Escape'){
                 closeLoginModal();
@@ -52,7 +58,7 @@ const Header = () => {
             window.addEventListener('keydown', closeByEsc);
             window.addEventListener('click', closeByOutsideClick);
         }
-    }, []);
+    });
 
     function showLoginModal() {
         setDisplayLoginModal(true);
@@ -68,8 +74,15 @@ const Header = () => {
         authenticationContext.logout()
     }
 
-    function loadTheme() {
-        setTheme(style + " " +  color);
+    function loadTheme(test: string | undefined) {
+        const cookie = new Cookies();
+        if (test !== undefined) {
+            setTheme(test);
+        } else {
+            let value = style + " " + color;
+            cookie.set("Theme", value, {path: "/"});
+            setTheme(style + " " +  color);
+        }
     }
 
     return (
@@ -141,27 +154,27 @@ const Header = () => {
                                     <li className="no-border d-flex">
                                         <a className="pointer p-1 d-flex">
                                             <FaSquareFull className="align-self-center" style={{color: "#000000", border: "2px solid black", borderRadius: "5px"}} size={18}
-                                                          onClick={() => {style = "mode-dark"; loadTheme()}}>
+                                                          onClick={() => {style = "mode-dark"; loadTheme(undefined)}}>
                                             </FaSquareFull>
                                         </a>
                                         <a className="pointer p-1 pe-4 d-flex">
                                             <FaSquareFull className="align-self-center" style={{color: "#ffffff", border: "2px solid black", borderRadius: "5px"}} size={18}
-                                                          onClick={() => {style = "mode-dark mode-light"; loadTheme()}}>
+                                                          onClick={() => {style = "mode-dark mode-light"; loadTheme(undefined)}}>
                                             </FaSquareFull>
                                         </a>
                                         <a className="pointer p-1 d-flex">
                                             <FaSquareFull className="align-self-center" style={{color: "#583475", border: "2px solid black", borderRadius: "5px"}} size={18}
-                                                          onClick={() => {color = "mode-violet"; loadTheme()}}>
+                                                          onClick={() => {color = "mode-violet"; loadTheme(undefined)}}>
                                             </FaSquareFull>
                                         </a>
                                         <a className="pointer p-1 d-flex">
                                             <FaSquareFull className="align-self-center" style={{color: "#C27F00", border: "2px solid black", borderRadius: "5px"}} size={18}
-                                                          onClick={() => {color = "mode-orange"; loadTheme()}}>
+                                                          onClick={() => {color = "mode-orange"; loadTheme(undefined)}}>
                                             </FaSquareFull>
                                         </a>
                                         <a className="pointer p-1 d-flex">
                                             <FaSquareFull className="align-self-center" style={{color: "#005078", border: "2px solid black", borderRadius: "5px"}} size={18}
-                                                          onClick={() => {color = "mode-blue"; loadTheme()}}>
+                                                          onClick={() => {color = "mode-blue"; loadTheme(undefined)}}>
                                             </FaSquareFull>
                                         </a>
                                     </li>
