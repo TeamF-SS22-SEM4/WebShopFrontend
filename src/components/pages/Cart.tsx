@@ -99,8 +99,6 @@ const Cart = () => {
                     amount: item.selectedAmount,
                 };
 
-                console.log(item.soundCarrierId);
-
                 selectedItems.push(orderItem);
             });
 

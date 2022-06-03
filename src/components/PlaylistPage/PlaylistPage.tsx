@@ -37,7 +37,6 @@ function PlaylistPage() {
 
     let playNext = () => {
         //TODO
-        console.log("playing next")
     }
 
     useEffect(() => {
