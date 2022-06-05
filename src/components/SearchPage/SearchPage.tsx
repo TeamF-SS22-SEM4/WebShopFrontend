@@ -1,11 +1,10 @@
 import './SearchPage.css';
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { GetProductRequest, ProductDetailsDTO, ProductOverviewDTO, SearchProductsRequest } from "../../openapi-client";
 import {apiClient} from "../../App";
 import SearchBar from "./SearchBar/SearchBar";
 import ProductDetailsPopup from './ProductDetailsPopup';
 import BuyProductPopup from './BuyProductPopup';
-import {Spinner, SpinnerSize} from "@blueprintjs/core";
 
 function SearchPage() {
     const [searchTerm, setSearchTerm] = useState<string>('a');
@@ -14,9 +13,7 @@ function SearchPage() {
     const [isProductDetailsShown, setIsProductDetailsShown] = useState<boolean>(false);
     const [isBuyProductShown, setIsBuyProductShown] = useState<boolean>(false);
     const [pageNumber, setPageNumber] = useState<number>(1);
-    const [isFetching, setIsFetching] = useState<boolean>(false);
     const [allProductsLoaded, setAllProductsLoaded] = useState<boolean>(false);
-
 
     const showProductDetails = (productId: string | undefined) => {
         if(productId !== undefined) {
@@ -43,18 +40,27 @@ function SearchPage() {
     }
 
     const fetchProducts = (isSearchButtonClicked: boolean) => {
-        setIsFetching(true);
+        let tempPageNumber = pageNumber;
+
+        if(isSearchButtonClicked) {
+            tempPageNumber = 1;
+            setPageNumber(tempPageNumber);
+        }
+
         const searchProductsRequest: SearchProductsRequest = {
             search: searchTerm,
-            pageNumber: pageNumber
+            pageNumber: tempPageNumber // Use tempPageNumber because setPageNumber is asynchronous
         };
 
         apiClient.searchProducts(searchProductsRequest).then(result => {
             if(result.length === 0){
+                setPageNumber(1);
                 setAllProductsLoaded(true);
             }
+
             if (isSearchButtonClicked) {
                 setAllProductsLoaded(false);
+                setPageNumber(tempPageNumber + 1);
                 setProducts(result);
             } else {
                 let productList: ProductOverviewDTO[] = products.concat(result);
@@ -62,9 +68,7 @@ function SearchPage() {
             }
         }).catch(() => {
             // Should only return 200 or a empty list
-            alert("Something went wrong...");
         });
-        setIsFetching(false);
     }
 
     const fetchProductDetails = (productId: string) => {
@@ -90,8 +94,9 @@ function SearchPage() {
     window.onscroll = function(ev) {
         if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
             // you're at the bottom of the page
-            if (products.length > 0) {
-                setPageNumber(pageNumber + 1);
+            if (products.length > 0 && !allProductsLoaded) {
+                let tempPageNumber = pageNumber;
+                setPageNumber(tempPageNumber + 1);
                 fetchProducts(false);
             }
         }
@@ -155,19 +160,6 @@ function SearchPage() {
                     </div>
                 </div>
             </div>
-            {
-                (isFetching && !allProductsLoaded) &&
-                    <div className={"spinner-wrapper"}>
-                        <h3>Loading products...</h3>
-                        <Spinner size={SpinnerSize.LARGE}/>
-                    </div>
-            }
-            {
-                allProductsLoaded &&
-                    <div>
-                        <h3>All products loaded</h3>
-                    </div>
-            }
             {
                 isProductDetailsShown ?
                 <ProductDetailsPopup callbackFunction={closeProductDetails} product={product}/> :
