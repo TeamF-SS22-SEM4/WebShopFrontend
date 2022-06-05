@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {GetProductRequest, ProductDetailsDTO, SearchProductsRequest} from "../../openapi-client";
+import {GetProductRequest, ProductDetailsDTO, ProductOverviewDTO, SearchProductsRequest} from "../../openapi-client";
 import {apiClient} from "../../App";
 import React from 'react';
 import { FaSearch } from 'react-icons/fa';
@@ -9,6 +9,7 @@ import BuyModal from "../modals/BuyModal";
 const Home = () => {
 
     const [searchTerm, setSearchTerm] = useState<string>("");
+    const [pageNumber, setPageNumber] = useState<number>(1);
     const [products, setProducts] = useState<Product[]>([]);
     const [productDetail, setProductDetail] = useState<ProductDetailsDTO>();
 
@@ -27,7 +28,7 @@ const Home = () => {
     }
 
     useEffect(() => {
-        fetchProducts();
+        fetchProducts(true);
 
         function closeByEsc(e: any) {
             if(e.key === 'Escape'){
@@ -80,11 +81,14 @@ const Home = () => {
         setDisplayBuyModal(false);
     }
 
-    function fetchProducts() {
-        setIsLoadingProducts(true);
-        const searchProductsRequest: SearchProductsRequest = {search: searchTerm};
+    function fetchProducts(searchButtonClicked: boolean) {
+        // setIsLoadingProducts(true);
+        const searchProductsRequest: SearchProductsRequest = {
+            search: searchTerm,
+            pageNumber: pageNumber
+        };
         apiClient.searchProducts(searchProductsRequest).then(result => {
-            let products: Product[] = [];
+            let productList: Product[] = [];
             result.forEach((element) => {
                 if (element.productId && element.name && element.artistName && element.genre && element.releaseYear && element.smallestPrice) {
                     let product: Product = {
@@ -95,13 +99,21 @@ const Home = () => {
                         release: element.releaseYear,
                         price: element.smallestPrice,
                     }
-                    products.push(product);
+                    productList.push(product);
                 }
             })
-            products.sort((a,b) => (a.album > b.album) ? 1 : ((b.album > a.album) ? -1 : 0));
-            setProducts(products);
-            setIsLoadingProducts(false);
-        }).catch(() => {});
+            // productList.sort((a,b) => (a.album > b.album) ? 1 : ((b.album > a.album) ? -1 : 0));
+
+            if (searchButtonClicked) {
+                setProducts(productList);
+            } else {
+                let other: Product[] = products.concat(productList);
+                setProducts(other);
+            }
+            // setIsLoadingProducts(false);
+        }).catch(() => {
+            //todo !?!?
+        });
     }
 
     function fetchProductDetails(productId: string) {
@@ -110,7 +122,18 @@ const Home = () => {
         apiClient.getProduct(getProductRequest).then(result => {
             setProductDetail(result);
             setIsLoadingProductDetail(false);
-        }).catch(() => {});
+        }).catch(() => {
+            //todo !?!?
+        });
+    }
+
+    function scrollHandler (e: any) {
+        if(e.scrollTop + e.offsetHeight >= e.scrollHeight) {
+            if (products.length > 0) {
+                setPageNumber(pageNumber + 1);
+                fetchProducts(false);
+            }
+        }
     }
 
     return (
@@ -119,8 +142,8 @@ const Home = () => {
             <div className="container h-100 pb-5">
                 <div className="row w-50 m-auto" style={{"height": "20%"}}>
                     <div className="col align-self-center input-group">
-                        <input className="form-control" placeholder="Search" type="text" onKeyDown={e => e.key === 'Enter' && fetchProducts()} onChange={(e) => setSearchTerm(e.target.value)} />
-                        <button className="btn btn-p" onClick={() => {fetchProducts()}}><FaSearch className="d-flex" size={20}></FaSearch></button>
+                        <input className="form-control" placeholder="Search" type="text" onKeyDown={e => e.key === 'Enter' && fetchProducts(true)} onChange={(e) => setSearchTerm(e.target.value)} />
+                        <button className="btn btn-p" onClick={() => {fetchProducts(true)}}><FaSearch className="d-flex" size={20}></FaSearch></button>
                     </div>
                 </div>
 
@@ -137,17 +160,16 @@ const Home = () => {
 
                         :
                             <div className="justify-content-center" style={{"height": "80%"}}>
-                                <div className="table-wrapper h-100">
+                                <div className="table-wrapper h-100" onScroll={(e) => scrollHandler(e.target)}>
                                     <table className="table">
                                         <thead>
                                             <tr>
-                                                <th className="py-4">Album</th>
-                                                <th className="py-4">Artist</th>
-                                                <th className="py-4">Genre</th>
-                                                <th className="py-4">Release</th>
-                                                <th className="py-4">Price</th>
-                                                <th className="py-4"></th>
-                                                <th className="py-4"></th>
+                                                <th className="py-4 col-3">Album</th>
+                                                <th className="py-4 col-3">Artist</th>
+                                                <th className="py-4 col-3">Genre</th>
+                                                <th className="py-4 col-1 text-center">Release</th>
+                                                <th className="py-4 col-1 text-center">Price</th>
+                                                <th className="py-4 col-3"></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -160,12 +182,10 @@ const Home = () => {
                                                     <td className="align-middle text-center">{product.release}</td>
                                                     <td className="align-middle text-center">{product.price} €</td>
                                                     <td className="align-middle">
-                                                        <button className='btn btn-p btn-sm' onClick={() => showDetailModal(product.id)}>
+                                                        <button className='btn btn-p btn-sm m-1' onClick={() => showDetailModal(product.id)}>
                                                             Details
                                                         </button>
-                                                    </td>
-                                                    <td className="align-middle">
-                                                        <button className='btn btn-s btn-sm' onClick={() => showBuyModal(product.id)}>
+                                                        <button className='btn btn-s btn-sm m-1' onClick={() => showBuyModal(product.id)}>
                                                             Buy
                                                         </button>
                                                     </td>
