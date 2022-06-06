@@ -20,6 +20,7 @@
   --color-bg-2: #464646;
   --color-bg-3: #646464;
   --color-bg-hover: rgba(194, 127, 0, 0.15);
+  --filter-btn-accordion: invert(100%) sepia(6%) saturate(2%) hue-rotate(136deg) brightness(108%) contrast(96%);
 
   --logo-url: url("resources/logo_2.png");
 }
@@ -32,6 +33,7 @@
   --color-bg-1: #f0f0f0 !important;
   --color-bg-2: #e1e1e1 !important;
   --color-bg-3: #f0f0f0 !important;
+  --filter-btn-accordion: invert(21%) sepia(0%) saturate(24%) hue-rotate(197deg) brightness(91%) contrast(98%) !important;
 }
 
 .mode-violet {
@@ -225,6 +227,25 @@ input::placeholder, select::placeholder {
 
 .btn-s:active {
   background-color: rgba(var(--value-success), var(--value-btn-acitve)) !important;
+}
+/********************************************************************************/
+/* ACCORDION                                                                    */
+/********************************************************************************/
+.accordion-button {
+  background-color: var(--color-bg-3) !important;
+  color: var(--color-text-1) !important;
+}
+
+.accordion-button:focus {
+  box-shadow: none !important;
+}
+
+.accordion-body {
+  background-color: var(--color-bg-1);
+}
+
+.accordion-button::after, .accordion-button:not(.collapsed)::after {
+  filter: var(--filter-btn-accordion);
 }
 /********************************************************************************/
 /* MODAL                                                                        */

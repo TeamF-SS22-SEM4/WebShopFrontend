@@ -122,7 +122,7 @@ const Header = () => {
                                             </Link>
                                         </li>
                                         <li>
-                                            <Link to={"/orders"} className="dropdown-item nav-link">
+                                            <Link to={"/purchases"} className="dropdown-item nav-link">
                                                 <IoPricetags size={15}></IoPricetags>
                                                 &nbsp;&nbsp;&nbsp;Purchases
                                             </Link>
