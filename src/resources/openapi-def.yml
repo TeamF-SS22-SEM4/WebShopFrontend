@@ -79,30 +79,35 @@ paths:
           description: Not Authenticated
         '404':
           description: User not found
-  /download-api/v1/songs/{username}/{songId}:
+  /download-api/v1/songs/{username}/{albumName}/{songName}:
     get:
       description: Responds with the MP3 of the song as bytes
       operationId: getSong
       parameters:
-        - name: songId
+        - name: albumName
           in: path
           required: true
           schema:
-            $ref: '#/components/schemas/UUID'
+            type: string
+        - name: songName
+          in: path
+          required: true
+          schema:
+            type: string
         - name: username
           in: path
           required: true
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/octet-stream:
               schema:
                 format: binary
                 type: string
-        "404":
+        '404':
           description: When the song cannot be found.
   /api/v1/products:
     get:

@@ -15,11 +15,12 @@ function PlaylistPage() {
     let authState = useContext(AuthenticationContext);
     let [emptyPlaylist, setEmptyPlaylist] = useState(false);
 
-    let downloadSong = (songId?: string) => {
-        if(songId !== undefined) {
+    let downloadSong = (albumName?: string, title?: string) => {
+        if(albumName !== undefined && title !== undefined) {
             const getSongRequest: GetSongRequest = {
-                songId: songId,
-				username: authState.username
+                username: authState.username,
+                albumName: albumName,
+                songName: title
             };
 
             apiClient.getSong(getSongRequest).then(result => {
@@ -54,7 +55,7 @@ function PlaylistPage() {
         })
     }, [authState.username]);
 
-    let songRows = songs.map((dto, index) => <SongRow index={index} songId={dto.songId} title={dto.title} artist={dto.artists} duration={dto.duration} setPlayingIndex={setPlayingIndex} downloadSong={downloadSong}/>)
+    let songRows = songs.map((dto, index) => <SongRow index={index} albumName={dto.albumName} title={dto.title} artist={dto.artists} duration={dto.duration} setPlayingIndex={setPlayingIndex} downloadSong={downloadSong}/>)
 
     let currentSrc;
     if (songs[playingIndex]) {
