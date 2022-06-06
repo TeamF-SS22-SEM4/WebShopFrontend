@@ -1,7 +1,7 @@
 import React, {useContext, useState} from 'react';
 import {ProductDetailsDTO, SoundCarrierDTO} from "../../openapi-client";
 import {ShoppingCartItem} from "../others/ShoppingCartItem";
-import {shoppingCart} from "../pages/Cart";
+import {shoppingCart} from "../pages/CartPage";
 import {ShoppingCartContext} from "../../App";
 
 interface BuyModalProps {
@@ -39,6 +39,7 @@ const BuyModal = ({callbackFunction, product, isLoading}: BuyModalProps) => {
         if(selectedSoundCarriers.size === 0 || sumOfSelectedAmount === 0) {
             setMessageText("Failed - You have to choose at least one item!" + text);
             setDisplayMessage(true);
+
         } else {
             let productAlreadyInCart: boolean = false;
 
@@ -69,7 +70,7 @@ const BuyModal = ({callbackFunction, product, isLoading}: BuyModalProps) => {
                     }
                 });
             } else {
-                setMessageText("Failed - Some of the product(s) are already in the cart!" + text);
+                setMessageText("Failed - Some of the products are already in the cart!" + text);
                 setDisplayMessage(true);
             }
         }
@@ -84,7 +85,6 @@ const BuyModal = ({callbackFunction, product, isLoading}: BuyModalProps) => {
                         <button className="btn btn-p btn-sm" onClick={() => callbackFunction()}>close</button>
                     </div>
                     <div className="modal-body">
-                        {/*TODO: sort carriers?!*/}
                         { !isLoading ?
                             <table className="table">
                                 <thead className="">
@@ -131,7 +131,7 @@ const BuyModal = ({callbackFunction, product, isLoading}: BuyModalProps) => {
                     { !isLoading &&
                         <div className="modal-footer justify-content-between">
                             <p key={messageText} className="fw-bolder breath-animation error">{!displayMessage ? "" : <>{messageText}</>}</p>
-                            <button className="btn btn-success btn-sm" onClick={() => addToCart()}>Add to cart</button>
+                            <button className="btn btn-s btn-sm" onClick={() => addToCart()}>Add to cart</button>
                         </div>
                     }
                 </div>

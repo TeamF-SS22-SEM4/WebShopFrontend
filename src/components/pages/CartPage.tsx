@@ -5,24 +5,21 @@ import {OrderItem, PaymentInformation, PlaceOrderRequest, Purchase} from "../../
 import {FaTrashAlt} from "react-icons/fa";
 import {useNavigate} from "react-router-dom";
 
-const Cart = () => {
+let text = " ";
+
+const CartPage = () => {
     const shoppingCartContext = useContext(ShoppingCartContext);
     const authenticationContext = useContext(AuthenticationContext);
     const sessionId = authenticationContext.sessionId;
-
-    const [totalPrice, setTotalPrice] = useState<number>(0);
-
     const navigate = useNavigate();
 
-    const [paymentMethod, setPaymentMethod] = useState<string>("");
+    const [totalPrice, setTotalPrice] = useState<number>(0);
+    const [paymentMethod, setPaymentMethod] = useState<string>("Credit card");
     const [creditCardType, setCreditCardType] = useState<string>("MASTERCARD");
     const [creditCardNumber, setCreditCardNumber] = useState<string>("");
     const [cvc, setCvc] = useState<string>("");
 
-    const[displayMessage, setDisplayMessage] = useState<boolean>(false);
     const[messageText, setMessageText] = useState<string>("");
-    const[displayAsError, setDisplayAsError] = useState<boolean>(false);
-
 
     useEffect(() => {     
         calculateTotalPrice();
@@ -36,11 +33,10 @@ const Cart = () => {
                 total += shoppingCartItem.selectedAmount * shoppingCartItem.pricePerCarrier;
             }
         });
-
         setTotalPrice(total);
     }
 
-    const updateSelectedAmount = (shoppingCartItem: ShoppingCartItem, newAmount: number) => {
+    function updateSelectedAmount(shoppingCartItem: ShoppingCartItem, newAmount: number) {
         if(shoppingCartItem !== undefined) {
             let newShoppingCartItem = new ShoppingCartItem(
                 shoppingCartItem.productName,
@@ -54,12 +50,11 @@ const Cart = () => {
 
             let oldItemIndex = shoppingCart.indexOf(shoppingCartItem);
             shoppingCart[oldItemIndex] = newShoppingCartItem;
-
             calculateTotalPrice();
         }
     }
 
-    const removeProductFromCart = (shoppingCartItem: ShoppingCartItem) => {
+    function removeProductFromCart(shoppingCartItem: ShoppingCartItem) {
         let index = shoppingCart?.indexOf(shoppingCartItem);
 
         if(index !== -1 && index !== undefined) {
@@ -67,13 +62,12 @@ const Cart = () => {
             shoppingCartContext.setItems(shoppingCart.length);
 
         }
-        
         calculateTotalPrice();
     }
 
-    const placeOrder = () => {
+    function placeOrder() {
+        text = text + " ";
         setMessageText("");
-        setDisplayAsError(false);
 
         let isValidForm: boolean = true;
         if(paymentMethod === "Credit card") {
@@ -81,8 +75,6 @@ const Cart = () => {
                 isValidForm = false;
             }
         }
-
-        //TODO: kredikartendaten prüfen ja/nein?
 
         if(isValidForm) {
             let providedPaymentInformation: PaymentInformation = {
@@ -118,78 +110,81 @@ const Cart = () => {
                 setCvc("");
                 shoppingCart = [];
                 shoppingCartContext.setItems(shoppingCart.length);
-                navigate("/orders");
+                navigate("/purchases");
             }).catch(response => {
-                setDisplayAsError(true);
                 if (response.status === 403) {
-                    setMessageText("Not Authenticated");
+                    setMessageText("Not Authenticated!" + text);
                 } else if (response.status === 401) {
-                    setMessageText("Unauthorized for operation");
+                    setMessageText("Unauthorized for operation!" + text);
                 } else if (response.status === 404) {
-                    setMessageText("Unknown carrier id");
+                    setMessageText("Unknown carrier id!" + text);
                 } else if (response.status === 400) {
-                    setMessageText("Payment information invalid");
+                    setMessageText("Payment information invalid!" + text);
                 } else {
-                    setMessageText("Something went wrong...");
+                    setMessageText("Something went wrong!" + text);
                 }
             });
         } else {
-            setDisplayAsError(true);
-            setMessageText("You have to enter the payment information");
+            setMessageText("You have to enter the payment information!" + text);
         }
     }
 
+    //TODO: Feedback wenn Item nicht mehr verfügbar?
+    //TODO: Kreditkartendaten werden nicht geprüft?!
+
     return (
         <div className="content">
-            <div className="container h-100 py-5">
+            <div className="container h-100 pt-5 pb-4">
                 { shoppingCart.length > 0 ?
                     <>
-                        <table className="table">
-                            <thead>
-                                <tr>
-                                    <th>Album</th>
-                                    <th>Artist</th>
-                                    <th>Type</th>
-                                    <th className="col-2 text-end pe-4">Unit price</th>
-                                    <th style={{width: "120px"}}></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            { shoppingCart?.map(
-                                shoppingCartItem =>
-                                    <tr key={shoppingCartItem.soundCarrierId}>
-                                        <td className="align-middle">{shoppingCartItem.productName}</td>
-                                        <td className="align-middle">{shoppingCartItem.artistName}</td>
-                                        <td className="align-middle">{shoppingCartItem.soundCarrierType}</td>
-                                        <td className="align-middle text-end pe-5">{shoppingCartItem.pricePerCarrier} €</td>
-                                        <td className="align-middle d-flex justify-content-end">
-                                            <input
-                                                className="form-control small-control me-2"
-                                                type="number"
-                                                value={shoppingCartItem.selectedAmount}
-                                                min="1"
-                                                max={shoppingCartItem.amountAvailable}
-                                                onChange={(event) => {
-                                                    if(shoppingCartItem.amountAvailable !== undefined && parseInt(event.target.value) > shoppingCartItem.amountAvailable) {
-                                                        event.target.value = String(shoppingCartItem.amountAvailable);
-                                                    }
-                                                    updateSelectedAmount(shoppingCartItem, parseInt(event.target.value))
-                                                }}
-                                            />
-                                            <button className="btn btn-danger btn-sm d-flex" onClick={() => removeProductFromCart(shoppingCartItem)}>
-                                                <FaTrashAlt className="align-self-center my-1" size={16}></FaTrashAlt>
-                                            </button>
-                                        </td>
+                        <div className="table-wrapper" style={{maxHeight: "85%"}}>
+                            <table className="table">
+                                <thead>
+                                    <tr>
+                                        <th className="py-4">Album</th>
+                                        <th className="py-4">Artist</th>
+                                        <th className="py-4">Type</th>
+                                        <th className="py-4 col-2 text-end pe-4">Unit price</th>
+                                        <th className="py-4" style={{width: "120px"}}></th>
                                     </tr>
-                                )
-                            }
-                            </tbody>
-                        </table>
-                        <div className="row justify-content-between py-3">
-                            <div className="col-3 align-self-center">
+                                </thead>
+                                <tbody>
+                                { shoppingCart?.map(
+                                    shoppingCartItem =>
+                                        <tr key={shoppingCartItem.soundCarrierId}>
+                                            <td className="align-middle">{shoppingCartItem.productName}</td>
+                                            <td className="align-middle">{shoppingCartItem.artistName}</td>
+                                            <td className="align-middle">{shoppingCartItem.soundCarrierType}</td>
+                                            <td className="align-middle text-end pe-5">{shoppingCartItem.pricePerCarrier} €</td>
+                                            <td className="align-middle d-flex justify-content-end">
+                                                <input
+                                                    className="form-control small-control me-2"
+                                                    type="number"
+                                                    value={shoppingCartItem.selectedAmount}
+                                                    min="1"
+                                                    max={shoppingCartItem.amountAvailable}
+                                                    onChange={(event) => {
+                                                        if(shoppingCartItem.amountAvailable !== undefined && parseInt(event.target.value) > shoppingCartItem.amountAvailable) {
+                                                            event.target.value = String(shoppingCartItem.amountAvailable);
+                                                        }
+                                                        updateSelectedAmount(shoppingCartItem, parseInt(event.target.value))
+                                                    }}
+                                                />
+                                                <button className="btn btn-danger btn-sm d-flex" onClick={() => removeProductFromCart(shoppingCartItem)}>
+                                                    <FaTrashAlt className="align-self-center my-1" size={16}></FaTrashAlt>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    )
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div className="row pt-3 px-3" style={{maxHeight: "15%"}}>
+                            <div className="col-3 pt-2">
                                 <select className="form-select small-control" onChange={(evt) => setPaymentMethod(evt.currentTarget.value)}>
-                                    <option value="Invoice">Invoice</option>
                                     <option value="Credit card">Credit card</option>
+                                    <option value="Invoice">Invoice</option>
                                 </select>
                                 { paymentMethod === "Credit card" &&
                                     <>
@@ -221,16 +216,12 @@ const Cart = () => {
                                 }
                             </div>
                             <div className="col align-self-center text-center">
-                                {authenticationContext.loggedIn ?
-                                    <span className={ displayAsError ? "fw-bolder error" : "fw-bolder" }>{messageText}</span>
-                                    :
-                                    <span className="fw-bolder error">You have to login for paying!</span>
-                                }
+                                <p key={messageText} style={{margin: 0}} className={authenticationContext.loggedIn ? "fw-bolder error breath-animation" : "fw-bolder error"}>{authenticationContext.loggedIn ? messageText : "You have to login for paying!"}</p>
                             </div>
-                            <div className="col-2 align-self-center text-end">
-                                <span>Total price<br/><span className="fw-bolder">{totalPrice} €</span></span>
-                                <div>
-                                    { authenticationContext.loggedIn && <button onClick={() => placeOrder()} className="btn btn-s btn-sm my-3">Check out</button> }
+                            <div className="col-2 row text-end">
+                                <span className="align-self-start">Total price<br/><span className="fw-bolder">{totalPrice} €</span></span>
+                                <div className="align-self-end">
+                                    { authenticationContext.loggedIn && <button onClick={() => placeOrder()} className="btn btn-s btn-sm mt-2">Check out</button> }
                                 </div>
                             </div>
                         </div>
@@ -246,4 +237,4 @@ const Cart = () => {
 }
 
 export let shoppingCart: ShoppingCartItem[] = [];
-export default Cart;
+export default CartPage;

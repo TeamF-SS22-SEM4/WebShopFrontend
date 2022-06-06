@@ -6,26 +6,19 @@ import { FaSearch } from 'react-icons/fa';
 import DetailModal from "../modals/DetailModal";
 import BuyModal from "../modals/BuyModal";
 
-const Home = () => {
+const HomePage = () => {
 
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [pageNumber, setPageNumber] = useState<number>(1);
-    const [products, setProducts] = useState<Product[]>([]);
+    const [products, setProducts] = useState<ProductOverviewDTO[]>([]);
     const [productDetail, setProductDetail] = useState<ProductDetailsDTO>();
 
     const [isLoadingProducts, setIsLoadingProducts] = useState<boolean>(false);
+    const [allProductsLoaded, setAllProductsLoaded] = useState<boolean>(false);
     const [isLoadingProductDetail, setIsLoadingProductDetail] = useState<boolean>(false);
     const [displayDetailModal, setDisplayDetailModal] = useState<boolean>(false);
     const [displayBuyModal, setDisplayBuyModal] = useState<boolean>(false);
 
-    type Product = {
-        id: string,
-        album: string,
-        artist: string,
-        genre: string,
-        release: string,
-        price: number,
-    }
 
     useEffect(() => {
         fetchProducts(true);
@@ -82,37 +75,31 @@ const Home = () => {
     }
 
     function fetchProducts(searchButtonClicked: boolean) {
-        // setIsLoadingProducts(true);
+        setIsLoadingProducts(true);
         const searchProductsRequest: SearchProductsRequest = {
             search: searchTerm,
             pageNumber: pageNumber
         };
-        apiClient.searchProducts(searchProductsRequest).then(result => {
-            let productList: Product[] = [];
-            result.forEach((element) => {
-                if (element.productId && element.name && element.artistName && element.genre && element.releaseYear && element.smallestPrice) {
-                    let product: Product = {
-                        id: element.productId,
-                        album: element.name,
-                        artist: element.artistName,
-                        genre: element.genre,
-                        release: element.releaseYear,
-                        price: element.smallestPrice,
-                    }
-                    productList.push(product);
-                }
-            })
-            // productList.sort((a,b) => (a.album > b.album) ? 1 : ((b.album > a.album) ? -1 : 0));
 
+        if (searchButtonClicked) {
+            setPageNumber(1);
+        }
+
+        apiClient.searchProducts(searchProductsRequest).then(result => {
+            if(result.length < 19){
+                setAllProductsLoaded(true);
+            }
             if (searchButtonClicked) {
-                setProducts(productList);
+                setProducts(result);
+                setAllProductsLoaded(false);
             } else {
-                let other: Product[] = products.concat(productList);
+                let other: ProductOverviewDTO[] = products.concat(result);
                 setProducts(other);
             }
-            // setIsLoadingProducts(false);
+            setIsLoadingProducts(false);
         }).catch(() => {
-            //todo !?!?
+            //TODO: bessere Lösung finden
+            fetchProducts(false);
         });
     }
 
@@ -123,7 +110,7 @@ const Home = () => {
             setProductDetail(result);
             setIsLoadingProductDetail(false);
         }).catch(() => {
-            //todo !?!?
+            //TODO: bessere Lösung finden
         });
     }
 
@@ -146,21 +133,15 @@ const Home = () => {
                         <button className="btn btn-p" onClick={() => {fetchProducts(true)}}><FaSearch className="d-flex" size={20}></FaSearch></button>
                     </div>
                 </div>
-
-                { isLoadingProducts ?
-                    <div className="row justify-content-center h-25">
-                        <div className="spinner-border align-self-center"></div>
-                    </div>
-                :
                     <>
                         { products.length <= 0 ?
                             <div className="row justify-content-center h-25">
-                                <span className="h4 text-center m-auto">No entry found!</span>
+                                <span className="h4 text-center m-auto">No entries found!</span>
                             </div>
 
                         :
-                            <div className="justify-content-center" style={{"height": "80%"}}>
-                                <div className="table-wrapper h-100" onScroll={(e) => scrollHandler(e.target)}>
+                            <div className="justify-content-center" style={{height: "80%"}}>
+                                <div className="table-wrapper" style={allProductsLoaded ? {height: "100%"} : {height: "95%"}} onScroll={(e) => scrollHandler(e.target)}>
                                     <table className="table">
                                         <thead>
                                             <tr>
@@ -175,19 +156,21 @@ const Home = () => {
                                         <tbody>
                                         { products?.map(
                                             product =>
-                                                <tr key={product.id}>
-                                                    <td className="align-middle">{product.album}</td>
-                                                    <td className="align-middle">{product.artist}</td>
+                                                <tr key={product.productId}>
+                                                    <td className="align-middle">{product.name}</td>
+                                                    <td className="align-middle">{product.artistName}</td>
                                                     <td className="align-middle">{product.genre}</td>
-                                                    <td className="align-middle text-center">{product.release}</td>
-                                                    <td className="align-middle text-center">{product.price} €</td>
+                                                    <td className="align-middle text-center">{product.releaseYear}</td>
+                                                    <td className="align-middle text-center">{product.smallestPrice} €</td>
                                                     <td className="align-middle">
-                                                        <button className='btn btn-p btn-sm m-1' onClick={() => showDetailModal(product.id)}>
-                                                            Details
-                                                        </button>
-                                                        <button className='btn btn-s btn-sm m-1' onClick={() => showBuyModal(product.id)}>
-                                                            Buy
-                                                        </button>
+                                                        <div className="d-flex">
+                                                            <button className='btn btn-p btn-sm m-1' onClick={() => showDetailModal(product.productId)}>
+                                                                Details
+                                                            </button>
+                                                            <button className='btn btn-s btn-sm m-1' onClick={() => showBuyModal(product.productId)}>
+                                                                Buy
+                                                            </button>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             )
@@ -195,10 +178,12 @@ const Home = () => {
                                         </tbody>
                                     </table>
                                 </div>
+                                <div className={(isLoadingProducts && !allProductsLoaded) ? "d-flex p-2 justify-content-center" : "d-flex p-2 justify-content-center invisible"} style={allProductsLoaded ? {height: "0%"} : {height: "5%"}}>
+                                    <div className="spinner-border-sm spinner-border align-self-center"></div>
+                                </div>
                             </div>
                         }
                     </>
-                }
             </div>
         </div>
         {displayDetailModal && <DetailModal callbackFunction={closeDetailModal} isLoading={isLoadingProductDetail} product={productDetail}/>}
@@ -207,4 +192,4 @@ const Home = () => {
     )
 }
 
-export default Home;
+export default HomePage;

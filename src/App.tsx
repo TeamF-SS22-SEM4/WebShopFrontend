@@ -1,8 +1,8 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Route, Routes} from 'react-router-dom';
-import Home from "./components/pages/Home";
+import HomePage from "./components/pages/HomePage";
 import {Configuration, DefaultApi, LoginResultDTO} from "./openapi-client";
-import Cart from './components/pages/Cart';
+import CartPage from './components/pages/CartPage';
 import Header from "./components/others/Header";
 
 import 'normalize.css/normalize.css'
@@ -10,8 +10,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 import './App.css';
 import PlaylistPage from "./components/PlaylistPage/PlaylistPage";
-import RestrictedWrapper from "./components/others/RestrictedWrapper";
-import Orders from "./components/pages/Orders";
+import RestrictionPage from "./components/pages/RestrictionPage";
+import PurchasesPage from "./components/pages/PurchasesPage";
 
 //set up open api client
 const apiUrl = window.location.origin === "http://localhost:3000" ? "http://localhost:80" : window.location.origin;
@@ -123,7 +123,7 @@ function App(this: any) {
         })
     }, []);
 
-    let [theme, setTheme] = useState<ThemeType>("mode-dark");
+    let [theme, setTheme] = useState<ThemeType>("mode-dark mode-orange");
 
     return (
         <AuthenticationContext.Provider value={authState}>
@@ -132,17 +132,17 @@ function App(this: any) {
                     <div className={theme}>
                         <Header />
                         <Routes>
-                            <Route index element={<Home/>}/>
-                            <Route path="/cart" element={ <Cart/>}/>
+                            <Route index element={<HomePage/>}/>
+                            <Route path="/cart" element={ <CartPage/>}/>
                             <Route path="/playlist" element={
-                                <RestrictedWrapper>
+                                <RestrictionPage>
                                     <PlaylistPage/>
-                                </RestrictedWrapper>
+                                </RestrictionPage>
                             }/>
-                            <Route path="/orders" element={
-                                <RestrictedWrapper>
-                                    <Orders/>
-                                </RestrictedWrapper>
+                            <Route path="/purchases" element={
+                                <RestrictionPage>
+                                    <PurchasesPage/>
+                                </RestrictionPage>
                             }/>
                         </Routes>
                     </div>

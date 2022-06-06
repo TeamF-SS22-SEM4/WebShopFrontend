@@ -3,14 +3,11 @@ import {AuthenticationContext, ShoppingCartContext, useThemeContext} from "../..
 import {Link} from "react-router-dom";
 import {FaHome, FaMusic, FaShoppingCart, FaSquareFull, FaUserAlt} from "react-icons/fa";
 import { FiLogIn, FiLogOut } from "react-icons/fi";
-import { BsBox } from "react-icons/bs";
-import LoginPopup from "../modals/LoginModal";
+import LoginModal from "../modals/LoginModal";
 import Cookie from "universal-cookie";
 import Cookies from "universal-cookie";
 import {CgColorPicker} from "react-icons/cg";
-
-let color = "mode-orange";
-let style = "mode-dark";
+import {IoPricetags} from "react-icons/io5";
 
 const Header = () => {
 
@@ -23,22 +20,6 @@ const Header = () => {
     const [theme, setTheme] = useThemeContext();
 
     useEffect(() => {
-        const cookie = new Cookies();
-        if(!authenticationContext.loggedIn){
-            let sessionCookie = cookie.get("sessionCookie");
-            if (sessionCookie != null) {
-                const sessionIDAndUser = sessionCookie.split("/");
-                let cookieLoginInfo = {sessionId: sessionIDAndUser[0], username: sessionIDAndUser[1], loggedIn: true}; // pass to function as JSON, so it re-renders
-                authenticationContext.storeLogin(cookieLoginInfo);
-            }
-        }
-
-        let themeCookie = cookie.get("Theme");
-        if (themeCookie != null) {
-            loadTheme(themeCookie);
-            console.log(themeCookie);
-        }
-
         function closeByEsc(e: any) {
             if(e.key === 'Escape'){
                 closeLoginModal();
@@ -58,6 +39,24 @@ const Header = () => {
             window.addEventListener('keydown', closeByEsc);
             window.addEventListener('click', closeByOutsideClick);
         }
+    }, []);
+
+    useEffect(() => {
+        const cookie = new Cookies();
+        if(!authenticationContext.loggedIn){
+            let sessionCookie = cookie.get("sessionCookie");
+            if (sessionCookie != null) {
+                const sessionIDAndUser = sessionCookie.split("/");
+                let cookieLoginInfo = {sessionId: sessionIDAndUser[0], username: sessionIDAndUser[1], loggedIn: true};
+                authenticationContext.storeLogin(cookieLoginInfo);
+            }
+        }
+
+        let themeCookie = cookie.get("Theme");
+
+        if (themeCookie != null) {
+            loadTheme(themeCookie);
+        }
     });
 
     function showLoginModal() {
@@ -74,15 +73,10 @@ const Header = () => {
         authenticationContext.logout()
     }
 
-    function loadTheme(test: string | undefined) {
+    function loadTheme(value: string) {
         const cookie = new Cookies();
-        if (test !== undefined) {
-            setTheme(test);
-        } else {
-            let value = style + " " + color;
-            cookie.set("Theme", value, {path: "/"});
-            setTheme(style + " " +  color);
-        }
+        cookie.set("Theme", value, {path: "/"});
+        setTheme(value);
     }
 
     return (
@@ -129,8 +123,8 @@ const Header = () => {
                                         </li>
                                         <li>
                                             <Link to={"/orders"} className="dropdown-item nav-link">
-                                                <BsBox size={15}></BsBox>
-                                                &nbsp;&nbsp;&nbsp;My Orders
+                                                <IoPricetags size={15}></IoPricetags>
+                                                &nbsp;&nbsp;&nbsp;Purchases
                                             </Link>
                                         </li>
                                         <li>
@@ -153,28 +147,33 @@ const Header = () => {
                                 <div className="dropdown-menu-custom p-2">
                                     <li className="no-border d-flex">
                                         <a className="pointer p-1 d-flex">
-                                            <FaSquareFull className="align-self-center" style={{color: "#000000", border: "2px solid black", borderRadius: "5px"}} size={18}
-                                                          onClick={() => {style = "mode-dark"; loadTheme(undefined)}}>
-                                            </FaSquareFull>
-                                        </a>
-                                        <a className="pointer p-1 pe-4 d-flex">
-                                            <FaSquareFull className="align-self-center" style={{color: "#ffffff", border: "2px solid black", borderRadius: "5px"}} size={18}
-                                                          onClick={() => {style = "mode-dark mode-light"; loadTheme(undefined)}}>
+                                            <FaSquareFull className="align-self-center" style={{color: "transparent", background: "linear-gradient(135deg, #000000 50%, #583475 50%)", border: "2px solid black", borderRadius: "5px"}} size={18}
+                                                          onClick={() => loadTheme("mode-dark mode-violet")}>
                                             </FaSquareFull>
                                         </a>
                                         <a className="pointer p-1 d-flex">
-                                            <FaSquareFull className="align-self-center" style={{color: "#583475", border: "2px solid black", borderRadius: "5px"}} size={18}
-                                                          onClick={() => {color = "mode-violet"; loadTheme(undefined)}}>
+                                            <FaSquareFull className="align-self-center" style={{color: "transparent", background: "linear-gradient(135deg, #000000 50%, #C27F00 50%)", border: "2px solid black", borderRadius: "5px"}} size={18}
+                                                          onClick={() => loadTheme("mode-dark mode-orange")}>
+                                            </FaSquareFull>
+                                        </a>
+                                        <a className="pointer p-1 pe-3 d-flex">
+                                            <FaSquareFull className="align-self-center" style={{color: "transparent", background: "linear-gradient(135deg, #000000 50%, #005078 50%)", border: "2px solid black", borderRadius: "5px"}} size={18}
+                                                          onClick={() => loadTheme("mode-dark mode-blue")}>
                                             </FaSquareFull>
                                         </a>
                                         <a className="pointer p-1 d-flex">
-                                            <FaSquareFull className="align-self-center" style={{color: "#C27F00", border: "2px solid black", borderRadius: "5px"}} size={18}
-                                                          onClick={() => {color = "mode-orange"; loadTheme(undefined)}}>
+                                            <FaSquareFull className="align-self-center" style={{color: "transparent", background: "linear-gradient(135deg, #ffffff 50%, #583475 50%)", border: "2px solid black", borderRadius: "5px"}} size={18}
+                                                          onClick={() => loadTheme("mode-dark mode-light mode-violet")}>
                                             </FaSquareFull>
                                         </a>
                                         <a className="pointer p-1 d-flex">
-                                            <FaSquareFull className="align-self-center" style={{color: "#005078", border: "2px solid black", borderRadius: "5px"}} size={18}
-                                                          onClick={() => {color = "mode-blue"; loadTheme(undefined)}}>
+                                            <FaSquareFull className="align-self-center" style={{color: "transparent", background: "linear-gradient(135deg, #ffffff 50%, #C27F00 50%)", border: "2px solid black", borderRadius: "5px"}} size={18}
+                                                          onClick={() => loadTheme("mode-dark mode-light mode-orange")}>
+                                            </FaSquareFull>
+                                        </a>
+                                        <a className="pointer p-1 d-flex">
+                                            <FaSquareFull className="align-self-center" style={{color: "transparent", background: "linear-gradient(135deg, #ffffff 50%, #005078 50%)", border: "2px solid black", borderRadius: "5px"}} size={18}
+                                                          onClick={() => loadTheme("mode-dark mode-light mode-blue")}>
                                             </FaSquareFull>
                                         </a>
                                     </li>
@@ -184,7 +183,7 @@ const Header = () => {
                     </li>
                 </ul>
             </div>
-            { displayLoginModal && <LoginPopup callbackFunction={closeLoginModal}/> }
+            { displayLoginModal && <LoginModal callbackFunction={closeLoginModal}/> }
         </div>
     );
 }

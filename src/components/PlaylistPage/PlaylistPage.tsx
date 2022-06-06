@@ -1,5 +1,4 @@
 import "@blueprintjs/table/lib/css/table.css";
-import './PlaylistPage.css';
 import {useContext, useEffect, useState} from "react";
 import SongPlayer from "./SongPlayer";
 import {Spinner, SpinnerSize} from "@blueprintjs/core";
@@ -24,7 +23,7 @@ function PlaylistPage() {
             };
 
             apiClient.getSong(getSongRequest).then(result => {
-                // fileDownload(result, "example.mp3", "audio/mpeg");
+                fileDownload(result, "example.mp3", "audio/mpeg");
             }).catch(response => {
                 if (response.status === 404) {
                     alert("Song not found");

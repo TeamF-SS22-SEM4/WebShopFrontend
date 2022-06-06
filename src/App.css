@@ -24,7 +24,7 @@
   --logo-url: url("resources/logo_2.png");
 }
 
-/*TODO background aktuell hässlich*/
+/*TODO background aktuell hässlich drowpdown hover gleich wie header usw...*/
 .mode-light {
   --color-text-1: #323232 !important;
   --color-text-2: #464646 !important;
@@ -58,6 +58,11 @@
 html, body, #root, .mode-dark, .mode-light, .mode-violet, .mode-orange, .mode-blue {
   height: 100%;
   overflow: hidden;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .header {
@@ -164,6 +169,10 @@ html, body, #root, .mode-dark, .mode-light, .mode-violet, .mode-orange, .mode-bl
   top: 0;
   position: sticky;
   background-color: var(--color-bg-1) !important;
+}
+
+.table td {
+  border: 0;
 }
 
 .table tbody tr:hover {

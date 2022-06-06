@@ -7,7 +7,8 @@ interface ProductDetailsPopupProps {
     callbackFunction: () => void;
 }
 
-const LoginPopup = ({callbackFunction}: ProductDetailsPopupProps) => {
+const LoginModal = ({callbackFunction}: ProductDetailsPopupProps) => {
+
     const authenticationContext = useContext(AuthenticationContext);
     const cookie = new Cookies();
     const [username, setUsername] = useState<string>();
@@ -23,25 +24,25 @@ const LoginPopup = ({callbackFunction}: ProductDetailsPopupProps) => {
 
         if (!username || !password) {
             setErrorMsg("Empty username or password!");
-            setDisplayErrorMsg(true);
             setIsLoading(false);
+            setDisplayErrorMsg(true);
         } else {
             const credentials = {username, password};
             apiClient.login({credentials}).then(resultDTO => {
                 setUsername("");
-                setPassword("")
+                setPassword("");
                 authenticationContext.storeLogin(resultDTO);
-                cookie.set('sessionCookie', resultDTO.sessionId + "/" + resultDTO.username, {maxAge: 1800, path: "/"});
+                cookie.set('sessionCookie', resultDTO.sessionId + "/" + resultDTO.username, {maxAge: 3600, path: "/"});
                 callbackFunction();
             }).catch(response => {
                 if (response.status === 403) {
                     setErrorMsg("Invalid username or password!");
-                    setDisplayErrorMsg(true);
                     setIsLoading(false);
+                    setDisplayErrorMsg(true);
                 } else {
-                    setErrorMsg("Something went wrong ...!");
-                    setDisplayErrorMsg(true);
+                    setErrorMsg("Something went wrong!");
                     setIsLoading(false);
+                    setDisplayErrorMsg(true);
                 }
             });
         }
@@ -81,4 +82,5 @@ const LoginPopup = ({callbackFunction}: ProductDetailsPopupProps) => {
         </div>
     )
 }
-export default LoginPopup;
+
+export default LoginModal;
