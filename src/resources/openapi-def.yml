@@ -23,6 +23,28 @@ paths:
         '403':
           description: invalid credentials
   /api/v1/orders:
+    get:
+      operationId: getPurchaseHistory
+      parameters:
+        - name: session-id
+          in: header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SaleDTO'
+        '401':
+          description: Not Authorized
+        '403':
+          description: Not Authenticated
+        '404':
+          description: User not found
     post:
       operationId: placeOrder
       parameters:
@@ -50,30 +72,6 @@ paths:
           description: Not Authenticated
         '404':
           description: unknown carrier id
-  /api/v1/orders/{userId}:
-    get:
-      operationId: getPurchaseHistory
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/UUID'
-        - name: session-id
-          in: header
-          schema:
-            type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/SaleDTO'
-        '403':
-          description: Not Authenticated
   /playlist-api/v1/playlists/{username}:
     get:
       summary: Get the Playlist of user
