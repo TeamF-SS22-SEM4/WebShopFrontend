@@ -23,6 +23,28 @@ paths:
         '403':
           description: invalid credentials
   /api/v1/orders:
+    get:
+      operationId: getPurchaseHistory
+      parameters:
+        - name: session-id
+          in: header
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SaleDTO'
+        '401':
+          description: Not Authorized
+        '403':
+          description: Not Authenticated
+        '404':
+          description: User not found
     post:
       operationId: placeOrder
       parameters:
@@ -256,6 +278,38 @@ components:
             $ref: '#/components/schemas/OrderItem'
         paymentInformation:
           $ref: '#/components/schemas/PaymentInformation'
+    SaleDTO:
+      type: object
+      properties:
+        invoiceNumber:
+          type: string
+        saleItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/SaleItemDTO'
+        totalPrice:
+          format: double
+          type: number
+    SaleItemDTO:
+      type: object
+      properties:
+        productName:
+          type: string
+        artistName:
+          type: string
+        soundCarrierId:
+          $ref: '#/components/schemas/UUID'
+        soundCarrierName:
+          type: string
+        amountOfCarriers:
+          format: int32
+          type: integer
+        pricePerCarrier:
+          format: float
+          type: number
+        refundedAmount:
+          format: int32
+          type: integer
     PlayableSongDTO:
       type: object
       properties:
