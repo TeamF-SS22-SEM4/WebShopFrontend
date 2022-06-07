@@ -56,13 +56,8 @@ function PlaylistPage() {
     }, [authState.username]);
 
     let songRows = songs.map((dto, index) => <SongRow index={index} albumName={dto.albumName} title={dto.title} artist={dto.artists} duration={dto.duration} setPlayingIndex={setPlayingIndex} downloadSong={downloadSong}/>)
-
     let currentSrc;
-    if (songs[playingIndex]) {
-        currentSrc = songs[playingIndex].filePath
-    } else {
-        currentSrc = "";
-    }
+
     return (
         <div>
             <h1 style={{textAlign: "center", fontSize: 45}}>Your songs</h1>

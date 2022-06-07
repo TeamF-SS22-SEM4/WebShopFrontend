@@ -321,8 +321,6 @@ components:
           type: string
         duration:
           type: string
-        filePath:
-          type: string
         artists:
           type: string
     SongDTO:
