@@ -14,7 +14,7 @@ const CartPage = () => {
     const navigate = useNavigate();
 
     const [totalPrice, setTotalPrice] = useState<number>(0);
-    const [paymentMethod, setPaymentMethod] = useState<string>("Credit card");
+    const [paymentMethod, setPaymentMethod] = useState<string>("Credit Card");
     const [creditCardType, setCreditCardType] = useState<string>("MASTERCARD");
     const [creditCardNumber, setCreditCardNumber] = useState<string>("");
     const [cvc, setCvc] = useState<string>("");
@@ -70,7 +70,7 @@ const CartPage = () => {
         setMessageText("");
 
         let isValidForm: boolean = true;
-        if(paymentMethod === "Credit card") {
+        if(paymentMethod === "Credit Card") {
             if(creditCardType === "" || creditCardNumber === "" || cvc === "") {
                 isValidForm = false;
             }
@@ -183,10 +183,10 @@ const CartPage = () => {
                         <div className="row pt-3 px-3" style={{maxHeight: "15%"}}>
                             <div className="col-3 pt-2">
                                 <select className="form-select small-control" onChange={(evt) => setPaymentMethod(evt.currentTarget.value)}>
-                                    <option value="Credit card">Credit card</option>
+                                    <option value="Credit Card">Credit Card</option>
                                     <option value="Invoice">Invoice</option>
                                 </select>
-                                { paymentMethod === "Credit card" &&
+                                { paymentMethod === "Credit Card" &&
                                     <>
                                         <select className="form-select small-control my-1" value={creditCardType} onChange={(evt) => setCreditCardType(evt.target.value)}>
                                             <option value="MASTERCARD">Mastercard</option>
