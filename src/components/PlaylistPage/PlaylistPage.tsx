@@ -1,5 +1,5 @@
 import "@blueprintjs/table/lib/css/table.css";
-import {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import SongPlayer from "./SongPlayer";
 import {Spinner, SpinnerSize} from "@blueprintjs/core";
 import SongRow from "./SongRow";
@@ -35,15 +35,11 @@ function PlaylistPage() {
         }
     }
 
-    let playNext = () => {
-        //TODO
-    }
-
     useEffect(() => {
         apiClient.getPlaylist({username: authState.username}).then(arr => {
             setSongs(arr);
             setSongsLoading(false);
-            setEmptyPlaylist(false)
+            setEmptyPlaylist(false);
         }).catch(err => {
             if (err.status === 404) {
                 setEmptyPlaylist(true);
@@ -55,38 +51,36 @@ function PlaylistPage() {
         })
     }, [authState.username]);
 
-    let songRows = songs.map((dto, index) => <SongRow index={index} albumName={dto.albumName} title={dto.title} artist={dto.artists} duration={dto.duration} setPlayingIndex={setPlayingIndex} downloadSong={downloadSong}/>)
-    let currentSrc;
-
     return (
-        <div>
-            <h1 style={{textAlign: "center", fontSize: 45}}>Your songs</h1>
-            {songsLoading && <Spinner size={SpinnerSize.LARGE}/>}
-            {!songsLoading && <div>
-                <table style={{width: "100%"}}>
-                    <thead>
-                        <tr>
-                            <th></th> {/*Play- button*/}
-                            <th><h1 style={{textAlign: "center"}}>Title</h1></th>
-                            <th><h1 style={{textAlign: "center"}}>Artist</h1></th>
-                            <th><h1 style={{textAlign: "center"}}>Duration</h1></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {songRows}
-                    </tbody>
-                </table>
-            </div>}
+        <div className="content">
+            <div className="container h-100 pt-5 pb-4">
+            {
+                emptyPlaylist ?
+                <div className="row justify-content-center h-25">
+                    <span className="h4 text-center m-auto">There seems to be nothing here. &#128577;</span>
+                </div>
 
-            {emptyPlaylist && <h1 style={{textAlign: "center"}}>There seems to be nothing here. &#128577;</h1>}
+                :
 
-            <div style={{
-                position: "fixed",
-                bottom: 0,
-                width: "100%",
-            }}>
-                <SongPlayer source={currentSrc} playNext={playNext}/>
+                    <div className="justify-content-center" style={{height: "80%"}}>
+                        <div className="table-wrapper">
+                            <table className="table">
+                                <thead>
+                                <tr>
+                                    <th className="py-4 col-3">Album</th>
+                                    <th className="py-4 col-3">Artist</th>
+                                    <th className="py-4 col-3">Genre</th>
+                                    <th className="py-4 col-1 text-center">Release</th>
+                                    <th className="py-4 col-1 text-center">Price</th>
+                                    <th className="py-4 col-3"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+            }
             </div>
         </div>
     )
