@@ -52,6 +52,9 @@ const PurchasesPage = () => {
                                                 {purchase.invoiceNumber}
                                             </div>
                                             <div className="col text-center">
+                                                {purchase.dateOfSale}
+                                            </div>
+                                            <div className="col text-end">
                                                 {purchase.totalPrice} €&nbsp;&nbsp;&nbsp;
                                             </div>
                                         </button>

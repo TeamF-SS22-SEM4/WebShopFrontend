@@ -290,6 +290,8 @@ components:
         totalPrice:
           format: double
           type: number
+        dateOfSale:
+          type: string
     SaleItemDTO:
       type: object
       properties:
