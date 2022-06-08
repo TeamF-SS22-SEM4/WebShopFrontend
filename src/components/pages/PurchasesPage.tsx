@@ -65,6 +65,7 @@ const PurchasesPage = () => {
                                                         <th className="col">Artist</th>
                                                         <th className="col">Type</th>
                                                         <th className="col-2">Amount</th>
+                                                        <th className="col-2">Unit price</th>
                                                         <th className="col-1 text-end">Price</th>
                                                     </tr>
                                                 </thead>
@@ -76,7 +77,14 @@ const PurchasesPage = () => {
                                                             <td className="align-middle">{saleItem.artistName}</td>
                                                             <td className="align-middle">{saleItem.soundCarrierName}</td>
                                                             <td className="align-middle">{saleItem.amountOfCarriers}</td>
-                                                            <td className="align-middle text-end">{saleItem.pricePerCarrier} €</td>
+                                                            <td className="align-middle">{saleItem.pricePerCarrier} €</td>
+                                                            <td className="align-middle text-end">
+                                                                {
+                                                                    (saleItem.pricePerCarrier !== undefined && saleItem.amountOfCarriers !== undefined)
+                                                                    &&
+                                                                    saleItem.pricePerCarrier * saleItem.amountOfCarriers
+                                                                } €
+                                                            </td>
                                                         </tr>
                                                     )}
                                                 </tbody>
