@@ -9,9 +9,9 @@ import 'normalize.css/normalize.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
 import './App.css';
-import PlaylistPage from "./components/PlaylistPage/PlaylistPage";
 import RestrictionPage from "./components/pages/RestrictionPage";
 import PurchasesPage from "./components/pages/PurchasesPage";
+import Playlist from "./components/pages/Playlist";
 
 //set up open api client
 const apiUrl = window.location.origin === "http://localhost:3000" ? "http://localhost:80" : window.location.origin;
@@ -135,7 +135,7 @@ function App(this: any) {
                             <Route path="/cart" element={ <CartPage/>}/>
                             <Route path="/playlist" element={
                                 <RestrictionPage>
-                                    <PlaylistPage/>
+                                    <Playlist />
                                 </RestrictionPage>
                             }/>
                             <Route path="/purchases" element={
