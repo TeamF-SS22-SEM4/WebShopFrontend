@@ -75,31 +75,37 @@ const HomePage = () => {
     }
 
     function fetchProducts(searchButtonClicked: boolean) {
+        let tempPageNumber = pageNumber;
+
+        if (searchButtonClicked) {
+            tempPageNumber = 1;
+            setPageNumber(tempPageNumber);
+        }
+
         setIsLoadingProducts(true);
         const searchProductsRequest: SearchProductsRequest = {
             search: searchTerm,
-            pageNumber: pageNumber
+            pageNumber: tempPageNumber
         };
-
-        if (searchButtonClicked) {
-            setPageNumber(1);
-        }
 
         apiClient.searchProducts(searchProductsRequest).then(result => {
             if(result.length < 19){
                 setAllProductsLoaded(true);
+                setPageNumber(1);
             }
             if (searchButtonClicked) {
                 setProducts(result);
                 setAllProductsLoaded(false);
+                setPageNumber(tempPageNumber + 1);
             } else {
                 let other: ProductOverviewDTO[] = products.concat(result);
                 setProducts(other);
             }
+
             setIsLoadingProducts(false);
         }).catch(() => {
             //TODO: bessere Lösung finden
-            fetchProducts(false);
+            // fetchProducts(false);
         });
     }
 
@@ -116,8 +122,9 @@ const HomePage = () => {
 
     function scrollHandler (e: any) {
         if(e.scrollTop + e.offsetHeight >= e.scrollHeight) {
-            if (products.length > 0) {
-                setPageNumber(pageNumber + 1);
+            if (products.length > 0 && !allProductsLoaded) {
+                let tempPageNumber = pageNumber;
+                setPageNumber(tempPageNumber + 1);
                 fetchProducts(false);
             }
         }
@@ -140,8 +147,8 @@ const HomePage = () => {
                             </div>
 
                         :
-                            <div className="justify-content-center" style={{height: "80%"}}>
-                                <div className="table-wrapper" style={allProductsLoaded ? {height: "100%"} : {height: "95%"}} onScroll={(e) => scrollHandler(e.target)}>
+                            <>
+                                <div className="justify-content-center table-wrapper" style={allProductsLoaded ? {maxHeight: "80%"} : {maxHeight: "75%"}} onScroll={(e) => scrollHandler(e.target)}>
                                     <table className="table">
                                         <thead>
                                             <tr>
@@ -181,7 +188,7 @@ const HomePage = () => {
                                 <div className={(isLoadingProducts && !allProductsLoaded) ? "d-flex p-2 justify-content-center" : "d-flex p-2 justify-content-center invisible"} style={allProductsLoaded ? {height: "0%"} : {height: "5%"}}>
                                     <div className="spinner-border-sm spinner-border align-self-center"></div>
                                 </div>
-                            </div>
+                            </>
                         }
                     </>
             </div>

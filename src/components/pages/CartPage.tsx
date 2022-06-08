@@ -20,6 +20,7 @@ const CartPage = () => {
     const [cvc, setCvc] = useState<string>("");
 
     const[messageText, setMessageText] = useState<string>("");
+    const[isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {     
         calculateTotalPrice();
@@ -66,6 +67,7 @@ const CartPage = () => {
     }
 
     function placeOrder() {
+        setIsLoading(true);
         text = text + " ";
         setMessageText("");
 
@@ -105,6 +107,7 @@ const CartPage = () => {
             };
 
             apiClient.placeOrder(placeOrderRequest).then(() => {
+                setIsLoading(false);
                 setPaymentMethod("");
                 setCreditCardNumber("");
                 setCvc("");
@@ -112,6 +115,7 @@ const CartPage = () => {
                 shoppingCartContext.setItems(shoppingCart.length);
                 navigate("/purchases");
             }).catch(response => {
+                setIsLoading(false);
                 if (response.status === 403) {
                     setMessageText("Not Authenticated!" + text);
                 } else if (response.status === 401) {
@@ -125,12 +129,12 @@ const CartPage = () => {
                 }
             });
         } else {
+            setIsLoading(false);
             setMessageText("You have to enter the payment information!" + text);
         }
     }
 
     //TODO: Feedback wenn Item nicht mehr verfügbar?
-    //TODO: Kreditkartendaten werden nicht geprüft?!
 
     return (
         <div className="content">
@@ -216,7 +220,13 @@ const CartPage = () => {
                                 }
                             </div>
                             <div className="col align-self-center text-center">
-                                <p key={messageText} style={{margin: 0}} className={authenticationContext.loggedIn ? "fw-bolder error breath-animation" : "fw-bolder error"}>{authenticationContext.loggedIn ? messageText : "You have to login for paying!"}</p>
+                                { isLoading ?
+                                    <div className="d-flex p-2 justify-content-center">
+                                        <div className="spinner-border-sm spinner-border align-self-center"></div>
+                                    </div>
+                                :
+                                    <p key={messageText} style={{margin: 0}} className={authenticationContext.loggedIn ? "fw-bolder error breath-animation" : "fw-bolder error"}>{authenticationContext.loggedIn ? messageText : "You have to login for paying!"}</p>
+                                }
                             </div>
                             <div className="col-2 row text-end">
                                 <span className="align-self-start">Total price<br/><span className="fw-bolder">{totalPrice} €</span></span>

@@ -23,7 +23,6 @@ const setSessionIdInClient = (token: string) => {
     apiClient = new DefaultApi(new Configuration(
         {...configParams,
         headers: {"session-id": token}}
-        //TODO change to http-auth header
     ))
 }
 
