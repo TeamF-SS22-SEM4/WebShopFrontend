@@ -149,9 +149,13 @@ const PlaylistPage = () => {
             </div>
             <div style={{position: "fixed", bottom: 0, width: "100%"}}>
                 <p>{playingSongTitle}</p>
-                <AudioPlayer src={playingSong} onEnded={playNext} onClickNext={playNext}
-                             onClickPrevious={playPrevious} autoPlay={false}
-                             autoPlayAfterSrcChange={true} showJumpControls={false}
+                <AudioPlayer src={playingSong}
+                             onEnded={playNext}
+                             onClickNext={playNext}
+                             onClickPrevious={playPrevious}
+                             autoPlay={false}
+                             autoPlayAfterSrcChange={true}
+                             showJumpControls={false}
                              showSkipControls={true}/>
             </div>
         </div>

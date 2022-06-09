@@ -54,7 +54,7 @@ const PurchasesPage = () => {
                                     purchases.map((purchase, index) =>
                                         <div className="accordion-item">
                                             <h2 className="accordion-header">
-                                                <button className="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target={"#a" + (index + 1)} aria-expanded="false">
+                                                <button className={index === 0 ? "accordion-button" : "accordion-button collapsed"} data-bs-toggle="collapse" data-bs-target={"#a" + (index + 1)} aria-expanded="false">
                                                     <div className="col fw-bolder">
                                                         {purchase.invoiceNumber}
                                                     </div>
@@ -66,7 +66,7 @@ const PurchasesPage = () => {
                                                     </div>
                                                 </button>
                                             </h2>
-                                            <div id={"a" + (index + 1)} className="accordion-collapse collapse">
+                                            <div id={"a" + (index + 1)} className={index === 0 ? "accordion-collapse collapse show" : "accordion-collapse collapse"}>
                                                 <div className="accordion-body">
                                                     <table className="table">
                                                         <thead>
