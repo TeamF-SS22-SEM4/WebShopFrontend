@@ -11,7 +11,7 @@ import 'bootstrap/dist/js/bootstrap.min.js'
 import './App.css';
 import RestrictionPage from "./components/pages/RestrictionPage";
 import PurchasesPage from "./components/pages/PurchasesPage";
-import Playlist from "./components/pages/Playlist";
+import PlaylistPage from "./components/pages/PlaylistPage";
 
 //set up open api client
 const apiUrl = window.location.origin === "http://localhost:3000" ? "http://localhost:80" : window.location.origin;
@@ -135,7 +135,7 @@ function App(this: any) {
                             <Route path="/cart" element={ <CartPage/>}/>
                             <Route path="/playlist" element={
                                 <RestrictionPage>
-                                    <Playlist />
+                                    <PlaylistPage />
                                 </RestrictionPage>
                             }/>
                             <Route path="/purchases" element={

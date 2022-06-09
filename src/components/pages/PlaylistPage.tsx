@@ -4,8 +4,10 @@ import {apiClient, AuthenticationContext} from "../../App";
 import fileDownload from "js-file-download";
 import AudioPlayer from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
+import {MdFileDownload, MdPlayArrow} from "react-icons/md";
 
-const Playlist = () => {
+const PlaylistPage = () => {
+
     const [songs, setSongs] = useState<PlayableSongDTO[]>([]);
     const [emptyPlaylist, setEmptyPlaylist] = useState(true);
     const [playingSong, setPlayingSong] = useState<string>("");
@@ -96,19 +98,14 @@ const Playlist = () => {
     return (
         <div className="content">
             <div className="container h-100 py-5">
-                <div className="row justify-content-center" style={{"height": "20%"}}>
-                    <h4 className="align-self-center text-center">Playlist</h4>
-                    {
-
-                        emptyPlaylist ?
-                        <div className="row justify-content-center h-25">
-                            <span className="h4 text-center m-auto">There seems to be nothing here. &#128577;</span>
-                        </div>
-
-                        :
-
-                        <>
-                        <div className="justify-content-center" style={{height: "80%"}}>
+                <h4 className="mb-3">Playlist</h4>
+                {songs.length === 0 ?
+                    <div className="row justify-content-center h-25">
+                        <span className="h4 text-center m-auto">No songs found!</span>
+                    </div>
+                :
+                    <>
+                        <div className="justify-content-center">
                             <div className="table-wrapper">
                                 <table className="table">
                                     <thead>
@@ -124,39 +121,41 @@ const Playlist = () => {
                                     <tbody>
                                     {
                                         songs.map((song, index) =>
-                                        <tr key={song.songId}>
-                                            <td>
-                                                <button className='btn btn-p btn-sm m-1' onClick={() => playSong(index, song.albumName, song.title)}>
-                                                    Play
-                                                </button>
-                                            </td>
-                                            <td>{song.title}</td>
-                                            <td>{song.albumName}</td>
-                                            <td>{song.artists}</td>
-                                            <td>{song.duration}</td>
-                                            <td>
-                                                <button className='btn btn-p btn-sm m-1' onClick={() => downloadSong(song.albumName, song.title)}>
-                                                    Download
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    )}
+                                            <tr key={song.songId}>
+                                                <td>
+                                                    <button className='btn btn-p btn-sm m-1'
+                                                            onClick={() => playSong(index, song.albumName, song.title)}>
+                                                        <MdPlayArrow size={25}></MdPlayArrow>
+                                                    </button>
+                                                </td>
+                                                <td>{song.title}</td>
+                                                <td>{song.albumName}</td>
+                                                <td>{song.artists}</td>
+                                                <td>{song.duration}</td>
+                                                <td>
+                                                    <button className='btn btn-p btn-sm'
+                                                            onClick={() => downloadSong(song.albumName, song.title)}>
+                                                        <MdFileDownload size={25}></MdFileDownload>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        )}
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-
-                        <div style={{position: "fixed", bottom: 0, width: "100%"}}>
-                            <p>{playingSongTitle}</p>
-                            <AudioPlayer src={playingSong} onEnded={playNext} onClickNext={playNext} onClickPrevious={playPrevious} autoPlay={false} autoPlayAfterSrcChange={true} showJumpControls={false} showSkipControls={true}/>
-                        </div>
-
-                        </>
-                    }
-                </div>
+                    </>
+                }
+            </div>
+            <div style={{position: "fixed", bottom: 0, width: "100%"}}>
+                <p>{playingSongTitle}</p>
+                <AudioPlayer src={playingSong} onEnded={playNext} onClickNext={playNext}
+                             onClickPrevious={playPrevious} autoPlay={false}
+                             autoPlayAfterSrcChange={true} showJumpControls={false}
+                             showSkipControls={true}/>
             </div>
         </div>
     )
 }
 
-export default Playlist;
+export default PlaylistPage;

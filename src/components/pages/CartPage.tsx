@@ -139,8 +139,12 @@ const CartPage = () => {
     return (
         <div className="content">
             <div className="container h-100 pt-5 pb-4">
-                { shoppingCart.length > 0 ?
-                    <>
+                { shoppingCart.length === 0 ?
+                    <div className="row justify-content-center" style={{"height": "20%"}}>
+                        <h4 className="align-self-center text-center">Cart is empty!</h4>
+                    </div>
+                :
+                   <>
                         <div className="table-wrapper" style={{maxHeight: "85%"}}>
                             <table className="table">
                                 <thead>
@@ -236,10 +240,6 @@ const CartPage = () => {
                             </div>
                         </div>
                     </>
-                :
-                    <div className="row justify-content-center" style={{"height": "20%"}}>
-                        <h4 className="align-self-center text-center">Cart is empty!</h4>
-                    </div>
                 }
             </div>
         </div>

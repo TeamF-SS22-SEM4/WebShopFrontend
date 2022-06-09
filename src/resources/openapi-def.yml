@@ -74,7 +74,7 @@ paths:
           description: unknown carrier id
   /playlist-api/v1/playlists/{username}:
     get:
-      summary: Get the Playlist of user
+      summary: Get the PlaylistPage of user
       operationId: getPlaylist
       parameters:
         - name: username

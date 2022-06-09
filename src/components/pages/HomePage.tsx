@@ -75,6 +75,8 @@ const HomePage = () => {
     }
 
     function fetchProducts(searchButtonClicked: boolean) {
+        setIsLoadingProducts(true);
+
         let tempPageNumber = pageNumber;
 
         if (searchButtonClicked) {
@@ -82,7 +84,6 @@ const HomePage = () => {
             setPageNumber(tempPageNumber);
         }
 
-        setIsLoadingProducts(true);
         const searchProductsRequest: SearchProductsRequest = {
             search: searchTerm,
             pageNumber: tempPageNumber
@@ -145,12 +146,11 @@ const HomePage = () => {
                             <div className="row justify-content-center h-25">
                                 <span className="h4 text-center m-auto">No entries found!</span>
                             </div>
-
                         :
                             <>
                                 <div className="justify-content-center table-wrapper" style={allProductsLoaded ? {maxHeight: "80%"} : {maxHeight: "75%"}} onScroll={(e) => scrollHandler(e.target)}>
                                     <table className="table">
-                                        <thead>
+                                        <thead className="fixed-head">
                                             <tr>
                                                 <th className="py-4 col-3">Album</th>
                                                 <th className="py-4 col-3">Artist</th>

@@ -174,9 +174,12 @@ body {
 }
 
 .table thead th {
+  background-color: var(--color-bg-1) !important;
+}
+
+.fixed-head {
   top: 0;
   position: sticky;
-  background-color: var(--color-bg-1) !important;
 }
 
 .table td {

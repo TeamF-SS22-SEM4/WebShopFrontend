@@ -13,12 +13,16 @@ function RestrictionPage({children}: BaseLayoutProps) {
             <div className="content">
                 <div className="container h-100 py-5">
                     <div className="row justify-content-center" style={{"height": "20%"}}>
-                        <h4 className="align-self-center text-center">You have to be logged in!</h4>
+                        <h4 className="align-self-center text-center">You have be logged in!</h4>
+                    </div>
+                    <div className="row justify-content-center">
+                    <Link to={"/"} className="btn btn-p" style={{width: "150px"}}>
+                        Back Home
+                    </Link>
                     </div>
                 </div>
             </div>
         )
-        //TODO: back home button fehlt
     }
     return <>{children}</>
 }
