@@ -8,3 +8,9 @@ services:
       dockerfile: Dockerfile-deploy
     ports:
       - "${OUTWARD_PORT:-80}:80"
+    networks:
+      - frontend_backend # Exists already on server
+
+networks:
+  frontend_backend:
+    external: true
