@@ -23,7 +23,6 @@ const PlaylistPage = () => {
             if (err.status === 404) {
                 setEmptyPlaylist(true);
             }
-            //TODO state for misc error
         })
     }, [authState.username]);
 

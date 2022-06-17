@@ -82,10 +82,6 @@ paths:
           required: true
           schema:
             type: string
-        - name: session-id
-          in: header
-          schema:
-            type: string
       responses:
         '200':
           description: OK
@@ -95,10 +91,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/PlayableSongDTO'
-        '401':
-          description: Unauthorized
-        '403':
-          description: Not Authenticated
         '404':
           description: User not found
   /download-api/v1/songs/{username}/{albumName}/{songName}:
