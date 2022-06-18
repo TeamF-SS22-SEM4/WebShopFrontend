@@ -105,7 +105,7 @@ const HomePage = () => {
 
             setIsLoadingProducts(false);
         }).catch(() => {
-            //TODO: bessere Lösung finden
+            // Returns empty list if nothing is found so nothing to do here
             // fetchProducts(false);
         });
     }
@@ -116,8 +116,11 @@ const HomePage = () => {
         apiClient.getProduct(getProductRequest).then(result => {
             setProductDetail(result);
             setIsLoadingProductDetail(false);
-        }).catch(() => {
-            //TODO: bessere Lösung finden
+        }).catch(response => {
+            // TODO: Visual Feedback
+            if (response.status === 404) {
+                console.log("Productdetails not found");
+            }
         });
     }
 
