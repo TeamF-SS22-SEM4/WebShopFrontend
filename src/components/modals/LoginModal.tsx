@@ -60,12 +60,12 @@ const LoginModal = ({callbackFunction}: ProductDetailsPopupProps) => {
                         <p className={displayErrorMsg ? "col text-center error fw-bolder py-2" : "col text-center error fw-bolder py-2 invisible"}>{errorMsg}</p>
                         <div className="input-group align-items-center w-50 m-auto pb-2">
                             <FaUserAlt className="me-3"></FaUserAlt>
-                            <input className="form-control login-input" type="text" placeholder="username"
+                            <input className="form-control login-input" id="username-input" type="text" placeholder="username"
                                    onInput={e => setUsername((e.target as HTMLInputElement).value)}/>
                         </div>
                         <div className="input-group align-items-center w-50 m-auto pb-3">
                             <FaLock className="me-3"></FaLock>
-                            <input className="form-control login-input" type="password" placeholder="password"
+                            <input className="form-control login-input" id="password-input" type="password" placeholder="password"
                                    onInput={e => setPassword((e.target as HTMLInputElement).value)}
                                    onKeyDown={e => e.key === 'Enter' && doLogin()}/>
                         </div>
