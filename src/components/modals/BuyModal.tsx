@@ -113,6 +113,9 @@ const BuyModal = ({callbackFunction, product, isLoading}: BuyModalProps) => {
                                                         if (soundCarrier.amountAvailable !== undefined && parseInt(event.target.value) > soundCarrier.amountAvailable) {
                                                             event.target.value = String(soundCarrier.amountAvailable);
                                                         }
+                                                        if (soundCarrier.amountAvailable !== undefined && parseInt(event.target.value) < 0) {
+                                                            event.target.value = String(0);
+                                                        }
                                                         updateSelectedSoundCarriers(soundCarrier, parseInt(event.target.value))
                                                     }}
                                                 />

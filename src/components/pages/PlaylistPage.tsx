@@ -104,50 +104,48 @@ const PlaylistPage = () => {
                     </div>
                 :
                     <>
-                        <div className="justify-content-center">
-                            <div className="table-wrapper">
+                        <div className="justify-content-center table-wrapper" style={{maxHeight: "80%"}}>
                                 <table className="table">
-                                    <thead>
+                                    <thead className="fixed-head">
                                     <tr>
-                                        <th className="py-4 col-3"></th>
-                                        <th className="py-4 col-3">Title</th>
-                                        <th className="py-4 col-3">Album</th>
-                                        <th className="py-4 col-3">Artist</th>
-                                        <th className="py-4 col-3">Duration</th>
-                                        <th className="py-4 col-3"></th>
+                                        <th className="py-4"></th>
+                                        <th className="py-4">Title</th>
+                                        <th className="py-4">Album</th>
+                                        <th className="py-4">Artist</th>
+                                        <th className="py-4">Duration</th>
+                                        <th className="py-4"></th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     {
                                         songs.map((song, index) =>
                                             <tr key={song.songId}>
-                                                <td>
+                                                <td className="align-middle">
                                                     <button className='btn btn-p btn-sm m-1'
                                                             onClick={() => playSong(index, song.albumName, song.title)}>
-                                                        <MdPlayArrow size={25}></MdPlayArrow>
+                                                        <MdPlayArrow size={20}></MdPlayArrow>
                                                     </button>
                                                 </td>
-                                                <td>{song.title}</td>
-                                                <td>{song.albumName}</td>
-                                                <td>{song.artists}</td>
-                                                <td>{song.duration}</td>
-                                                <td>
+                                                <td className="align-middle">{song.title}</td>
+                                                <td className="align-middle">{song.albumName}</td>
+                                                <td className="align-middle">{song.artists}</td>
+                                                <td className="align-middle">{song.duration}</td>
+                                                <td className="align-middle">
                                                     <button className='btn btn-p btn-sm'
                                                             onClick={() => downloadSong(song.albumName, song.title)}>
-                                                        <MdFileDownload size={25}></MdFileDownload>
+                                                        <MdFileDownload size={20}></MdFileDownload>
                                                     </button>
                                                 </td>
                                             </tr>
                                         )}
                                     </tbody>
                                 </table>
-                            </div>
                         </div>
                     </>
                 }
             </div>
             <div style={{position: "fixed", bottom: 0, width: "100%"}}>
-                <p>{playingSongTitle}</p>
+                <p className="px-4">{playingSongTitle}</p>
                 <AudioPlayer src={playingSong}
                              onEnded={playNext}
                              onClickNext={playNext}
@@ -155,7 +153,9 @@ const PlaylistPage = () => {
                              autoPlay={false}
                              autoPlayAfterSrcChange={true}
                              showJumpControls={false}
-                             showSkipControls={true}/>
+                             showSkipControls={true}
+                             showFilledVolume={true}
+                             className="player"/>
             </div>
         </div>
     )

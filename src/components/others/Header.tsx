@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from "react";
 import {AuthenticationContext, ShoppingCartContext, useThemeContext} from "../../App";
 import {Link} from "react-router-dom";
 import {FaHome, FaMusic, FaShoppingCart, FaSquareFull, FaUserAlt} from "react-icons/fa";
-import { FiLogIn, FiLogOut } from "react-icons/fi";
+import {FiLogIn, FiLogOut} from "react-icons/fi";
 import LoginModal from "../modals/LoginModal";
 import Cookie from "universal-cookie";
 import Cookies from "universal-cookie";
@@ -84,60 +84,83 @@ const Header = () => {
             <div className="container d-flex align-items-center justify-content-between">
                 <Link to={"/"} className="header-logo" />
                 <ul className="nav">
-                    <li className="m-2">
-                        <Link to={"/"} className="nav-link">
-                            <FaHome size={20}></FaHome>
-                            &nbsp;&nbsp;&nbsp;Home
-                        </Link>
-                    </li>
-                    <li className="m-2">
-                        <Link to={"/cart"} className="nav-link position-relative">
-                            <FaShoppingCart size={18}></FaShoppingCart>
-                            &nbsp;&nbsp;&nbsp;Cart
-                            { shoppingCartContext.items > 0 &&
-                                <span key={shoppingCartContext.items} className="position-absolute top-25 start-100 translate-middle badge rounded-pill bg-danger grow-animation">
+                    { !isLoggedIn ?
+                        <>
+                        <li className="m-2">
+                            <Link to={"/"} className="nav-link">
+                                <FaHome size={20}></FaHome>
+                                &nbsp;&nbsp;&nbsp;Home
+                            </Link>
+                        </li>
+                        <li className="m-2">
+                            <Link to={"/cart"} className="nav-link position-relative">
+                                <FaShoppingCart size={18}></FaShoppingCart>
+                                &nbsp;&nbsp;&nbsp;Cart
+                                { shoppingCartContext.items > 0 &&
+                                    <span key={shoppingCartContext.items} className="position-absolute top-25 start-100 translate-middle badge rounded-pill bg-danger grow-animation">
                                     {shoppingCartContext.items}
                                 </span>
-                            }
-                        </Link>
-                    </li>
-                    <li className="m-2">
-                        { !isLoggedIn ?
+                                }
+                            </Link>
+                        </li>
+                        <li className="m-2">
                             <a className="nav-link" onClick={() => showLoginModal()}>
-                                <FiLogIn size={20}></FiLogIn>
+                                <FiLogIn size={18}></FiLogIn>
                                 &nbsp;&nbsp;&nbsp;Login
                             </a>
-                        :
+                        </li>
+                        </>
+                    :
+                        <>
+                        <li className="m-2">
+                            <Link to={"/"} className="nav-link">
+                                <FaHome size={20}></FaHome>
+                                &nbsp;&nbsp;&nbsp;Home
+                            </Link>
+                        </li>
+                        <li className="m-2">
+                            <Link to={"/playlist"} className="dropdown-item nav-link">
+                                <FaMusic size={18}></FaMusic>
+                                &nbsp;&nbsp;&nbsp;Playlist
+                            </Link>
+                        </li>
+                        <li className="m-2">
+                            <Link to={"/purchases"} className="dropdown-item nav-link">
+                                <IoPricetags size={18}></IoPricetags>
+                                &nbsp;&nbsp;&nbsp;Purchases
+                            </Link>
+                        </li>
+                        <li className="m-2">
+                            <Link to={"/cart"} className="nav-link position-relative">
+                                <FaShoppingCart size={18}></FaShoppingCart>
+                                &nbsp;&nbsp;&nbsp;Cart
+                                { shoppingCartContext.items > 0 &&
+                                    <span key={shoppingCartContext.items} className="position-absolute top-25 start-100 translate-middle badge rounded-pill bg-danger grow-animation">
+                                {shoppingCartContext.items}
+                            </span>
+                                }
+                            </Link>
+                        </li>
+                        <li className="m-2">
                             <div className="dropdown">
-                                <a className="dropdown-toggle nav-link">
-                                    <FaUserAlt size={16}></FaUserAlt>
+                                <a className="nav-link">
+                                    <FaUserAlt size={18}></FaUserAlt>
                                     &nbsp;&nbsp;&nbsp;{username}
                                 </a>
                                 <ul className="dropdown-menu">
                                     <div className="pt-1 pb-2 px-2 dropdown-menu-custom">
                                         <li>
-                                            <Link to={"/playlist"} className="dropdown-item nav-link">
-                                                <FaMusic size={15}></FaMusic>
-                                                &nbsp;&nbsp;&nbsp;Playlist
-                                            </Link>
-                                        </li>
-                                        <li>
-                                            <Link to={"/purchases"} className="dropdown-item nav-link">
-                                                <IoPricetags size={15}></IoPricetags>
-                                                &nbsp;&nbsp;&nbsp;Purchases
-                                            </Link>
-                                        </li>
-                                        <li>
                                             <a onClick={() => logout()} className="dropdown-item nav-link">
-                                                <FiLogOut size={15}></FiLogOut>
+                                                <FiLogOut size={18}></FiLogOut>
                                                 &nbsp;&nbsp;&nbsp;Logout
                                             </a>
                                         </li>
                                     </div>
                                 </ul>
                             </div>
-                        }
-                    </li>
+                        </li>
+                        </>
+                    }
                     <li className="m-2">
                         <div className="dropdown">
                             <a className="nav-link">

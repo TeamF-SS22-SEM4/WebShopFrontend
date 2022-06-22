@@ -1,8 +1,7 @@
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {GetProductRequest, ProductDetailsDTO, ProductOverviewDTO, SearchProductsRequest} from "../../openapi-client";
 import {apiClient} from "../../App";
-import React from 'react';
-import { FaSearch } from 'react-icons/fa';
+import {FaSearch} from 'react-icons/fa';
 import DetailModal from "../modals/DetailModal";
 import BuyModal from "../modals/BuyModal";
 
@@ -106,7 +105,6 @@ const HomePage = () => {
             setIsLoadingProducts(false);
         }).catch(() => {
             // Returns empty list if nothing is found so nothing to do here
-            // fetchProducts(false);
         });
     }
 
@@ -117,9 +115,8 @@ const HomePage = () => {
             setProductDetail(result);
             setIsLoadingProductDetail(false);
         }).catch(response => {
-            // TODO: Visual Feedback
             if (response.status === 404) {
-                console.log("Productdetails not found");
+                alert("Productdetails not found");
             }
         });
     }

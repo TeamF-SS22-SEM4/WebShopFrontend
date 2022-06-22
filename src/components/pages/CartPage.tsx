@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {apiClient, AuthenticationContext, ShoppingCartContext} from "../../App";
-import { ShoppingCartItem } from "../others/ShoppingCartItem";
+import {ShoppingCartItem} from "../others/ShoppingCartItem";
 import {OrderItem, PaymentInformation, PlaceOrderRequest, Purchase} from "../../openapi-client";
 import {FaTrashAlt} from "react-icons/fa";
 import {useNavigate} from "react-router-dom";
@@ -107,13 +107,13 @@ const CartPage = () => {
             };
 
             apiClient.placeOrder(placeOrderRequest).then(() => {
-                setIsLoading(false);
                 setPaymentMethod("");
                 setCreditCardNumber("");
                 setCvc("");
                 shoppingCart = [];
                 shoppingCartContext.setItems(shoppingCart.length);
                 navigate("/purchases");
+                setIsLoading(false);
             }).catch(response => {
                 setIsLoading(false);
                 if (response.status === 403) {
@@ -133,8 +133,6 @@ const CartPage = () => {
             setMessageText("You have to enter the payment information!" + text);
         }
     }
-
-    //TODO: Feedback wenn Item nicht mehr verfügbar?
 
     return (
         <div className="content">
